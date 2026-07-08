@@ -1,0 +1,38 @@
+[
+  {
+    "Id": "active_01",
+    "Name": "Oxygen Supply",
+    "TimeTaken": 5,
+    "ResourcesCost": 100,
+    "TimeToConsume": 3,
+    "TexturePath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "active_02",
+    "Name": "Power Supply",
+    "TimeTaken": 5,
+    "ResourcesCost": 100,
+    "TimeToConsume": 3,
+    "TexturePath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "active_03",
+    "Name": "Temperature Control",
+    "TimeTaken": 5,
+    "ResourcesCost": 100,
+    "TimeToConsume": 3,
+    "TexturePath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "active_04",
+    "Name": "Route Control",
+    "TimeTaken": 5,
+    "ResourcesCost": 100,
+    "TimeToConsume": 3,
+    "TexturePath": null,
+    "SoundPath": null
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "Id": "Item_Note_01",
+    "Name": "숨겨진 노트",
+    "Description": "동료가 Fixer 대한 설명을 적어 놓은 노트이다.",
+    "ApplyEffective": null,
+    "MaxStackCount": 1,
+    "ApplyFigure": null,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  },
+  {
+    "Id": "Item_Food_01",
+    "Name": "우주 식량",
+    "Description": "배고픔을 달랠 수 있는 우주 식량이다.",
+    "ApplyEffective": "배고픔 수치 감소",
+    "MaxStackCount": 999,
+    "ApplyFigure": -50,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  },
+  {
+    "Id": "Item_Resources_01",
+    "Name": "얼음 결정석",
+    "Description": "산소 공급 시스템을 수리하기 위한 자원 이다.",
+    "ApplyEffective": "산소 공급 수리 ",
+    "MaxStackCount": 999,
+    "ApplyFigure": null,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  },
+  {
+    "Id": "Item_Resources_02",
+    "Name": "플라즈마 배터리 셀",
+    "Description": "전력 공급 시스템을 수리하기 위한 자원이다.",
+    "ApplyEffective": "전력 공급 수리 ",
+    "MaxStackCount": 999,
+    "ApplyFigure": null,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  },
+  {
+    "Id": "Item_Resources_03",
+    "Name": "액체 질소 냉각제",
+    "Description": "온도 제어 시스템을 수리하기 위한 자원이다.",
+    "ApplyEffective": "온도 제어 수리",
+    "MaxStackCount": 999,
+    "ApplyFigure": null,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  },
+  {
+    "Id": "Item_Resources_04",
+    "Name": "전선 뭉치",
+    "Description": "항로 제어 시스템을 수리하기 위한 자원이다.",
+    "ApplyEffective": "항로 제어 수리",
+    "MaxStackCount": 999,
+    "ApplyFigure": null,
+    "PrefabPath": null,
+    "SoundPath": null,
+    "IconPath": null
+  }
+]

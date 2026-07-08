@@ -1,0 +1,41 @@
+[
+  {
+    "Id": "Fixer_01",
+    "Name": "헬레나",
+    "Speed": "1",
+    "UnlockDate": 0,
+    "O2Repair": 100,
+    "ElectRepair": 100,
+    "WayRepair": 150,
+    "FarmingRepair": 100,
+    "TempRepair": 100,
+    "PrefabPath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "Fixer_02",
+    "Name": "빅토르",
+    "Speed": "1",
+    "UnlockDate": 0,
+    "O2Repair": 100,
+    "ElectRepair": 100,
+    "WayRepair": 100,
+    "FarmingRepair": 150,
+    "TempRepair": 100,
+    "PrefabPath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "Fixer_03",
+    "Name": "다니엘",
+    "Speed": "1",
+    "UnlockDate": 0,
+    "O2Repair": 100,
+    "ElectRepair": 150,
+    "WayRepair": 100,
+    "FarmingRepair": 100,
+    "TempRepair": 100,
+    "PrefabPath": null,
+    "SoundPath": null
+  }
+]

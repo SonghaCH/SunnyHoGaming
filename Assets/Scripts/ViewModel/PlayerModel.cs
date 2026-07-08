@@ -23,3 +23,8 @@ public class PlayerModel
 
     public List<ItemModel> ItemList = new List<ItemModel>();
 }
+
+public class ItemInventoryModel
+{
+    
+}
