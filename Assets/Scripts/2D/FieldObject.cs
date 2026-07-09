@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class _FieldObject : _Entity
+public class FieldObject : Entity
 {
     [Header("에디터 확인용 데이터 - 따로 지정하는 용도는 아닙니다")]
-    [SerializeField] private int _fieldObjectInstanceId;
-    [SerializeField] private string _fieldObjectDataId;
-    [SerializeField] private string _fieldObjectName;
+    [SerializeField] private int FieldObjectInstanceId;
+    [SerializeField] private string FieldObjectDataId;
+    [SerializeField] private string FieldObjectName;
 
     public void InitFieldObjectInfoOnCreated(int instanceId, string fieldObjectDataId)
     {
@@ -17,13 +17,13 @@ public class _FieldObject : _Entity
             return;
         }
 
-        _fieldObjectInstanceId = instanceId;
-        _fieldObjectDataId = fieldObjectDataId;
+        FieldObjectInstanceId = instanceId;
+        FieldObjectDataId = fieldObjectDataId;
     }
 
     public string GetFieldObjectDataId()
     {
-        return _fieldObjectDataId;
+        return FieldObjectDataId;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,10 +50,10 @@ public class _FieldObject : _Entity
         // Destroy(this.gameObject);
 
         // 채집과 드랍 1-0) 내가 상호작용한 필드 오브젝트의 타입에 따라 처리를 추가해봅시다
-        var fieldObjectData = GameDataManager.Instance.GetFieldObjectData(_fieldObjectDataId);
+        var fieldObjectData = GameDataManager.Instance.GetFieldObjectData(FieldObjectDataId);
         if (fieldObjectData == null)
         {
-            Debug.LogWarning($"유효하지 않은 필드 오브젝트 데이터 입니다! {_fieldObjectDataId}");
+            Debug.LogWarning($"유효하지 않은 필드 오브젝트 데이터 입니다! {FieldObjectDataId}");
             return;
         }
 
@@ -70,7 +70,7 @@ public class _FieldObject : _Entity
             var itemData = GameDataManager.Instance.GetItemData(fieldObjectData.DropItemDataId);
             if (itemData == null)
             {
-                Debug.LogWarning($"유효하지 않은 아이템 데이터 입니다! {_fieldObjectDataId}");
+                Debug.LogWarning($"유효하지 않은 아이템 데이터 입니다! {FieldObjectDataId}");
                 return;
             }
 
@@ -85,11 +85,11 @@ public class _FieldObject : _Entity
             }
 
             // 채집과 드랍 1-4) 게임 매니저에게 "어디서든"(현재는 채집물이 충돌된 시점) 편하게 아이템 추가를 요청한다!
-            GameManager.Inst.AddItem(itemData.Id, finalDropItemCount);
+            NetworkManager.Inst.InventoryService.AddItem(itemData.Id, finalDropItemCount);
 
 
             // 채집과 드랍 1-5) 추가 완료 되었다면 이 오브젝트를 비활성화 또는 제거하자 (우리는 제거를 선택)
-            GameObjectManager.Inst.RequestDestroyFieldObject(_fieldObjectInstanceId);
+            GameObjectManager.Inst.RequestDestroyFieldObject(FieldObjectInstanceId);
         }
 
     }

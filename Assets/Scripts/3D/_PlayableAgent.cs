@@ -16,7 +16,7 @@ public class _PlayableAgent : MonoBehaviour
     [SerializeField] private int _playerBaseAtk = 100;
 
     [Header("애니메이터")]
-    [SerializeField] private _AnimationController AnimatorController_Entity;
+    [SerializeField] private _AnimationController AnimatorControllerEntity;
 
     private bool _isSkillUsing = false;
 
@@ -50,7 +50,7 @@ public class _PlayableAgent : MonoBehaviour
 
 
         // 우선 애니메이션만 바꿔 봅시다
-        AnimatorController_Entity.SetState(newState);
+        AnimatorControllerEntity.SetState(newState);
     }
 
 

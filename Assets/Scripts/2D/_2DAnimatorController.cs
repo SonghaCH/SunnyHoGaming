@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum _EntityAnimState
+public enum EntityAnimState
 {
     None = 0,
     Idle,
@@ -13,15 +13,15 @@ public enum _EntityAnimState
 
 public class _2DAnimatorController : MonoBehaviour
 {
-    [SerializeField] private Animator Animator_Entity;
+    [SerializeField] private Animator AnimatorEntity;
 
-    private _EntityAnimState _currentAnimState;
+    private EntityAnimState _currentAnimState;
 
     // 외부에서 쉽게 변경을 요청하려고
     // 이 상태에 따른 애니메이션 재생을 여기서만 모아서 해줄려고
-    public void SetState(_EntityAnimState newState) // 새로운 상태
+    public void SetState(EntityAnimState newState) // 새로운 상태
     {
-        if (newState == _EntityAnimState.Idle && _currentAnimState == _EntityAnimState.Idle)
+        if (newState == EntityAnimState.Idle && _currentAnimState == EntityAnimState.Idle)
         {
             return;
         }
@@ -31,23 +31,23 @@ public class _2DAnimatorController : MonoBehaviour
 
         switch (_currentAnimState)
         {
-            case _EntityAnimState.Idle:
+            case EntityAnimState.Idle:
                 ResetAllAnimParameters();
                 break;
-            case _EntityAnimState.Walk:
-                Animator_Entity.SetBool("IsWalk", true);
+            case EntityAnimState.Walk:
+                AnimatorEntity.SetBool("IsWalk", true);
                 break;
-            case _EntityAnimState.Atk:
-                Animator_Entity.SetTrigger("IsAtk");
+            case EntityAnimState.Atk:
+                AnimatorEntity.SetTrigger("IsAtk");
                 break;
-            case _EntityAnimState.Positive:
-                Animator_Entity.SetTrigger("IsPositive");
+            case EntityAnimState.Positive:
+                AnimatorEntity.SetTrigger("IsPositive");
                 break;
-            case _EntityAnimState.Negative:
-                Animator_Entity.SetTrigger("IsNegative");
+            case EntityAnimState.Negative:
+                AnimatorEntity.SetTrigger("IsNegative");
                 break;
-            case _EntityAnimState.InteractionStart:
-                Animator_Entity.SetTrigger("IsInteractionStart");
+            case EntityAnimState.InteractionStart:
+                AnimatorEntity.SetTrigger("IsInteractionStart");
                 break;
             default:
                 // 의도되지 않은 상황이라면 모든 파라미터를 초기화한다
@@ -58,7 +58,7 @@ public class _2DAnimatorController : MonoBehaviour
 
     private void ResetAllAnimParameters()
     {
-        Animator_Entity.SetBool("IsWalk", false);
+        AnimatorEntity.SetBool("IsWalk", false);
     } 
 
 

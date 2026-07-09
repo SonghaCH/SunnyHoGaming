@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public class _Entity : MonoBehaviour
+public class Entity : MonoBehaviour
 {
     [Header("주소 설정")]
     [SerializeField] private string ResourceMeshObjectPath;
@@ -9,8 +9,8 @@ public class _Entity : MonoBehaviour
 
 
     [Header("캐릭터 3D 메쉬 & 애니메이션 전용")]
-    [SerializeField] private Transform Tranform_EntityMeshRoot;
-    [SerializeField] private Animator Animator_Entity;
+    [SerializeField] private Transform TranformEntityMeshRoot;
+    [SerializeField] private Animator AnimatorEntity;
     [SerializeField] private Vector3 InitialMeshScale;
 
     private void Start()
@@ -24,20 +24,20 @@ public class _Entity : MonoBehaviour
 
     public async UniTaskVoid InitEntity3DMeshAsync(string meshObjectPath, string specificAnimContollerPath = "")
     {
-        Tranform_EntityMeshRoot.gameObject.SetActive(false);
-        var animator = await GameUtil.LoadAndMeshObjectAndBindAnimator(Tranform_EntityMeshRoot, meshObjectPath, specificAnimContollerPath);
+        TranformEntityMeshRoot.gameObject.SetActive(false);
+        var animator = await GameUtil.LoadAndMeshObjectAndBindAnimator(TranformEntityMeshRoot, meshObjectPath, specificAnimContollerPath);
         if(animator == null)
         {
             Debug.LogError($"{meshObjectPath} 오브젝트 비동기 로딩에 실패했습니다!!");
         }
 
-        Animator_Entity = animator;
-        Tranform_EntityMeshRoot.localScale = InitialMeshScale;
-        Tranform_EntityMeshRoot.gameObject.SetActive(true);
+        AnimatorEntity = animator;
+        TranformEntityMeshRoot.localScale = InitialMeshScale;
+        TranformEntityMeshRoot.gameObject.SetActive(true);
     }
 
     public Animator GetEntityAnimator()
     {
-        return Animator_Entity;
+        return AnimatorEntity;
     }
 }

@@ -24,7 +24,7 @@ public class BattleAgent : MonoBehaviour
     public BattleFaction _agentFaction;
 
     [Header("연동 컴포넌트")]
-    [SerializeField] private _Entity _myEntity; // 3D 외형 제어용 엔티티 추가
+    [SerializeField] private Entity _myEntity; // 3D 외형 제어용 엔티티 추가
 
     // TODO : 우선 몬스터 유지
     [Header("받아왔는데 전투에서 필요한 데이터")]
@@ -57,7 +57,7 @@ public class BattleAgent : MonoBehaviour
 
         if (_myEntity == null)
         {
-            var entity = this.GetComponent<_Entity>();
+            var entity = this.GetComponent<Entity>();
             if (entity == null)
             {
                 Debug.LogError("대상 오브젝트에 Entity 컴포넌트가 존재하지 않습니다!");

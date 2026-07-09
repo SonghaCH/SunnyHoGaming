@@ -3,7 +3,7 @@
 public class _2pc : MonoBehaviour
 {
     [Header("애니메이터")]
-    [SerializeField] private _2DAnimatorController AnimatorController_Entity;
+    [SerializeField] private _2DAnimatorController AnimatorControllerEntity;
 
     [Header("NPC의 정보")]
     [SerializeField] private int _instanceId;
@@ -13,13 +13,13 @@ public class _2pc : MonoBehaviour
 
     public void StartInteract()
     {
-        ChangeNpcState(_EntityAnimState.InteractionStart);
+        ChangeNpcState(EntityAnimState.InteractionStart);
     }
 
-    public void ChangeNpcState(_EntityAnimState newState)
+    public void ChangeNpcState(EntityAnimState newState)
     {
         // 우선 애니메이션만 바꿔 봅시다
-        AnimatorController_Entity.SetState(newState);
+        AnimatorControllerEntity.SetState(newState);
     }
 
     
