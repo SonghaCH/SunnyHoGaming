@@ -184,6 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3705586291567264601}
+  - component: {fileID: 6659973921011719838}
   - component: {fileID: 7718329537351356260}
   - component: {fileID: 5304066021637289936}
   - component: {fileID: 5757990713839683642}
@@ -214,6 +215,22 @@ RectTransform:
   m_AnchoredPosition: {x: -174, y: 14}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &6659973921011719838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2667819627699822996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a8ebc63bbddd04a843ff7490a561ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 5757990713839683642}
+  Text_Base: {fileID: 0}
+  Image_Base: {fileID: 0}
+  Image_Select: {fileID: 0}
 --- !u!222 &7718329537351356260
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -380,6 +397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8977974686506347890}
+  - component: {fileID: 2422597722843424418}
   - component: {fileID: 6424467636644132734}
   - component: {fileID: 4930385373414001117}
   - component: {fileID: 8031781134629819828}
@@ -410,6 +428,22 @@ RectTransform:
   m_AnchoredPosition: {x: -174, y: 14}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2422597722843424418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5718496581809345864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a8ebc63bbddd04a843ff7490a561ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 8031781134629819828}
+  Text_Base: {fileID: 0}
+  Image_Base: {fileID: 0}
+  Image_Select: {fileID: 0}
 --- !u!222 &6424467636644132734
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -713,6 +747,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3904304741271177883}
+  - component: {fileID: 5630954907150778949}
   - component: {fileID: 5760022846672337394}
   - component: {fileID: 2010267767775999319}
   - component: {fileID: 8924805727122941797}
@@ -743,6 +778,22 @@ RectTransform:
   m_AnchoredPosition: {x: -174, y: 14}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &5630954907150778949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068505354347804024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a8ebc63bbddd04a843ff7490a561ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  Button_Base: {fileID: 8924805727122941797}
+  Text_Base: {fileID: 0}
+  Image_Base: {fileID: 0}
+  Image_Select: {fileID: 0}
 --- !u!222 &5760022846672337394
 CanvasRenderer:
   m_ObjectHideFlags: 0
