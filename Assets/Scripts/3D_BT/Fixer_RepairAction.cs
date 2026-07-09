@@ -21,6 +21,15 @@ public partial class Fixer_RepairAction : Action
         // TODO : 애니메이션 재생 등 시각적 처리 (MVVM이나 Animator 연동)
         // Self.Value.GetComponent<Animator>().SetTrigger("Repair");
 
+        if (Self.Value != null)
+        {
+            var viewModel = Self.Value.GetComponent<FixerViewModel>();
+            if (viewModel != null)
+            {
+                viewModel.CurrentState = FixerState.Executing;
+            }
+        }
+
         return Status.Running;
     }
 

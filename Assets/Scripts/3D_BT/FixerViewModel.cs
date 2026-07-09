@@ -49,12 +49,16 @@ public class FixerViewModel : MonoBehaviour
         }
     }
 
+    public void PlayAnimationFor(FixerState state)
+    {
+        PlayStateAnimation(state);
+    }
+
     private void SyncToBehaviorTree(FixerState state)
     {
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
-            _behaviorGraphAgent.BlackboardReference.SetVariableValue("CurrentState", state);
-
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("FixerState", state);
             _behaviorGraphAgent.Restart();
         }
 
@@ -77,6 +81,9 @@ public class FixerViewModel : MonoBehaviour
                 _animator.CrossFade("Fix", 0.1f);
                 break;
             case FixerState.Returning: 
+                _animator.CrossFade("Run", 0.1f);
+                break;
+            case FixerState.Wandering:
                 _animator.CrossFade("Walk", 0.1f);
                 break;
         }

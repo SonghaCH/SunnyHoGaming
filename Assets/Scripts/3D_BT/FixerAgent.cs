@@ -16,6 +16,6 @@ public class FixerAgent : MonoBehaviour
             behaviorAgent.SetVariableValue("MainRoomSpots", mainRoomSpots);
         }
 
-        behaviorAgent.SetVariableValue("CurrentState", FixerState.Rampaging);
+        behaviorAgent.SetVariableValue("FixerState", FixerState.Rampaging);
     }
 }

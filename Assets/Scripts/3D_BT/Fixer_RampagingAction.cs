@@ -30,6 +30,12 @@ public partial class Fixer_RampagingAction : Action
             return Status.Failure;
         }
 
+        var viewModel = Self.Value.GetComponent<FixerViewModel>();
+        if (viewModel != null)
+        {
+            viewModel.CurrentState = FixerState.Rampaging;
+        }
+
         _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
         if (_navMeshAgent == null)
         {

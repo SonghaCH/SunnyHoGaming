@@ -12,6 +12,7 @@ public partial class Fixer_MoveToTargetAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<GameObject> Target;
+    [SerializeReference] public BlackboardVariable<FixerState> TargetState;
 
     private NavMeshAgent _navMeshAgent;
 
@@ -19,6 +20,12 @@ public partial class Fixer_MoveToTargetAction : Action
     {
         _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
         if (_navMeshAgent == null || Target.Value == null) return Status.Failure;
+
+        var viewModel = Self.Value.GetComponent<FixerViewModel>();
+        if (viewModel != null)
+        {
+            viewModel.PlayAnimationFor(FixerState.Wandering);
+        }
 
         _navMeshAgent.SetDestination(Target.Value.transform.position);
 

@@ -16,7 +16,7 @@ public partial class Fixer_WanderAction : Action
 
     private NavMeshAgent _navMeshAgent;
     private float _currentWanderTime;
-    private float _maxWanderTime = 7.0f; 
+    private float _maxWanderTime = 7.0f;
 
     protected override Status OnStart()
     {
@@ -25,17 +25,20 @@ public partial class Fixer_WanderAction : Action
             return Status.Failure;
         }
 
+        var viewModel = Self.Value.GetComponent<FixerViewModel>();
+        if (viewModel != null)
+        {
+            viewModel.CurrentState = FixerState.Wandering;
+        }
+
         _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
         if (_navMeshAgent == null)
         {
             return Status.Failure;
         }
-
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
-
         Vector3 randomDirection = Random.insideUnitSphere * Radius.Value;
         Vector3 rawTargetPosition = Self.Value.transform.position + randomDirection;
-
         NavMeshHit hit;
         if (NavMesh.SamplePosition(rawTargetPosition, out hit, Radius.Value, NavMesh.AllAreas))
         {
@@ -43,7 +46,6 @@ public partial class Fixer_WanderAction : Action
             _currentWanderTime = Time.time;
             return Status.Running;
         }
-
         return Status.Failure;
     }
 
@@ -53,12 +55,10 @@ public partial class Fixer_WanderAction : Action
         {
             return Status.Success;
         }
-
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
             return Status.Success;
         }
-
         return Status.Running;
     }
 

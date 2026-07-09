@@ -69,6 +69,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ef0db008a3d74ad448ba97ebeae1dbc8, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1652701999270023882}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ef0db008a3d74ad448ba97ebeae1dbc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2209192592177195803}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ef0db008a3d74ad448ba97ebeae1dbc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8081187133849313448}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ef0db008a3d74ad448ba97ebeae1dbc8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 380671565411326695}
   m_SourcePrefab: {fileID: 100100000, guid: ef0db008a3d74ad448ba97ebeae1dbc8, type: 3}
 --- !u!1 &3083314058526433551 stripped
 GameObject:
@@ -147,3 +156,61 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2209192592177195803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3083314058526433551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18cc9aa5bf08f94cb7959efb7d9109f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerAgent
+  behaviorAgent: {fileID: 380671565411326695}
+  fixerID: 0
+  mainRoomSpots:
+  - {fileID: 0}
+--- !u!114 &8081187133849313448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3083314058526433551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a200c6146f10c94a9515de67d82b476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerViewModel
+  currentState: 2
+--- !u!114 &380671565411326695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3083314058526433551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: 5625085183314897752, guid: d126424347d45eb428382f85cbaa74fd, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 5131825594694631495
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5131825594694631495
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 3083314058526433551}
