@@ -1,7 +1,7 @@
 [
   {
     "Id": "Fixer_01",
-    "Name": "헬레나",
+    "Name": "픽스",
     "Speed": "1",
     "UnlockDate": 0,
     "O2Repair": 100,
@@ -14,7 +14,7 @@
   },
   {
     "Id": "Fixer_02",
-    "Name": "빅토르",
+    "Name": "암스트숏",
     "Speed": "1",
     "UnlockDate": 0,
     "O2Repair": 100,
@@ -27,7 +27,7 @@
   },
   {
     "Id": "Fixer_03",
-    "Name": "다니엘",
+    "Name": "볼트",
     "Speed": "1",
     "UnlockDate": 0,
     "O2Repair": 100,
