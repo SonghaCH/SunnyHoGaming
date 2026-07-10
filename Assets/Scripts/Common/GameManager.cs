@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        NetworkManager.Inst.RequestCreateLocalPlayer();
         UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.LocalPlayerProfileUI);
         UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.MVVMTestUI);
     }
@@ -47,15 +46,5 @@ public class GameManager : MonoBehaviour
         _playerModel = NetworkManager.Inst.RequstLoadSaveData();
     }
 
-    public void IncreasePlayerExp(int exp)
-    {
-        // 추후에 한곳에서 관리할 수 있게 익스텐션으로 빼도 된다
-        _playerModel.PlayerTotalExp += exp;
-    }
-
-
-    public _PlayableAgent GetLocalPlayer()
-    {
-        return GameObjectManager.Inst.GetLocalPlayer();
-    }
+  
 }

@@ -8,7 +8,6 @@ public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager Inst { get; set; }
 
-    public NetworkPlayerService LocalPlayerService { get; private set; }
     public NetworkInventoryService InventoryService { get; private set; }
 
     private void Awake()
@@ -20,24 +19,13 @@ public class NetworkManager : MonoBehaviour
     private void InitNetworkService()
     {
         // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
-        LocalPlayerService = new NetworkPlayerService();
         InventoryService = new NetworkInventoryService();
 
     }
 
-    public void RequestCreateLocalPlayer()
-    {
-        // 게임 시작이나, 맵 진입 시 로컬 플레이어를 서버에 생성하는 요청
-        var localPlayerVm = LocalPlayerService.CreateLocalPlayerViewModel();
+   
 
-        // 응답 받았다고 가정한다 = 추후 실제 서버 통신시에는 람다나 비동기 로직으로 받아온다
-        OnRecvCreateLocalPlayer(localPlayerVm);
-    }
-
-    public void OnRecvCreateLocalPlayer(LocalPlayerViewModel localPlayerVm)
-    {
-        GameObjectManager.Inst.CreateLocalPlayer(localPlayerVm);
-    }
+    
 
     // 파일 저장 경로 설정 (C:/Users/이름/.../projectName/save.json)
     private string GetPath()
