@@ -13,9 +13,7 @@ public enum UIRootType
 
 public enum UIType
 {
-    SimplePopup,
-    MainUI,
-    MyProfilePopup, // 신규UI추가 1) 새로운 UIType을 추가한다
+    MyProfilePopup, 
     Inventory,
     LoadingUI,
     DialogueUI,
@@ -24,7 +22,27 @@ public enum UIType
     GameBookUI,
     HudUI,
     LocalPlayerProfileUI,
-    MVVMTestUI
+    MVVMTestUI,
+
+
+
+    GameStartUI,
+    MainUI,
+    FixerPopupUI,
+    HiddenNotePopupUI,
+    RepairPopupUI,
+    WorkPopupUI,
+    InventoryPopupUI,
+    JobcompletedPopupUI,
+    SimplePopup,
+
+
+
+
+
+
+
+
 }
 
 public static class UIManagerExtension
@@ -33,38 +51,20 @@ public static class UIManagerExtension
     {
         string path = string.Empty; // "" == string.Empty
 
-        // 신규UI추가 2) Resources.Load를 할 경로를 직접 명시한다
-        // 해당 경로는 프로젝트창에서 Resources/Prefabs/UI폴더 내에 있는 RootType 폴더명과 UIType 프리팹 이름과 동일해야 한다! (ex. ContentUI/MyProfilePopup)
-        path = $"Prefabs/UI/{uiRootType}/{uiType}";
+        
+        path = $"Prefab/UI/{uiRootType}/{uiType}";
         return path;
     }
 
     public static void ShowStartupUIOnGameStart(this UIManager uiManager)
     {
-        uiManager.OpenLoadingUI();
-        uiManager.OpenContentUI(UIType.RobbyUI);
-        // uiManager.OpenUI(UIRootType.ContentUI, UIType.RobbyUI); // 위랑 똑같은 원리
-        uiManager.OpenUI(UIRootType.MainUI, UIType.HudUI);
-        uiManager.OpenUI(UIRootType.MainUI, UIType.MainUI);
-        // 게임 로비 UI를 여기서 오픈해주자 -> uiManager.
-        // MainUI도
+        uiManager.OpenGameStartUI();
     }
 
    
 
-    // 신규UI추가 3) 이렇게 어떤 팝업을 열고, 열때 전달해야하는 파라미터가 있다면 이렇게 전달한다.
-        // 추가하기 편하게 그냥 빼둔 확장 메서드이므로, uiManager과 this는 우선 넘어가자
     
-
-    public static void OpenInventoryPopup(this UIManager uiManger)
-    {
-        var uiBase = uiManger.OpenContentUI(UIType.Inventory);
-        if (uiBase == null)
-        {
-            Debug.LogWarning($"UI가 생성되지 않았습니다");
-            return;
-        }
-    }
+    
 
     public static void OpenLoadingUI(this UIManager uiManager)
     {
@@ -75,20 +75,162 @@ public static class UIManagerExtension
             return;
         }
     }
-
     public static void CloseLoadingUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
     }
 
-    
+
+
+
+
+    //
+    public static void OpenGameStartUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.ContentUI, UIType.GameStartUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseGameStartUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.GameStartUI);
+    }
+
+
+    //
+    public static void OpenMainUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.MainUI, UIType.MainUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseMainUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.MainUI, UIType.MainUI);
+    }
+
+    //
+    public static void OpenFixerPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.FixerPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseFixerPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.FixerPopupUI);
+    }
+
+    //
+    public static void OpenHiddenNotePopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.HiddenNotePopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseHiddenNotePopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.HiddenNotePopupUI);
+    }
+
+    //
+    public static void OpenRepairPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.RepairPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseRepairPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.RepairPopupUI);
+    }
+
+    //
+    public static void OpenWorkPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.WorkPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseWorkPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.WorkPopupUI);
+    }
+
+    //
+    public static void OpenInventoryPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.InventoryPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseInventoryPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.InventoryPopupUI);
+    }
+
+    //
+    public static void OpenJobcompletedPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.JobcompletedPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseJobcompletedPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.JobcompletedPopupUI);
+    }
+
+    //
+    public static void OpenSimplePopup(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.SimplePopup);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseSimplePopup(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.SimplePopup);
+    }
+
+
+
 
     
 
-    // 그 대상이 죽었을때 호출
-    
 
 
-    
+
+
+
+
 }
 

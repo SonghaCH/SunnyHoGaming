@@ -29,12 +29,6 @@ public class GameManager : MonoBehaviour
         NetworkManager.Inst.RequestCreateLocalPlayer();
         UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.LocalPlayerProfileUI);
         UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.MVVMTestUI);
-
-
-        //if (GObj_StartObject != null)
-        //{
-        //    GObj_StartObject.SetActive(true);
-        //}
     }
 
     public void SaveData()

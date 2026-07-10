@@ -38,7 +38,7 @@ public class _2pc : MonoBehaviour
     {
         if(interectionKey == "G")
         {
-            UIManager.Instance.OpenInventoryPopup();
+            //UIManager.Instance.OpenInventoryPopup();
         }
     }
 
