@@ -9,6 +9,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager Inst { get; set; }
 
     public NetworkPlayerService LocalPlayerService { get; private set; }
+    public NetworkInventoryService InventoryService { get; private set; }
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class NetworkManager : MonoBehaviour
     {
         // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
         LocalPlayerService = new NetworkPlayerService();
+        InventoryService = new NetworkInventoryService();
 
     }
 

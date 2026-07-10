@@ -6,7 +6,7 @@ public class LocalPlayerView : ViewBase
     // 플레이어 3D 모델, 애니메이션, 물리에 관한 뷰
     [SerializeField] TextMesh TextMesh_Name;
     [SerializeField] TextMesh TextMesh_Level;
-    [SerializeField] _Entity Entity_Self;
+    [SerializeField] Entity Entity_Self;
 
     // 뷰에서 절대 new로 VewModel을 하지 않고, 네트워크 매니저를 통해
     // 실제 생성된 뷰 모델을 받아와야한다!

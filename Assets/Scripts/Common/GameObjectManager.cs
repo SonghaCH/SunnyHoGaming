@@ -20,7 +20,7 @@ public class GameObjectManager : MonoBehaviour
 
     // 생성된 오브젝트의 생명을 보관
     private Dictionary<int, GameObject> _createdGameObjectContainer = new Dictionary<int, GameObject>();
-    private Dictionary<int, _FieldObject> _fieldObjectContainer = new Dictionary<int, _FieldObject>();
+    private Dictionary<int, FieldObject> FieldObjectContainer = new Dictionary<int, FieldObject>();
     private Dictionary<int, BattleAgent> _monsterObjectContainer = new Dictionary<int, BattleAgent>();
 
     // 게임 오브젝트 매니저가 살아있는 동안, 이 플레이어를 보관(캐싱)해둔다
@@ -190,11 +190,11 @@ public class GameObjectManager : MonoBehaviour
     {
         _objectInstanceKeyGenerator++;
         var generatedInstanceId = _objectInstanceKeyGenerator;
-        var fieldObject = createdObject.GetComponent<_FieldObject>();
+        var fieldObject = createdObject.GetComponent<FieldObject>();
 
         if (fieldObject != null)
         {
-            _fieldObjectContainer.Add(generatedInstanceId, fieldObject);
+            FieldObjectContainer.Add(generatedInstanceId, fieldObject);
             fieldObject.InitFieldObjectInfoOnCreated(generatedInstanceId, fieldObjectDataId);
         }
     }
@@ -208,18 +208,18 @@ public class GameObjectManager : MonoBehaviour
         }
 
         // 요청된 필드 오브젝트를 제거함
-        _fieldObjectContainer.Remove(instanceId);
+        FieldObjectContainer.Remove(instanceId);
         Destroy(fieldObjectComponent.gameObject);
     }
 
-    public _FieldObject GetFieldObjectByInstanceId(int fieldObjectInstanceId)
+    public FieldObject GetFieldObjectByInstanceId(int fieldObjectInstanceId)
     {
-        if (_fieldObjectContainer.ContainsKey(fieldObjectInstanceId) == false)
+        if (FieldObjectContainer.ContainsKey(fieldObjectInstanceId) == false)
         {
             Debug.LogError($"{fieldObjectInstanceId} 찾으려는 필드 오브젝트가 유효하지 않습니다");
             return null;
         }
 
-        return _fieldObjectContainer[fieldObjectInstanceId];
+        return FieldObjectContainer[fieldObjectInstanceId];
     }
 }

@@ -66,6 +66,7 @@ public class ItemData : GameDataBase
     public string PrefabPath;
     public string SoundPath;
     public string IconPath;
+    public string UseItemType;
 
 
 }

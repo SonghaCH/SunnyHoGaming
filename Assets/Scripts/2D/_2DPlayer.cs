@@ -17,7 +17,7 @@ public class _2DPlayer : _PlayableAgent
     [SerializeField] private LayerMask _groundLayer;    // 지면으로 인식할 레이어 (Platforms 등)
 
     [Header("애니메이터")]
-    [SerializeField] private _2DAnimatorController AnimatorController_Entity;
+    [SerializeField] private _2DAnimatorController AnimatorControllerEntity;
 
     [Header("스킬")]
     [SerializeField] private Collider2D Collider_PlayerNormalAttack;
@@ -100,19 +100,19 @@ public class _2DPlayer : _PlayableAgent
 
         // 이동을 한다라는 판정만 우선 해봅시다
         bool isMoving = (_horizontalInput != 0);
-        ChangePlayerState(isMoving ? _EntityAnimState.Walk : _EntityAnimState.Idle);
+        ChangePlayerState(isMoving ? EntityAnimState.Walk : EntityAnimState.Idle);
 
         
 
     }
 
-    private void ChangePlayerState(_EntityAnimState newState)
+    private void ChangePlayerState(EntityAnimState newState)
     {
         // 이런 곳에 UI나 플레이어의 별도 처리를 넣어줄 수도 있다
 
 
         // 우선 애니메이션만 바꿔 봅시다
-        AnimatorController_Entity.SetState(newState);
+        AnimatorControllerEntity.SetState(newState);
     }
 
     void FixedUpdate()

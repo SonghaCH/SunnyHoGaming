@@ -8,7 +8,8 @@
     "ApplyFigure": null,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": "OpenPopup"
   },
   {
     "Id": "Item_Food_01",
@@ -19,7 +20,8 @@
     "ApplyFigure": -50,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": "Reduce Hunger"
   },
   {
     "Id": "Item_Resources_01",
@@ -30,7 +32,8 @@
     "ApplyFigure": null,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": null
   },
   {
     "Id": "Item_Resources_02",
@@ -41,7 +44,8 @@
     "ApplyFigure": null,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": null
   },
   {
     "Id": "Item_Resources_03",
@@ -52,7 +56,8 @@
     "ApplyFigure": null,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": null
   },
   {
     "Id": "Item_Resources_04",
@@ -63,6 +68,7 @@
     "ApplyFigure": null,
     "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null
+    "IconPath": null,
+    "UseItemType": null
   }
 ]
