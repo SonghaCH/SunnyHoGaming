@@ -16,8 +16,8 @@ public class FixerViewModel : MonoBehaviour
 
     private void Awake()
     {
-        _behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
-        _animator = GetComponent<Animator>();
+        TryGetComponent(out _behaviorGraphAgent);
+        TryGetComponent(out _animator);
     }
 
     public FixerState CurrentState
@@ -44,14 +44,36 @@ public class FixerViewModel : MonoBehaviour
                     hasBeenRepaired = true;
                 }
 
-                if (OnStateChanged != null) OnStateChanged.Invoke(currentState);
+                OnStateChanged.Invoke(currentState);
             }
         }
     }
 
-    public void PlayAnimationFor(FixerState state)
+    public void ChangeStateFromBrain(FixerState newState)
     {
-        PlayStateAnimation(state);
+        if (hasBeenRepaired && newState == FixerState.Rampaging)
+        {
+            return;
+        }
+
+        if (currentState != newState)
+        {
+            currentState = newState;
+
+            if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
+            {
+                _behaviorGraphAgent.BlackboardReference.SetVariableValue("FixerState", currentState);
+            }
+
+            PlayStateAnimation(currentState);
+
+            if (currentState != FixerState.Rampaging)
+            {
+                hasBeenRepaired = true;
+            }
+
+            OnStateChanged?.Invoke(currentState);
+        }
     }
 
     private void SyncToBehaviorTree(FixerState state)
@@ -80,17 +102,23 @@ public class FixerViewModel : MonoBehaviour
             case FixerState.Executing: 
                 _animator.CrossFade("Fix", 0.1f);
                 break;
-            case FixerState.Returning: 
-                _animator.CrossFade("Run", 0.1f);
+            case FixerState.Returning:
+                _animator.Play("Run");
                 break;
             case FixerState.Wandering:
                 _animator.CrossFade("Walk", 0.1f);
+                break;
+            case FixerState.MoveToTarget:
+                _animator.CrossFade("Run", 0.1f);
                 break;
         }
     }
 
     private void OnValidate()
     {
-        if (Application.isPlaying) SyncToBehaviorTree(currentState);
+        if (Application.isPlaying)
+        {
+            SyncToBehaviorTree(currentState);
+        }
     }
 }

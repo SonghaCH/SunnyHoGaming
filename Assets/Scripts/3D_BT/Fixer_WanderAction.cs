@@ -20,27 +20,20 @@ public partial class Fixer_WanderAction : Action
 
     protected override Status OnStart()
     {
-        if (Self.Value == null)
+        if (Self.Value == null || !Self.Value.TryGetComponent(out _navMeshAgent))
         {
             return Status.Failure;
         }
 
-        var viewModel = Self.Value.GetComponent<FixerViewModel>();
-        if (viewModel != null)
+        if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
         {
-            viewModel.CurrentState = FixerState.Wandering;
+            viewModel.ChangeStateFromBrain(FixerState.Wandering);
         }
 
-        _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
-        if (_navMeshAgent == null)
-        {
-            return Status.Failure;
-        }
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
-        Vector3 randomDirection = Random.insideUnitSphere * Radius.Value;
-        Vector3 rawTargetPosition = Self.Value.transform.position + randomDirection;
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(rawTargetPosition, out hit, Radius.Value, NavMesh.AllAreas))
+
+        Vector3 rawTargetPosition = Self.Value.transform.position + (Random.insideUnitSphere * Radius.Value);
+        if (NavMesh.SamplePosition(rawTargetPosition, out NavMeshHit hit, Radius.Value, NavMesh.AllAreas))
         {
             _navMeshAgent.SetDestination(hit.position);
             _currentWanderTime = Time.time;
@@ -53,12 +46,24 @@ public partial class Fixer_WanderAction : Action
     {
         if (Time.time - _currentWanderTime > _maxWanderTime)
         {
+            if (Self.Value != null && Self.Value.TryGetComponent(out FixerViewModel viewModel))
+            {
+                viewModel.ChangeStateFromBrain(FixerState.Idle);
+            }
+
             return Status.Success;
         }
+
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
+            if (Self.Value != null && Self.Value.TryGetComponent(out FixerViewModel viewModel))
+            {
+                viewModel.ChangeStateFromBrain(FixerState.Idle);
+            }
+
             return Status.Success;
         }
+
         return Status.Running;
     }
 

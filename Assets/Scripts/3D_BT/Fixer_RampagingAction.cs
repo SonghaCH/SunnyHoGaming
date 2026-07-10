@@ -30,17 +30,16 @@ public partial class Fixer_RampagingAction : Action
             return Status.Failure;
         }
 
-        var viewModel = Self.Value.GetComponent<FixerViewModel>();
-        if (viewModel != null)
-        {
-            viewModel.CurrentState = FixerState.Rampaging;
-        }
-
-        _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
-        if (_navMeshAgent == null)
+        if (!Self.Value.TryGetComponent(out _navMeshAgent))
         {
             return Status.Failure;
         }
+
+        if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
+        {
+            viewModel.ChangeStateFromBrain(FixerState.Rampaging);
+        }
+
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
 
         if (TryGetValidRoomDestination(RoomArea.Value.bounds, out Vector3 targetDestination))
@@ -50,7 +49,6 @@ public partial class Fixer_RampagingAction : Action
             return Status.Running;
         }
 
-        // 10번 다 실패했을 때 로그
         Debug.LogWarning($"[{Self.Value.name}] 방 안에서 유효한 NavMesh 바닥 좌표를 찾지 못했습니다.");
         return Status.Failure;
     }

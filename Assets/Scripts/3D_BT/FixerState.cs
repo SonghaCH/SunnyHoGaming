@@ -8,5 +8,6 @@ public enum FixerState
     Executing,      
     Rampaging,      
     Returning,      
-    Wandering
+    Wandering,
+    MoveToTarget
 }

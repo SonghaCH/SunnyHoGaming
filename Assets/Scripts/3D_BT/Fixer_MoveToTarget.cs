@@ -6,7 +6,7 @@ using Unity.Properties;
 using UnityEngine.AI;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "Fixer_MoveTOTarget", story: "[Self] to [Target]", category: "Action/Fixer", id: "fixer-move-action")]
+[NodeDescription(name: "Fixer_MoveTOTarget", story: "[Self] [TargetState] to [Target]", category: "Action/Fixer", id: "fixer-move-action")]
 
 public partial class Fixer_MoveToTargetAction : Action
 {
@@ -18,18 +18,25 @@ public partial class Fixer_MoveToTargetAction : Action
 
     protected override Status OnStart()
     {
-        _navMeshAgent = Self.Value.GetComponent<NavMeshAgent>();
-        if (_navMeshAgent == null || Target.Value == null) return Status.Failure;
-
-        var viewModel = Self.Value.GetComponent<FixerViewModel>();
-        if (viewModel != null)
+        if (Self.Value == null || Target.Value == null)
         {
-            viewModel.PlayAnimationFor(FixerState.Wandering);
+            return Status.Failure;
+        }
+        if (!Self.Value.TryGetComponent(out _navMeshAgent))
+        {
+            return Status.Failure;
+        }
+
+        if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
+        {
+            if (TargetState != null)
+            {
+                viewModel.ChangeStateFromBrain(TargetState.Value);
+            }
         }
 
         _navMeshAgent.SetDestination(Target.Value.transform.position);
-
-        return Status.Running; 
+        return Status.Running;
     }
 
     protected override Status OnUpdate()

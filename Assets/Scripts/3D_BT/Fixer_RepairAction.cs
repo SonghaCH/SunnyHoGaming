@@ -18,16 +18,9 @@ public partial class Fixer_RepairAction : Action
     {
         _startTime = Time.time;
 
-        // TODO : 애니메이션 재생 등 시각적 처리 (MVVM이나 Animator 연동)
-        // Self.Value.GetComponent<Animator>().SetTrigger("Repair");
-
-        if (Self.Value != null)
+        if (Self.Value != null && Self.Value.TryGetComponent(out FixerViewModel viewModel))
         {
-            var viewModel = Self.Value.GetComponent<FixerViewModel>();
-            if (viewModel != null)
-            {
-                viewModel.CurrentState = FixerState.Executing;
-            }
+            viewModel.ChangeStateFromBrain(FixerState.Executing);
         }
 
         return Status.Running;

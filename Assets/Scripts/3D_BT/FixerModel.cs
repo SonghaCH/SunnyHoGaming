@@ -1,19 +1,18 @@
 ﻿using UnityEngine;
 using Unity.Behavior;
-using System.Collections.Generic;
 
-public class FixerAgent : MonoBehaviour
+public class FixerModel : MonoBehaviour
 {
     [SerializeField] private BehaviorGraphAgent behaviorAgent;
     [SerializeField] private int fixerID;
 
-    [SerializeField] private List<GameObject> mainRoomSpots;
+    [SerializeField] private GameObject mainRoomSpot;
 
     private void Start()
     {
-        if (mainRoomSpots != null && mainRoomSpots.Count > 0)
+        if (mainRoomSpot != null)
         {
-            behaviorAgent.SetVariableValue("MainRoomSpots", mainRoomSpots);
+            behaviorAgent.SetVariableValue("MainRoomSpot", mainRoomSpot);
         }
 
         behaviorAgent.SetVariableValue("FixerState", FixerState.Rampaging);
