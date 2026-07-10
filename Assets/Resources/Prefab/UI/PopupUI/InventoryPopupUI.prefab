@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryPopupUI
   Btn_close: {fileID: 6864761440437822162}
+  Btn_Use: {fileID: 6718253794061422763}
 --- !u!1 &278250844263377571
 GameObject:
   m_ObjectHideFlags: 0

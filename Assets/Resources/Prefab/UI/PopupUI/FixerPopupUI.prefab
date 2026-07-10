@@ -1123,6 +1123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6785642122163601180}
+  - component: {fileID: 1809175672915163468}
   m_Layer: 5
   m_Name: FixerPopupUI
   m_TagString: Untagged
@@ -1153,6 +1154,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1809175672915163468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6526474812915417013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cc5d4841d51e5469de431d2422a29e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerPopupUI
+  Btn_Close: {fileID: 6718264845211936509}
+  Btn_Order: {fileID: 2065541081928335517}
 --- !u!1 &6673584046567284149
 GameObject:
   m_ObjectHideFlags: 0
