@@ -20,7 +20,7 @@ public class Fixer_WaitAction : Action
 
         if (Self.Value != null && Self.Value.TryGetComponent(out FixerViewModel viewModel)) 
         {
-            viewModel.ChangeStateFromBrain(FixerState.Idle);
+            viewModel.ChangeStateFromBrain(FixerState.Idle, true);
         }
 
         return Status.Running;

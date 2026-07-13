@@ -1,23 +1,24 @@
 ﻿using System;
 using Unity.Behavior;
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(Animator))]
 public class FixerViewModel : MonoBehaviour
 {
     public event Action<FixerState> OnStateChanged;
+
+    public event Action<FixerState> OnAnimationStateChanged;
 
     [SerializeField] private FixerState currentState = FixerState.Rampaging;
 
     private bool hasBeenRepaired = false;
     private BehaviorGraphAgent _behaviorGraphAgent;
-
-    private Animator _animator;
+    private NavMeshAgent _navMeshAgent;
 
     private void Awake()
     {
         TryGetComponent(out _behaviorGraphAgent);
-        TryGetComponent(out _animator);
+        TryGetComponent(out _navMeshAgent);
     }
 
     public FixerState CurrentState
@@ -44,17 +45,15 @@ public class FixerViewModel : MonoBehaviour
                     hasBeenRepaired = true;
                 }
 
+                OnAnimationStateChanged?.Invoke(currentState);
                 OnStateChanged.Invoke(currentState);
             }
         }
     }
 
-    public void ChangeStateFromBrain(FixerState newState)
+    public void ChangeStateFromBrain(FixerState newState, bool isSilent = false)
     {
-        if (hasBeenRepaired && newState == FixerState.Rampaging)
-        {
-            return;
-        }
+        if (hasBeenRepaired && newState == FixerState.Rampaging) return;
 
         if (currentState != newState)
         {
@@ -65,14 +64,14 @@ public class FixerViewModel : MonoBehaviour
                 _behaviorGraphAgent.BlackboardReference.SetVariableValue("FixerState", currentState);
             }
 
-            PlayStateAnimation(currentState);
+            if (currentState != FixerState.Rampaging) hasBeenRepaired = true;
 
-            if (currentState != FixerState.Rampaging)
+            OnAnimationStateChanged?.Invoke(currentState);
+
+            if (!isSilent)
             {
-                hasBeenRepaired = true;
+                OnStateChanged?.Invoke(currentState);
             }
-
-            OnStateChanged?.Invoke(currentState);
         }
     }
 
@@ -84,34 +83,7 @@ public class FixerViewModel : MonoBehaviour
             _behaviorGraphAgent.Restart();
         }
 
-        PlayStateAnimation(state);
-    }
-
-    private void PlayStateAnimation(FixerState state)
-    {
-        if (_animator == null) return;
-
-        switch (state)
-        {
-            case FixerState.Idle: 
-                _animator.CrossFade("Idle", 0.1f);
-                break;
-            case FixerState.Rampaging: 
-                _animator.CrossFade("CrashRun", 0.1f);
-                break;
-            case FixerState.Executing: 
-                _animator.CrossFade("Fix", 0.1f);
-                break;
-            case FixerState.Returning:
-                _animator.Play("Run");
-                break;
-            case FixerState.Wandering:
-                _animator.CrossFade("Walk", 0.1f);
-                break;
-            case FixerState.MoveToTarget:
-                _animator.CrossFade("Run", 0.1f);
-                break;
-        }
+        OnAnimationStateChanged?.Invoke(state);
     }
 
     private void OnValidate()

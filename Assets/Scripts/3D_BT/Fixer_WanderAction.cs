@@ -27,7 +27,7 @@ public partial class Fixer_WanderAction : Action
 
         if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
         {
-            viewModel.ChangeStateFromBrain(FixerState.Wandering);
+            viewModel.ChangeStateFromBrain(FixerState.Wandering, true);
         }
 
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
