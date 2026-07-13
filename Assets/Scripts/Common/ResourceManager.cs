@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class ResourceManager : MonoBehaviour
     {
         Inst = this;
     }
-
+   
     // 로드된 에셋들을 관리하기 위한 캐시 (메모리 해제 시 필요)
     private Dictionary<string, AsyncOperationHandle> _handles = new Dictionary<string, AsyncOperationHandle>();
 

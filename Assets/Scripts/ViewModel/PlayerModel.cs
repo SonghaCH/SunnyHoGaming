@@ -26,10 +26,9 @@ public class PlayerModel
 
 
 [Serializable]
-
 public class ItemModel
 {
     public long ItemUniqueId;
     public string ItemDataId;
-    public int ItemMaxStackCount;
+    public int ItemStackCount;
 }

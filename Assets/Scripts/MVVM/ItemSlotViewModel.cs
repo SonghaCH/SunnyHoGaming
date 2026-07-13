@@ -2,6 +2,17 @@
 
 public class ItemSlotViewModel : ViewModelBase
 {
+    public void InvokeOnceOnInit()
+    {
+        OnPropertyChanged(nameof(ItemUniqueId));
+        OnPropertyChanged(nameof(ItemDataId));
+        OnPropertyChanged(nameof(ItemStackCount));
+
+    }
+
+
+
+
     private long _ItemUniqueId;
     public long ItemUniqueId
     { 
@@ -30,16 +41,16 @@ public class ItemSlotViewModel : ViewModelBase
         }
     }
 
-    private int _itemMaxStackCount;
-    public int itemMaxStackCount
+    private int _itemStackCount;
+    public int ItemStackCount
     {
-        get => _itemMaxStackCount;
+        get => _itemStackCount;
         set
         {
-            if (_itemMaxStackCount != value)
+            if (_itemStackCount != value)
             {
-                _itemMaxStackCount = value;
-                OnPropertyChanged(nameof(itemMaxStackCount));
+                _itemStackCount = value;
+                OnPropertyChanged(nameof(ItemStackCount));
             }
         }
     }

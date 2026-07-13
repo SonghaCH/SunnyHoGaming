@@ -19,6 +19,11 @@ public class InventoryViewModel :ViewModelBase
         }
     }
 
+    public void InvokeOnceOnInit()
+    {
+        OnPropertyChanged(nameof(ItemList));
+    }
+
     public void AddItemSlotViewModel(ItemSlotViewModel slotVm)
     {
         _ItemList.Add(slotVm.ItemUniqueId, slotVm);

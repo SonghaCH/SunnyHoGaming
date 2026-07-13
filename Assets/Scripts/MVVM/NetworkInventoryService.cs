@@ -32,7 +32,7 @@ public class NetworkInventoryService
         var newItemVm = new ItemSlotViewModel();
         newItemVm.ItemUniqueId = uniqueId;
         newItemVm.ItemDataId = itemDataId;
-        newItemVm.itemMaxStackCount = addItemCount;
+        newItemVm.ItemStackCount = addItemCount;
 
 
         var invenVm = GetLocalInventoryViewModel();
