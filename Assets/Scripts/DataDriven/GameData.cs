@@ -63,7 +63,6 @@ public class ItemData : GameDataBase
     public string ApplyEffective;
     public int ApplyFigure;
     public int MaxStackCount;
-    public string PrefabPath;
     public string SoundPath;
     public string IconPath;
     public string UseItemType;

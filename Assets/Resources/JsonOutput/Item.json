@@ -6,9 +6,8 @@
     "ApplyEffective": null,
     "MaxStackCount": 1,
     "ApplyFigure": null,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/Note",
     "UseItemType": "OpenPopup"
   },
   {
@@ -18,9 +17,8 @@
     "ApplyEffective": "배고픔 수치 감소",
     "MaxStackCount": 999,
     "ApplyFigure": -50,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/Food",
     "UseItemType": "Reduce Hunger"
   },
   {
@@ -30,9 +28,8 @@
     "ApplyEffective": "산소 공급 수리 ",
     "MaxStackCount": 999,
     "ApplyFigure": null,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/Ice",
     "UseItemType": null
   },
   {
@@ -42,9 +39,8 @@
     "ApplyEffective": "전력 공급 수리 ",
     "MaxStackCount": 999,
     "ApplyFigure": null,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/Plasma",
     "UseItemType": null
   },
   {
@@ -54,9 +50,8 @@
     "ApplyEffective": "온도 제어 수리",
     "MaxStackCount": 999,
     "ApplyFigure": null,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/LN",
     "UseItemType": null
   },
   {
@@ -66,9 +61,8 @@
     "ApplyEffective": "항로 제어 수리",
     "MaxStackCount": 999,
     "ApplyFigure": null,
-    "PrefabPath": null,
     "SoundPath": null,
-    "IconPath": null,
+    "IconPath": "Icon/Wire",
     "UseItemType": null
   }
 ]
