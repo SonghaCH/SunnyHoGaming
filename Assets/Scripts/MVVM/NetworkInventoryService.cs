@@ -22,23 +22,54 @@ public class NetworkInventoryService
         return InventoryVm;
     }
 
-    public void AddItem(string itemDataId, int addItemCount)
+    public void AddItem(string itemId, int addCount)
     {
-        // 저장할때 고유값 ID를 부여하기 위해 사용
-        long uniqueId = GameUtil.GenerateUniqueId();
-
-        // TODO : 우선 쉽게 사용할 수 있도록 중복 처리는 빼두었다. 습득할때마다 아이템이 하나씩 추가되도록 해두고
-        // 추후에 중복값은 StackCount가 다 찰때까지 누적해줄 수 있도록 로직을 추가하자
-        var newItemVm = new ItemSlotViewModel();
-        newItemVm.ItemUniqueId = uniqueId;
-        newItemVm.ItemDataId = itemDataId;
-        newItemVm.ItemStackCount = addItemCount;
-
-
         var invenVm = GetLocalInventoryViewModel();
-        invenVm.AddItemSlotViewModel(newItemVm);
+        if (invenVm == null || invenVm.ItemList == null) return;
 
-        //NetworkManager.Inst.SaveLoadServie.RequstSaveData();
+        // 1. 테이블 데이터에서 해당 아이템의 최대 중첩 개수를 가져옵니다.
+        var itemTableData = GameDataManager.Instance.GetItemData(itemId);
+        int maxStack = (itemTableData != null) ? itemTableData.MaxStackCount : 999;
+
+        int remainingCount = addCount;
+
+        // 2. 가방을 선 탐색하며 빈 공간이 남은(maxStack 미만) 동일 슬롯을 채워줍니다.
+        foreach (var kvp in invenVm.ItemList)
+        {
+            var slotVm = kvp.Value;
+
+            if (slotVm.ItemDataId == itemId && slotVm.ItemStackCount < maxStack)
+            {
+                int roomLeft = maxStack - slotVm.ItemStackCount;
+                int amountToAdd = Mathf.Min(remainingCount, roomLeft);
+
+                slotVm.ItemStackCount += amountToAdd;
+                remainingCount -= amountToAdd;
+
+                if (remainingCount <= 0)
+                    break;
+            }
+        }
+
+        // 3. 그래도 추가할 수량이 남았다면 새 고유 ID를 생성해 새 슬롯에 할당합니다.
+        while (remainingCount > 0)
+        {
+            int newSlotCount = Mathf.Min(remainingCount, maxStack);
+            long newUniqueId = GameUtil.GenerateUniqueId();
+
+            var newSlotVm = new ItemSlotViewModel()
+            {
+                ItemUniqueId = newUniqueId,
+                ItemDataId = itemId,
+                ItemStackCount = newSlotCount
+            };
+
+            invenVm.ItemList.Add(newUniqueId, newSlotVm);
+            remainingCount -= newSlotCount;
+        }
+
+        // 4. 리스트 변경 사항을 이벤트를 통해 UI에 강제 갱신 유도합니다.
+        invenVm.RefreshItemList();
     }
 
     public bool RequestUseItem(long requestUseTargetItemUniqueId)

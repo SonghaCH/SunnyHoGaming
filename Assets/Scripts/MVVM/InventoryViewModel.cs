@@ -62,7 +62,10 @@ public class InventoryViewModel :ViewModelBase
         OnPropertyChanged("ItemListAdded");
 
     }
-
+    public void RefreshItemList()
+    {
+        OnPropertyChanged(nameof(ItemList));
+    }
 
     public void RemoveItemSlotViewModel(long uniqueId)
     {
