@@ -157,6 +157,16 @@ public class InventoryPopupUI : UIBase
 
         }
 
+        if (string.IsNullOrEmpty(itemData.UseItemType))
+        {
+            ActiveUseSelectItemButton(false);
+        }
+        else
+        {
+            ActiveUseSelectItemButton(true);
+        }
+
+
         Text_Amount.text = selectedItemVm.ItemStackCount.ToString();
 
         if (_lastSelectedUniqueId != -1 && _itemSlotList.ContainsKey(_lastSelectedUniqueId))

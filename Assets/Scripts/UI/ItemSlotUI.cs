@@ -55,6 +55,15 @@ public class ItemSlotUI : MonoBehaviour
         _slotVm = slotVm;
         _slotVm.PropertyChanged += OnPropChanged_InvenView;
         _slotVm.InvokeOnceOnInit();
+
+        if (_slotVm.ItemDataId == "Item_Note_01")
+        {
+            Text_StackCount.gameObject.SetActive(false);
+        }
+        else
+        {
+            Text_StackCount.gameObject.SetActive(true);
+        }
     }
 
     private void OnPropChanged_InvenView(object sender, PropertyChangedEventArgs e)
@@ -72,7 +81,15 @@ public class ItemSlotUI : MonoBehaviour
                 break;
             case nameof(ItemSlotViewModel.ItemStackCount):
                 {
-                    Text_StackCount.text = $"{_slotVm.ItemStackCount}";
+                    if (_slotVm.ItemDataId == "Item_Note_01")
+                    {
+                        Text_StackCount.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        Text_StackCount.gameObject.SetActive(true);
+                        Text_StackCount.text = $"{_slotVm.ItemStackCount}";
+                    }
                 }
                 break;
         }
