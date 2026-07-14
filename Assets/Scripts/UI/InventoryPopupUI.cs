@@ -148,13 +148,12 @@ public class InventoryPopupUI : UIBase
 
         _currentSelectedItemUniqueId = selectedItemVm.ItemUniqueId;
 
-        // GameDataManager에서 기획 데이터를 로드하여 적용
         var itemData = GameDataManager.Instance.GetItemData(selectedItemVm.ItemDataId);
         if (itemData != null)
         {
             Text_ItemName.text = itemData.Name; 
             Text_Description.text = itemData.Description;
-            GameUtil.LoadAndSetSpriteImage(Image_ItemIcon, itemData.IconPath).Forget();
+            LoadDetailIconSafe(itemData.IconPath).Forget();
 
         }
 
@@ -180,6 +179,14 @@ public class InventoryPopupUI : UIBase
             slotKv.Value.SetSelectedActive(isCurrentSelected);
         }
     }
+
+    private async UniTaskVoid LoadDetailIconSafe(string path)
+    {
+        if (Image_ItemIcon == null) return;
+
+        await GameUtil.LoadAndSetSpriteImage(Image_ItemIcon, path);
+    }
+
     private void ResetItemSlotAndCreateAll()
     {
         ReturnAllSlotsToPool();
