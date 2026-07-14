@@ -7,10 +7,9 @@ using Cysharp.Threading.Tasks;
 
 public class ItemSlotUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro Text_StackCount;
+    [SerializeField] private TextMeshProUGUI Text_StackCount;
     [SerializeField] private UIButton Btn_Slot;
     [SerializeField] private Image Image_Icon;
-    [SerializeField] private Image Image_Frame;
     [SerializeField] private Image Image_Selected;
 
     private event Action<long> OnSelectEvent;
@@ -20,7 +19,12 @@ public class ItemSlotUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Image_Selected.gameObject.SetActive(false);
+        if (_slotVm == null)
+        {
+            return;
+        }
+
+        SetSelectedActive(false);
         Btn_Slot.BindOnClickButtonEvent(OnClick_SelectItem);
     }
 
@@ -30,6 +34,20 @@ public class ItemSlotUI : MonoBehaviour
 
 
         Debug.Log($"{_slotVm.ItemUniqueId}눌러졌다");
+    }
+
+    public void BindSlotSelectEvent(Action<long> onSelectedAction)
+    {
+        OnSelectEvent = null;
+        OnSelectEvent += onSelectedAction;
+    }
+
+    public void SetSelectedActive(bool isSelected)
+    {
+        if (Image_Selected != null)
+        {
+            Image_Selected.gameObject.SetActive(isSelected);
+        }
     }
 
     public void BindSlotViewModel(ItemSlotViewModel slotVm)

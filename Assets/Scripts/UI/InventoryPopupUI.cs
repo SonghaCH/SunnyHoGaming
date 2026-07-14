@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public class InventoryPopupUI : UIBase
 {
@@ -8,6 +11,12 @@ public class InventoryPopupUI : UIBase
     [SerializeField] private GameObject Prefab_Slot;
     [SerializeField] private Transform Transform_UISlotRoot;
     [SerializeField] private UIButton Btn_UseSelectItem;
+
+    [SerializeField] private Image Image_ItemIcon;
+    [SerializeField] private TextMeshProUGUI Text_ItemName;       
+    [SerializeField] private TextMeshProUGUI Text_Description;    
+    [SerializeField] private TextMeshProUGUI Text_Amount;         
+    [SerializeField] private GameObject Layout_Description;
 
     [SerializeField] private Dictionary<long, ItemSlotUI> _itemSlotList = new Dictionary<long, ItemSlotUI>();
     private long _currentSelectedItemUniqueId;
@@ -59,6 +68,11 @@ public class InventoryPopupUI : UIBase
                     ResetItemSlotAndCreateAll();
                 }
                 break;
+            case nameof(InventoryViewModel.SelectedItem):
+                {
+                    UpdateSelectedItemDetail(_invenVm.SelectedItem);
+                }
+                break;
             case "ItemListAdded":
                 {
 
@@ -66,12 +80,53 @@ public class InventoryPopupUI : UIBase
                 break;
             case "ItemListRemoved":
                 {
-
+                    if (_invenVm.SelectedItem == null)
+                    {
+                        Layout_Description.SetActive(false);
+                        ActiveUseSelectItemButton(false);
+                    }
                 }
                 break;
         }
     }
 
+    private void UpdateSelectedItemDetail(ItemSlotViewModel selectedItemVm)
+    {
+        if (selectedItemVm == null)
+        {
+            Layout_Description.SetActive(false);
+            ActiveUseSelectItemButton(false);
+
+            foreach (var slot in _itemSlotList.Values)
+            {
+                slot.SetSelectedActive(false);
+            }
+            return;
+        }
+
+        Layout_Description.SetActive(true);
+        ActiveUseSelectItemButton(true);
+
+        _currentSelectedItemUniqueId = selectedItemVm.ItemUniqueId;
+
+        // GameDataManager에서 기획 데이터를 로드하여 적용
+        var itemData = GameDataManager.Instance.GetItemData(selectedItemVm.ItemDataId);
+        if (itemData != null)
+        {
+            Text_ItemName.text = itemData.Name; 
+            Text_Description.text = itemData.Description;
+            GameUtil.LoadAndSetSpriteImage(Image_ItemIcon, itemData.IconPath).Forget();
+
+        }
+
+        Text_Amount.text = selectedItemVm.ItemStackCount.ToString();
+
+        foreach (var slotKv in _itemSlotList)
+        {
+            bool isCurrentSelected = (slotKv.Key == selectedItemVm.ItemUniqueId);
+            slotKv.Value.SetSelectedActive(isCurrentSelected);
+        }
+    }
     private void ResetItemSlotAndCreateAll()
     {
         foreach (var itemKv in _invenVm.ItemList)
@@ -98,10 +153,15 @@ public class InventoryPopupUI : UIBase
         // 1-4 중복체크 해주면 좋긴 하지만, 일단 쉽게 컴포넌트(컴포넌트로 게임오브젝트는 받을 수 있으므로)를 보관해보자
         _itemSlotList.Add(slotVm.ItemUniqueId, slotView);
 
+        slotView.BindSlotSelectEvent(OnChildSlotSelected);
         //slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
-
+    private void OnChildSlotSelected(long clickedUniqueId)
+    {
+        // 뷰모델에게 아이템이 선택되었음을 알려 상태를 변경시킵니다.
+        _invenVm.SelectItem(clickedUniqueId);
+    }
 
 
     private void ActiveUseSelectItemButton(bool isActive)

@@ -19,9 +19,41 @@ public class InventoryViewModel :ViewModelBase
         }
     }
 
+    private ItemSlotViewModel _selectedItem;
+    public ItemSlotViewModel SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            if (_selectedItem != value)
+            {
+                _selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
+    }
+
     public void InvokeOnceOnInit()
     {
         OnPropertyChanged(nameof(ItemList));
+        if (_ItemList.Count > 0)
+        {
+            using (var enumerator = _ItemList.Values.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                {
+                    SelectedItem = enumerator.Current;
+                }
+            }
+        }
+    }
+
+    public void SelectItem(long uniqueId)
+    {
+        if (_ItemList.TryGetValue(uniqueId, out var targetSlotVm))
+        {
+            SelectedItem = targetSlotVm;
+        }
     }
 
     public void AddItemSlotViewModel(ItemSlotViewModel slotVm)
@@ -37,6 +69,11 @@ public class InventoryViewModel :ViewModelBase
         if(_ItemList.ContainsKey(uniqueId))
         {
             _ItemList.Remove(uniqueId);
+
+            if (SelectedItem != null && SelectedItem.ItemUniqueId == uniqueId)
+            {
+                SelectedItem = null; 
+            }
         }
 
         OnPropertyChanged("ItemListRemoved");
