@@ -48,12 +48,43 @@ public class InventoryPopupUI : UIBase
 
     private void FindInventoryViewModelAndBind()
     {
+        // [디버깅 방어 코드]
+        if (NetworkManager.Inst == null)
+        {
+            Debug.LogError("[InventoryUI] NetworkManager.Inst가 null입니다!");
+            return;
+        }
+
+        if (NetworkManager.Inst.InventoryService == null)
+        {
+            Debug.LogError("[InventoryUI] InventoryService가 null입니다!");
+            return;
+        }
+
+
         var invenVm = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+
+        if (invenVm == null)
+        {
+            Debug.LogError("[InventoryUI] GetLocalInventoryViewModel() 결과가 null입니다!");
+            return;
+        }
+
         if (invenVm.ItemList == null || invenVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다!");
+
+            // 우측 상세 레이아웃과 사용 버튼을 깔끔하게 꺼줍니다.
+            if (Layout_Description != null)
+            {
+                Layout_Description.SetActive(false);
+            }
+            ActiveUseSelectItemButton(false);
+
             return;
         }
+
+
         _invenVm = invenVm;
         _invenVm.PropertyChanged += OnPropChanged_InvenView;
         _invenVm.InvokeOnceOnInit();
