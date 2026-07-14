@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryPopupUI
   Btn_close: {fileID: 6864761440437822162}
-  Prefab_Slot: {fileID: 0}
+  Prefab_Slot: {fileID: 5627029719153345935, guid: c3ed51e6c17d78a4184c88a6e596b748, type: 3}
   Transform_UISlotRoot: {fileID: 1554996085826692849}
   Btn_UseSelectItem: {fileID: 6718253794061422763}
   Image_ItemIcon: {fileID: 3078357414635587758}

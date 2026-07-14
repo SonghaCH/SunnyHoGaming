@@ -19,6 +19,8 @@ public class InventoryPopupUI : UIBase
     [SerializeField] private GameObject Layout_Description;
 
     [SerializeField] private Dictionary<long, ItemSlotUI> _itemSlotList = new Dictionary<long, ItemSlotUI>();
+
+    private List<ItemSlotUI> _slotPoolList = new List<ItemSlotUI>();
     private long _currentSelectedItemUniqueId;
 
     private InventoryViewModel _invenVm; 
@@ -34,21 +36,28 @@ public class InventoryPopupUI : UIBase
 
     private void SetInventoryItemSlotOnEnable()
     {
-        if (_itemSlotList.Count > 0)
-        {
-            foreach (var slot in _itemSlotList)
-            {
-                DestroyImmediate(slot.Value.gameObject);
-            }
-            _itemSlotList.Clear();
-        }
+        ReturnAllSlotsToPool();
 
         FindInventoryViewModelAndBind();
     }
 
+    private void ReturnAllSlotsToPool()
+    {
+        if (_itemSlotList != null && _itemSlotList.Count > 0)
+        {
+            foreach (var slot in _itemSlotList.Values)
+            {
+                if (slot != null && slot.gameObject != null)
+                {
+                    slot.gameObject.SetActive(false);
+                }
+            }
+            _itemSlotList.Clear();
+        }
+    }
+
     private void FindInventoryViewModelAndBind()
     {
-        // [디버깅 방어 코드]
         if (NetworkManager.Inst == null)
         {
             Debug.LogError("[InventoryUI] NetworkManager.Inst가 null입니다!");
@@ -74,7 +83,6 @@ public class InventoryPopupUI : UIBase
         {
             Debug.LogWarning("보유한 아이템이 없습니다!");
 
-            // 우측 상세 레이아웃과 사용 버튼을 깔끔하게 꺼줍니다.
             if (Layout_Description != null)
             {
                 Layout_Description.SetActive(false);
@@ -209,7 +217,9 @@ public class InventoryPopupUI : UIBase
         Btn_UseSelectItem.gameObject.SetActive(isActive);
     }
 
-   
+    
+
+
 
     private void RequestSelectedUseItem()
     {
