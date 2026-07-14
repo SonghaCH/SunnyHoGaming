@@ -1,12 +1,13 @@
-﻿using Unity.VisualScripting;
+﻿using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameStartUI : UIBase
 {
     [SerializeField] private UIButton Btn_Start;
     [SerializeField] private UIButton Btn_Setting;
     [SerializeField] private UIButton Btn_Exit;
-
 
 
     private void OnEnable()
