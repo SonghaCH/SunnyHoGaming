@@ -13,26 +13,22 @@ public class ItemSlotUI : MonoBehaviour
     [SerializeField] private Image Image_Selected;
 
     private event Action<long> OnSelectEvent;
-
     private ItemSlotViewModel _slotVm;
-
 
     private void OnEnable()
     {
-        if (_slotVm == null)
-        {
-            return;
-        }
-
         SetSelectedActive(false);
-        Btn_Slot.BindOnClickButtonEvent(OnClick_SelectItem);
+        if (Btn_Slot != null)
+        {
+            Btn_Slot.BindOnClickButtonEvent(OnClick_SelectItem, false);
+        }
     }
 
     public void OnClick_SelectItem()
     {
+        if (_slotVm == null) return;
+
         OnSelectEvent?.Invoke(_slotVm.ItemUniqueId);
-
-
         Debug.Log($"{_slotVm.ItemUniqueId}눌러졌다");
     }
 
@@ -52,9 +48,38 @@ public class ItemSlotUI : MonoBehaviour
 
     public void BindSlotViewModel(ItemSlotViewModel slotVm)
     {
+        // 중복 방지를 위해 기존 이벤트 해제
+        if (_slotVm != null)
+        {
+            _slotVm.PropertyChanged -= OnPropChanged_InvenView;
+        }
+
         _slotVm = slotVm;
         _slotVm.PropertyChanged += OnPropChanged_InvenView;
-        _slotVm.InvokeOnceOnInit();
+
+        // 아이콘 초기화 및 수량 초기화 강제 실행
+        SetIcon(_slotVm.ItemDataId);
+        UpdateStackCountUI();
+    }
+
+    private void OnPropChanged_InvenView(object sender, PropertyChangedEventArgs e)
+    {
+        if (_slotVm == null) return;
+
+        switch (e.PropertyName)
+        {
+            case nameof(ItemSlotViewModel.ItemDataId):
+                SetIcon(_slotVm.ItemDataId);
+                break;
+            case nameof(ItemSlotViewModel.ItemStackCount):
+                UpdateStackCountUI();
+                break;
+        }
+    }
+
+    private void UpdateStackCountUI()
+    {
+        if (_slotVm == null) return;
 
         if (_slotVm.ItemDataId == "Item_Note_01")
         {
@@ -63,58 +88,26 @@ public class ItemSlotUI : MonoBehaviour
         else
         {
             Text_StackCount.gameObject.SetActive(true);
+            Text_StackCount.text = $"{_slotVm.ItemStackCount}";
         }
     }
 
-    private void OnPropChanged_InvenView(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(ItemSlotViewModel.ItemUniqueId):
-                {
-                }
-                break;
-            case nameof(ItemSlotViewModel.ItemDataId):
-                {
-                    SetIcon(_slotVm.ItemDataId);
-                }
-                break;
-            case nameof(ItemSlotViewModel.ItemStackCount):
-                {
-                    if (_slotVm.ItemDataId == "Item_Note_01")
-                    {
-                        Text_StackCount.gameObject.SetActive(false);
-                    }
-                    else
-                    {
-                        Text_StackCount.gameObject.SetActive(true);
-                        Text_StackCount.text = $"{_slotVm.ItemStackCount}";
-                    }
-                }
-                break;
-        }
-    }
     private void SetIcon(string itemDataId)
     {
         var itemData = GameDataManager.Instance.GetItemData(itemDataId);
-        if (itemData == null)
-        {
-            Debug.LogWarning($"Item 데이터를 불러올 수 없습니다! 경로:{itemDataId}");
-            return;
-        }
+        if (itemData == null) return;
 
         string iconPath = itemData.IconPath;
-        if (string.IsNullOrEmpty(iconPath) == true)
-        {
-            Debug.LogWarning($"Item 데이터에 아이콘 경로가 존재하지 않습니다.");
-            return;
-        }
-
-        //IsUsableItem = (string.IsNullOrEmpty(itemData.UseItemType) == false);
+        if (string.IsNullOrEmpty(iconPath)) return;
 
         GameUtil.LoadAndSetSpriteImage(Image_Icon, iconPath).Forget();
+    }
 
-       
-
+    private void OnDisable()
+    {
+        if (_slotVm != null)
+        {
+            _slotVm.PropertyChanged -= OnPropChanged_InvenView;
+        }
     }
 }

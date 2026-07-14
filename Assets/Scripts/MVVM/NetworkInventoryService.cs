@@ -74,35 +74,53 @@ public class NetworkInventoryService
 
     public bool RequestUseItem(long requestUseTargetItemUniqueId)
     {
-        // 아이템의 실제적인 사용 부분이다.
-        long removeTargetUniqueId = 0;
-
         var invenVm = GetLocalInventoryViewModel();
+        if (invenVm == null || invenVm.ItemList == null) return false;
 
-        
-        foreach (var itemSlotKv in invenVm.ItemList)
+        if (invenVm.ItemList.TryGetValue(requestUseTargetItemUniqueId, out var itemSlotVm))
         {
-
-            var itemSlotVm = itemSlotKv.Value;
-            if (itemSlotVm.ItemUniqueId == requestUseTargetItemUniqueId)
+            if (itemSlotVm.ItemStackCount <= 0)
             {
-
-                // 데이터를 분해합시다!
-                string itemDataId = itemSlotVm.ItemDataId;
-                var itemData = GameDataManager.Instance.GetItemData(itemDataId);
-                if (string.IsNullOrEmpty(itemData.UseItemType) == false)
-                {
-                    // 사용할 수 있는 아이템이므로
-                    UseItemFunction(itemData.UseItemType);
-                }
-                // Break 하나만 찾아서 사용할 것이므로
-                removeTargetUniqueId = itemSlotVm.ItemUniqueId;
-                RequestRemoveItem(removeTargetUniqueId);
-                break;
+                return false;
             }
+
+            string itemDataId = itemSlotVm.ItemDataId;
+            var itemData = GameDataManager.Instance.GetItemData(itemDataId);
+            if (itemData == null) return false;
+
+            if (string.IsNullOrEmpty(itemData.UseItemType) == false)
+            {
+                UseItemFunction(itemData.UseItemType);
+            }
+
+            if (itemDataId == "Item_Note_01")
+            {
+                return true;
+            }
+
+            itemSlotVm.ItemStackCount--;
+            Debug.Log($"[아이템 소모] {itemData.Name} 사용됨. 남은 수량: {itemSlotVm.ItemStackCount}");
+
+            if (itemSlotVm.ItemStackCount <= 0)
+            {
+                RequestRemoveItem(requestUseTargetItemUniqueId);
+
+                invenVm.RefreshItemList();
+
+                if (invenVm.SelectedItem == itemSlotVm)
+                {
+                    invenVm.SelectItem(-1);
+                }
+            }
+            else
+            {
+                invenVm.RefreshItemList();
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 
@@ -118,50 +136,22 @@ public class NetworkInventoryService
 
         if (itemUseType == "OpenPopup")
         {
-
+            UIManager.Instance.OpenHiddenNotePopupUI();
         }
         else if (itemUseType == "Reduce Hunger")
         {
-            //if (useItemParamList.Count > 0)
+            //var playerComponent = GetLocalPlayer();
+            //if (playerComponent != null)
             //{
-            //    string str = useItemParamList[0];
-            //    int statChangeVal = int.Parse(str);
-            //    //var playerComponent = GetLocalPlayer();
-            //    //playerComponent.AddAtk(statChangeVal);
+            //    // 2. 기획 데이터의 수치인 -50 만큼 배고픔 수치를 감소(회복)시킵니다.
+            //    // (배고픔을 줄여주는 수치이므로 -50을 더하거나 빼주는 식으로 구현 형태에 맞춰 조절해 주세요!)
+            //    playerComponent.ReduceHunger(-50);
+
+            //    Debug.Log($"[아이템 효과] 배고픔이 50만큼 해소되었습니다!");
             //}
 
         }
-        //else if (itemUseType == "StatChangeHp")
-        //{
-        //    //if (useItemParamList.Count > 0)
-        //    //{
-        //    //    string str = useItemParamList[0];
-        //    //    int statChangeVal = int.Parse(str);
-        //    //    //var playerComponent = GetLocalPlayer();
-        //    //    //playerComponent.AddHp(statChangeVal);
-        //    //}
-        //}
-        //else if (itemUseType == "SummonMonster")
-        //{
-        //    //if (useItemParamList.Count > 0)
-        //    //{
-        //    //    string str = useItemParamList[0];
-        //    //    var strArr = str.Split(":");
-        //    //    if (strArr.Length > 1)
-        //    //    {
-        //    //        string monsterDataId = strArr[0];
-        //    //        int monsterSummonCount = int.Parse(strArr[1]);
-
-        //    //        for (int i = 0; i < monsterSummonCount; i++)
-        //    //        {
-        //    //            //var playerComponent = GetLocalPlayer();
-        //    //            //GameObjectManager.Inst.CreateMonsterObject(monsterDataId, playerComponent.transform).Forget();
-        //    //        }
-        //    //    }
-        //    //}
-
-
-        //}
+       
     }
 
     private void RequestRemoveItem(long removeTargetUniqueId)
