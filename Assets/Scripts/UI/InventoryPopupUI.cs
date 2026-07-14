@@ -182,28 +182,52 @@ public class InventoryPopupUI : UIBase
     }
     private void ResetItemSlotAndCreateAll()
     {
+        ReturnAllSlotsToPool();
+
         foreach (var itemKv in _invenVm.ItemList)
         {
             var itemSlotVm = itemKv.Value;
-            CreateSlot(itemSlotVm);
+            GetOrCreateSlot(itemSlotVm);
         }
     }
 
-    private void CreateSlot(ItemSlotViewModel slotVm)
+    private void GetOrCreateSlot(ItemSlotViewModel slotVm)
     {
-        var gObj = Instantiate(Prefab_Slot, Transform_UISlotRoot);
-        if (gObj == null) return;
+        if (_itemSlotList.ContainsKey(slotVm.ItemUniqueId)) return;
 
-        var slotView = gObj.GetComponent<ItemSlotUI>();
-        if (slotView == null) return;
+        ItemSlotUI slotView = null;
 
+        for (int i = _slotPoolList.Count - 1; i >= 0; i--)
+        {
+            var poolSlot = _slotPoolList[i];
+            if (poolSlot == null || poolSlot.gameObject == null)
+            {
+                _slotPoolList.RemoveAt(i);
+                continue;
+            }
 
-        slotView.BindSlotViewModel(slotVm); 
+            if (poolSlot.gameObject.activeSelf == false)
+            {
+                slotView = poolSlot;
+                slotView.gameObject.SetActive(true);
+                break;
+            }
+        }
 
+        if (slotView == null)
+        {
+            var gObj = Instantiate(Prefab_Slot, Transform_UISlotRoot);
+            if (gObj == null) return;
+
+            slotView = gObj.GetComponent<ItemSlotUI>();
+            if (slotView == null) return;
+
+            _slotPoolList.Add(slotView);
+        }
+
+        slotView.BindSlotViewModel(slotVm);
         _itemSlotList.Add(slotVm.ItemUniqueId, slotView);
-
         slotView.BindSlotSelectEvent(OnChildSlotSelected);
-        //slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
     private void OnChildSlotSelected(long clickedUniqueId)
