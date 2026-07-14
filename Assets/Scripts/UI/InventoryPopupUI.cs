@@ -13,50 +13,103 @@ public class InventoryPopupUI : UIBase
     [SerializeField] private UIButton Btn_UseSelectItem;
 
     [SerializeField] private Image Image_ItemIcon;
-    [SerializeField] private TextMeshProUGUI Text_ItemName;       
-    [SerializeField] private TextMeshProUGUI Text_Description;    
-    [SerializeField] private TextMeshProUGUI Text_Amount;         
+    [SerializeField] private TextMeshProUGUI Text_ItemName;
+    [SerializeField] private TextMeshProUGUI Text_Description;
+    [SerializeField] private TextMeshProUGUI Text_Amount;
     [SerializeField] private GameObject Layout_Description;
 
     [SerializeField] private Dictionary<long, ItemSlotUI> _itemSlotList = new Dictionary<long, ItemSlotUI>();
+
+    private List<ItemSlotUI> _slotPoolList = new List<ItemSlotUI>();
     private long _currentSelectedItemUniqueId;
 
-    private InventoryViewModel _invenVm; 
-        
+    private InventoryViewModel _invenVm;
+
+    private bool _canUseCurrentItem = false;
+
 
     private void OnEnable()
     {
-        Btn_close.BindOnClickButtonEvent(OnClick_Close);
-        Btn_UseSelectItem.BindOnClickButtonEvent(Onclick_UseSelectItem, true);
+        Btn_close.BindOnClickButtonEvent(OnClick_Close, false);
+        Btn_UseSelectItem.BindOnClickButtonEvent(Onclick_UseSelectItem, false);
+
         SetInventoryItemSlotOnEnable();
+    }
+
+    private void OnDisable()
+    {
+        if (_invenVm != null)
+        {
+            _invenVm.PropertyChanged -= OnPropChanged_InvenView;
+        }
     }
 
 
     private void SetInventoryItemSlotOnEnable()
     {
-        if (_itemSlotList.Count > 0)
+        ReturnAllSlotsToPool();
+        FindInventoryViewModelAndBind();
+    }
+
+    private void ReturnAllSlotsToPool()
+    {
+        if (_itemSlotList != null && _itemSlotList.Count > 0)
         {
-            foreach (var slot in _itemSlotList)
+            foreach (var slot in _itemSlotList.Values)
             {
-                DestroyImmediate(slot.Value.gameObject);
+                if (slot != null && slot.gameObject != null)
+                {
+                    slot.gameObject.SetActive(false);
+                }
             }
             _itemSlotList.Clear();
         }
-
-        FindInventoryViewModelAndBind();
     }
 
     private void FindInventoryViewModelAndBind()
     {
+        if (NetworkManager.Inst == null)
+        {
+            Debug.LogError("[InventoryUI] NetworkManager.Inst가 null입니다!");
+            return;
+        }
+
+        if (NetworkManager.Inst.InventoryService == null)
+        {
+            Debug.LogError("[InventoryUI] InventoryService가 null입니다!");
+            return;
+        }
+
         var invenVm = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+
+        if (invenVm == null)
+        {
+            Debug.LogError("[InventoryUI] GetLocalInventoryViewModel() 결과가 null입니다!");
+            return;
+        }
+
+        if (_invenVm != null)
+        {
+            _invenVm.PropertyChanged -= OnPropChanged_InvenView;
+        }
+
+        _invenVm = invenVm;
+        _invenVm.PropertyChanged += OnPropChanged_InvenView;
+
+        _invenVm.InvokeOnceOnInit();
+
         if (invenVm.ItemList == null || invenVm.ItemList.Count == 0)
         {
             Debug.LogWarning("보유한 아이템이 없습니다!");
+
+            if (Layout_Description != null)
+            {
+                Layout_Description.SetActive(false);
+            }
+            ActiveUseSelectItemButton(false);
+
             return;
         }
-        _invenVm = invenVm;
-        _invenVm.PropertyChanged += OnPropChanged_InvenView;
-        _invenVm.InvokeOnceOnInit();
     }
 
     private void OnPropChanged_InvenView(object sender, PropertyChangedEventArgs e)
@@ -66,16 +119,20 @@ public class InventoryPopupUI : UIBase
             case nameof(InventoryViewModel.ItemList):
                 {
                     ResetItemSlotAndCreateAll();
+
+                    if (_invenVm != null && _invenVm.SelectedItem != null)
+                    {
+                        var itemData = GameDataManager.Instance.GetItemData(_invenVm.SelectedItem.ItemDataId);
+                        if (itemData != null && !string.IsNullOrEmpty(itemData.UseItemType))
+                        {
+                            _canUseCurrentItem = true;
+                        }
+                    }
                 }
                 break;
             case nameof(InventoryViewModel.SelectedItem):
                 {
                     UpdateSelectedItemDetail(_invenVm.SelectedItem);
-                }
-                break;
-            case "ItemListAdded":
-                {
-
                 }
                 break;
             case "ItemListRemoved":
@@ -89,6 +146,7 @@ public class InventoryPopupUI : UIBase
                 break;
         }
     }
+
     private long _lastSelectedUniqueId = -1;
     private void UpdateSelectedItemDetail(ItemSlotViewModel selectedItemVm)
     {
@@ -96,7 +154,9 @@ public class InventoryPopupUI : UIBase
         {
             Layout_Description.SetActive(false);
             ActiveUseSelectItemButton(false);
+            _canUseCurrentItem = false;
             _lastSelectedUniqueId = -1;
+            _currentSelectedItemUniqueId = -1;
             foreach (var slot in _itemSlotList.Values)
             {
                 slot.SetSelectedActive(false);
@@ -105,18 +165,25 @@ public class InventoryPopupUI : UIBase
         }
 
         Layout_Description.SetActive(true);
-        ActiveUseSelectItemButton(true);
-
         _currentSelectedItemUniqueId = selectedItemVm.ItemUniqueId;
 
-        // GameDataManager에서 기획 데이터를 로드하여 적용
         var itemData = GameDataManager.Instance.GetItemData(selectedItemVm.ItemDataId);
         if (itemData != null)
         {
-            Text_ItemName.text = itemData.Name; 
+            Text_ItemName.text = itemData.Name;
             Text_Description.text = itemData.Description;
-            GameUtil.LoadAndSetSpriteImage(Image_ItemIcon, itemData.IconPath).Forget();
+            LoadDetailIconSafe(itemData.IconPath).Forget();
+        }
 
+        if (itemData != null && string.IsNullOrEmpty(itemData.UseItemType))
+        {
+            ActiveUseSelectItemButton(false);
+            _canUseCurrentItem = false;
+        }
+        else
+        {
+            ActiveUseSelectItemButton(true);
+            _canUseCurrentItem = true;
         }
 
         Text_Amount.text = selectedItemVm.ItemStackCount.ToString();
@@ -126,7 +193,6 @@ public class InventoryPopupUI : UIBase
             _itemSlotList[_lastSelectedUniqueId].SetSelectedActive(false);
         }
 
-       
         if (_itemSlotList.ContainsKey(selectedItemVm.ItemUniqueId))
         {
             _itemSlotList[selectedItemVm.ItemUniqueId].SetSelectedActive(true);
@@ -134,37 +200,65 @@ public class InventoryPopupUI : UIBase
 
         _lastSelectedUniqueId = selectedItemVm.ItemUniqueId;
 
-
         foreach (var slotKv in _itemSlotList)
         {
             bool isCurrentSelected = (slotKv.Key == selectedItemVm.ItemUniqueId);
             slotKv.Value.SetSelectedActive(isCurrentSelected);
         }
     }
+
+    private async UniTaskVoid LoadDetailIconSafe(string path)
+    {
+        if (Image_ItemIcon == null) return;
+
+        await GameUtil.LoadAndSetSpriteImage(Image_ItemIcon, path);
+    }
+
     private void ResetItemSlotAndCreateAll()
     {
+        ReturnAllSlotsToPool();
+
         foreach (var itemKv in _invenVm.ItemList)
         {
             var itemSlotVm = itemKv.Value;
-            CreateSlot(itemSlotVm);
+            GetOrCreateSlot(itemSlotVm);
         }
     }
 
-    private void CreateSlot(ItemSlotViewModel slotVm)
+    private void GetOrCreateSlot(ItemSlotViewModel slotVm)
     {
-        var gObj = Instantiate(Prefab_Slot, Transform_UISlotRoot);
-        if (gObj == null) return;
+        if (_itemSlotList.ContainsKey(slotVm.ItemUniqueId)) return;
 
-        var slotView = gObj.GetComponent<ItemSlotUI>();
-        if (slotView == null) return;
+        ItemSlotUI slotView = null;
 
+        for (int i = 0; i < _slotPoolList.Count; i++)
+        {
+            var poolSlot = _slotPoolList[i];
+            if (poolSlot == null || poolSlot.gameObject == null) continue;
 
-        slotView.BindSlotViewModel(slotVm); 
+            if (poolSlot.gameObject.activeSelf == false)
+            {
+                slotView = poolSlot;
+                slotView.gameObject.SetActive(true);
+                slotView.transform.SetAsLastSibling();
+                break;
+            }
+        }
 
+        if (slotView == null)
+        {
+            var gObj = Instantiate(Prefab_Slot, Transform_UISlotRoot);
+            if (gObj == null) return;
+
+            slotView = gObj.GetComponent<ItemSlotUI>();
+            if (slotView == null) return;
+
+            _slotPoolList.Add(slotView);
+        }
+
+        slotView.BindSlotViewModel(slotVm);
         _itemSlotList.Add(slotVm.ItemUniqueId, slotView);
-
         slotView.BindSlotSelectEvent(OnChildSlotSelected);
-        //slotView.BindSlotSelectEvent(OnChildSlotSelected);
     }
 
     private void OnChildSlotSelected(long clickedUniqueId)
@@ -172,21 +266,16 @@ public class InventoryPopupUI : UIBase
         _invenVm.SelectItem(clickedUniqueId);
     }
 
-
     private void ActiveUseSelectItemButton(bool isActive)
     {
         Btn_UseSelectItem.gameObject.SetActive(isActive);
     }
-
-   
 
     private void RequestSelectedUseItem()
     {
         NetworkManager.Inst.InventoryService.RequestUseItem(_currentSelectedItemUniqueId);
     }
 
-    
-    
     private void OnClick_Close()
     {
         UIManager.Instance.CloseInventoryPopupUI();
@@ -196,8 +285,15 @@ public class InventoryPopupUI : UIBase
     {
         UIManager.Instance.OpenHiddenNotePopupUI();
     }
+
     public void Onclick_UseSelectItem()
     {
-        RequestSelectedUseItem();
+        if (_canUseCurrentItem && _currentSelectedItemUniqueId != -1)
+        {
+            
+            _canUseCurrentItem = false;
+
+            RequestSelectedUseItem();
+        }
     }
 }
