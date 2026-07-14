@@ -89,14 +89,14 @@ public class InventoryPopupUI : UIBase
                 break;
         }
     }
-
+    private long _lastSelectedUniqueId = -1;
     private void UpdateSelectedItemDetail(ItemSlotViewModel selectedItemVm)
     {
         if (selectedItemVm == null)
         {
             Layout_Description.SetActive(false);
             ActiveUseSelectItemButton(false);
-
+            _lastSelectedUniqueId = -1;
             foreach (var slot in _itemSlotList.Values)
             {
                 slot.SetSelectedActive(false);
@@ -121,6 +121,20 @@ public class InventoryPopupUI : UIBase
 
         Text_Amount.text = selectedItemVm.ItemStackCount.ToString();
 
+        if (_lastSelectedUniqueId != -1 && _itemSlotList.ContainsKey(_lastSelectedUniqueId))
+        {
+            _itemSlotList[_lastSelectedUniqueId].SetSelectedActive(false);
+        }
+
+       
+        if (_itemSlotList.ContainsKey(selectedItemVm.ItemUniqueId))
+        {
+            _itemSlotList[selectedItemVm.ItemUniqueId].SetSelectedActive(true);
+        }
+
+        _lastSelectedUniqueId = selectedItemVm.ItemUniqueId;
+
+
         foreach (var slotKv in _itemSlotList)
         {
             bool isCurrentSelected = (slotKv.Key == selectedItemVm.ItemUniqueId);
@@ -138,19 +152,15 @@ public class InventoryPopupUI : UIBase
 
     private void CreateSlot(ItemSlotViewModel slotVm)
     {
-        // 1-1 수동 SetParant가 뒤에 지금은 자동으로 해주고 있다
         var gObj = Instantiate(Prefab_Slot, Transform_UISlotRoot);
         if (gObj == null) return;
 
-        // 1-2 자식 슬롯의 컴포넌트를 가져온다 -> 위에 게임오브젝트는 스크립트가 아직 아니므로
         var slotView = gObj.GetComponent<ItemSlotUI>();
         if (slotView == null) return;
 
 
-        // 1-3 여기서 slotComponent가지고 뭔가를 하는 겁니다!
         slotView.BindSlotViewModel(slotVm); 
 
-        // 1-4 중복체크 해주면 좋긴 하지만, 일단 쉽게 컴포넌트(컴포넌트로 게임오브젝트는 받을 수 있으므로)를 보관해보자
         _itemSlotList.Add(slotVm.ItemUniqueId, slotView);
 
         slotView.BindSlotSelectEvent(OnChildSlotSelected);
@@ -159,7 +169,6 @@ public class InventoryPopupUI : UIBase
 
     private void OnChildSlotSelected(long clickedUniqueId)
     {
-        // 뷰모델에게 아이템이 선택되었음을 알려 상태를 변경시킵니다.
         _invenVm.SelectItem(clickedUniqueId);
     }
 
