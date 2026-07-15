@@ -34,9 +34,13 @@ public enum UIType
     WorkPopupUI,
     InventoryPopupUI,
     JobcompletedPopupUI,
-    SimplePopup
-
-
+    SimplePopup,
+    NotePopupUI,
+    TempRepairPopupUI,
+    ElectricRepairPopupUI,
+    ControlRepairPopupUI,
+    AirRepairPopupUI,
+    PasswordPopupUI
 
 
 
@@ -227,16 +231,97 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.SimplePopup);
     }
 
+    //
+    public static void OpenNotePopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.NotePopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseNotePopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.NotePopupUI);
+    }
 
 
+    //
+    public static void OpenTempRepairPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.TempRepairPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseTempRepairPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.TempRepairPopupUI);
+    }
 
-    
+    //
+    public static void OpenElectricRepairPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.ElectricRepairPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseElectricRepairPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.ElectricRepairPopupUI);
+    }
 
+    //
+    public static void OpenControlRepairPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.ControlRepairPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseControlRepairPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.ControlRepairPopupUI);
+    }
 
+    //
+    public static void OpenAirRepairPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.AirRepairPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseAirRepairPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.AirRepairPopupUI);
+    }
 
-
-
-
+    //
+    public static void OpenPasswordPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.PasswordPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void ClosePasswordPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.PasswordPopupUI);
+    }
 
 }
+
 

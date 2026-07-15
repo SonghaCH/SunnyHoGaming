@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class HackMiniGame : MonoBehaviour
+public class ConstellationMiniGame : UIBase
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI[] rowTextTemplates; 
@@ -25,22 +25,23 @@ public class HackMiniGame : MonoBehaviour
     private float currentTime;
     private bool isGameActive = true;
 
-    void Start()
+
+    private void Update()
     {
-        currentTime = limitTime;
-        timerSlider.maxValue = limitTime;
-        timerSlider.value = limitTime;
-
-        GenerateGrid();
-
-        ResetAllRowTexts();
-
-        SetActiveRow(0);
+        GameStart();
     }
 
-    void Update()
+    private void OnEnable()
     {
-        if (!isGameActive) return;
+        InitGame();
+    }
+
+    private void GameStart()
+    {
+        if (!isGameActive)
+        { 
+           return;
+        }
 
         currentTime -= Time.deltaTime;
         timerSlider.value = currentTime;
@@ -60,7 +61,8 @@ public class HackMiniGame : MonoBehaviour
         }
     }
 
-    void GenerateGrid()
+
+    private void GenerateGrid()
     {
         gridData = new string[totalRows];
         redIndicesPerLine = new List<int>[totalRows];
@@ -89,7 +91,7 @@ public class HackMiniGame : MonoBehaviour
         }
     }
 
-    void ResetAllRowTexts()
+    private void ResetAllRowTexts()
     {
         for (int i = 0; i < totalRows; i++)
         {
@@ -97,7 +99,7 @@ public class HackMiniGame : MonoBehaviour
         }
     }
 
-    void UpdateRowText(int rowIndex)
+    private void UpdateRowText(int rowIndex)
     {
         string originalStr = gridData[rowIndex];
         System.Text.StringBuilder formattedText = new System.Text.StringBuilder();
@@ -126,7 +128,7 @@ public class HackMiniGame : MonoBehaviour
         rowTextTemplates[rowIndex].text = formattedText.ToString();
     }
 
-    void SetActiveRow(int rowIndex)
+    private void SetActiveRow(int rowIndex)
     {
         if (rowIndex >= totalRows)
         {
@@ -143,7 +145,7 @@ public class HackMiniGame : MonoBehaviour
         UpdateRowText(currentRow);
     }
 
-    void CheckInput(char pressedChar)
+    private void CheckInput(char pressedChar)
     {
         List<int> currentRedIndices = redIndicesPerLine[currentRow];
         if (currentRedIndices.Count == 0) return;
@@ -177,16 +179,47 @@ public class HackMiniGame : MonoBehaviour
         }
     }
 
-    void GameOver(bool isSuccess)
+    private void GameOver(bool isSuccess)
     {
         isGameActive = false;
         if (isSuccess)
         {
+            UIManager.Instance.OpenSimplePopup("항로 제어 완료");
             Debug.Log("제어 성공!");
+            UIManager.Instance.CloseControlRepairPopupUI();
+
         }
         else
         {
+            UIManager.Instance.OpenSimplePopup("항로 제어 실패");
             Debug.Log("제어 실패!");
+            UIManager.Instance.CloseControlRepairPopupUI();
         }
+    }
+
+    public void InitGame()
+    {
+        currentTime = limitTime;
+        currentRow = 0;
+        currentCorrectCount = 0;
+
+        if (timerSlider != null)
+        {
+            timerSlider.maxValue = limitTime;
+            timerSlider.value = limitTime;
+        }
+
+        GenerateGrid();
+
+        ResetAllRowTexts();
+
+        if (rowTextTemplates != null && rowTextTemplates.Length > 0)
+        {
+            SetActiveRow(0);
+        }
+
+        isGameActive = true;
+        GameStart();
+        Debug.Log("별자리 미니게임이 초기화되었습니다.");
     }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ElecMiniGame : MonoBehaviour
+public class ElecMiniGame : UIBase
 {
     [Header("UI Reference")]
     public Slider totalSlider;      // 전체 게이지 바
@@ -35,6 +35,11 @@ public class ElecMiniGame : MonoBehaviour
         {
             CheckTiming();
         }
+    }
+
+    private void OnEnable()
+    {
+        InitGame();
     }
 
     private void RotateIndicator()
@@ -111,12 +116,34 @@ public class ElecMiniGame : MonoBehaviour
     private void CompleteMission()
     {
         _isMissionComplete = true;
+        UIManager.Instance.OpenSimplePopup("전기 공급 완료");
         Debug.Log("미션 완료!");
+        UIManager.Instance.CloseElectricRepairPopupUI();
 
         if (OnMissionComplete != null)
         {
             OnMissionComplete.Invoke();
         }
+    }
+
+    public void InitGame()
+    {
+        _progress = 0f;
+        _currentAngle = 0f;
+        _isMissionComplete = false;
+
+        if (totalSlider != null)
+        {
+            totalSlider.maxValue = 1f; 
+            totalSlider.value = 0f;
+        }
+
+        if (indicator != null)
+        {
+            indicator.localRotation = Quaternion.identity;
+        }
+
+        Debug.Log("전기 공급 미니게임이 초기화되었습니다.");
     }
 
 }
