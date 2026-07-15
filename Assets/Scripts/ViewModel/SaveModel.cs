@@ -22,3 +22,12 @@ public class ItemModel
     public string ItemDataId;
     public int ItemStackCount;
 }
+
+[Serializable]
+public class FixerSaveData
+{
+    public int instanceId;
+    public string fixerDataId;
+    public Vector3 lastPosition;
+    public FixerState lastState;
+}
