@@ -287,10 +287,25 @@ public class InventoryPopupUI : UIBase
 
     public void Onclick_UseSelectItem()
     {
+
+
         if (_currentSelectedItemUniqueId != -1)
         {
             _preservedSelectedUniqueId = _currentSelectedItemUniqueId;
+            
+            string itemName = "아이템";
+            if (Text_ItemName != null && !string.IsNullOrEmpty(Text_ItemName.text))
+            {
+                itemName = Text_ItemName.text;
+            }
+
+            // 서버/서비스단에 아이템 소모 요청
             RequestSelectedUseItem();
+
+            // 사용 알림 심플 팝업 띄우기
+
+            UIManager.Instance.OpenSimplePopup($"{itemName}을 사용했습니다.");
+            
             ReopenPopupSafe().Forget();
         }
     }

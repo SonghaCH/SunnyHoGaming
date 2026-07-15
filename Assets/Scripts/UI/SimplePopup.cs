@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SimplePopup : UIBase
 {
-    [SerializeField] Text Text_Msg;
+    [SerializeField] TextMeshProUGUI Text_Msg;
 
     // 유니테스크 취소 1-1) 대기 시간이 긴 경우 이 UI가 중간에 닫힌다면 메모리누수를 방지하기 위해 취소처리하자
     private CancellationTokenSource _cancelToken;
