@@ -493,7 +493,6 @@ GameObject:
   - component: {fileID: 3589692742175549040}
   - component: {fileID: 5700571913283673300}
   - component: {fileID: 3623715221333578769}
-  - component: {fileID: 8902067489972883024}
   - component: {fileID: 2750603195089818149}
   - component: {fileID: 8158743488737459200}
   m_Layer: 0
@@ -626,20 +625,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4999dcfa54a22f4fa671967183829fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FixerView
---- !u!114 &8902067489972883024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2649365569034178510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eb8e1cfc775102438a4cea7aa584b3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FixerModel
-  behaviorAgent: {fileID: 8158743488737459200}
-  fixerID: 0
 --- !u!114 &2750603195089818149
 MonoBehaviour:
   m_ObjectHideFlags: 0
