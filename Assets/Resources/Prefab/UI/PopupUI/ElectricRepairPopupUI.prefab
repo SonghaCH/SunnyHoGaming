@@ -52,7 +52,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1319979090352135976
 RectTransform:
   m_ObjectHideFlags: 0
@@ -132,15 +132,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.92156863}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 317e2404aa72da844b19ececb0d6cf85, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 549b54fe4cc12ea438c315d9c7f1d67e, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -270,7 +270,6 @@ GameObject:
   m_Component:
   - component: {fileID: 64071521217924068}
   - component: {fileID: 6920880563179052593}
-  - component: {fileID: 3479792856115478060}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -298,7 +297,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -300}
+  m_AnchoredPosition: {x: 0, y: -262}
   m_SizeDelta: {x: 600, y: 600}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &6920880563179052593
@@ -352,25 +351,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3479792856115478060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3006688945747101129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18f59e39e7adee34ab6ef43c67a7afa2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ElecMiniGame
-  totalSlider: {fileID: 8732824901442256987}
-  indicator: {fileID: 8432080779193660322}
-  rotationSpeed: 500
-  successZoneCenterAngle: 115
-  successRange: 25
-  progressPerSuccess: 0.05
-  progressPerFail: 0.1
 --- !u!1 &3188795262190525565
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,14 +720,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6587361, g: 0.754717, b: 0.13883947, a: 1}
+  m_Color: {r: 1, g: 0.037245974, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 06d9ea63f5c2e844a9cef049f8f62039, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -841,7 +821,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7854714882875631743}
-  - component: {fileID: 3696013432459049976}
+  - component: {fileID: 3815017814272854620}
   m_Layer: 5
   m_Name: ElectricRepairPopupUI
   m_TagString: Untagged
@@ -863,8 +843,8 @@ RectTransform:
   m_Children:
   - {fileID: 4267493532871870118}
   - {fileID: 1319979090352135976}
-  - {fileID: 8035705453521504775}
   - {fileID: 3703740873896964953}
+  - {fileID: 8035705453521504775}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -872,7 +852,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3696013432459049976
+--- !u!114 &3815017814272854620
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -881,11 +861,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4066142344755380642}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e357389c8c932294699b0edb08ef904c, type: 3}
+  m_Script: {fileID: 11500000, guid: 18f59e39e7adee34ab6ef43c67a7afa2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RepairPopupUI
-  Btn_Close: {fileID: 2959376662173077240}
-  Btn_Complete: {fileID: 3858495719125803217}
+  m_EditorClassIdentifier: Assembly-CSharp::ElecMiniGame
+  totalSlider: {fileID: 8732824901442256987}
+  indicator: {fileID: 8432080779193660322}
+  rotationSpeed: 500
+  successZoneCenterAngle: 115
+  successRange: 25
+  progressPerSuccess: 0.05
+  progressPerFail: 0.1
 --- !u!1 &4483017521513002004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,10 +1055,10 @@ RectTransform:
   - {fileID: 7483902111603968591}
   m_Father: {fileID: 7854714882875631743}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 1600, y: 900}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5616709422029254584
 GameObject:
@@ -1482,14 +1467,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2784314}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d7c32425da751e7489a6d8ef58576810, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 55cf5ec3f0c89ad4a806ef40507db592, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1514,7 +1499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8035705453521504775
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1532,7 +1517,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -32.8, y: -10}
+  m_AnchoredPosition: {x: -58, y: -44}
   m_SizeDelta: {x: 150, y: 80}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &6587389085880178867
@@ -1682,7 +1667,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 500, y: -450}
+  m_AnchoredPosition: {x: 329, y: -527}
   m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &8732824901442256987
@@ -1732,7 +1717,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
