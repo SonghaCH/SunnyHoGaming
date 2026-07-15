@@ -299,10 +299,8 @@ public class InventoryPopupUI : UIBase
                 itemName = Text_ItemName.text;
             }
 
-            // 서버/서비스단에 아이템 소모 요청
             RequestSelectedUseItem();
 
-            // 사용 알림 심플 팝업 띄우기
 
             UIManager.Instance.OpenSimplePopup($"{itemName}을 사용했습니다.");
             

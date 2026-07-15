@@ -65,8 +65,7 @@ public class NetworkManager : MonoBehaviour
     public PlayerModel GetDefaultPlayerData()
     {
         var newPlayerData = new PlayerModel();
-        newPlayerData.PlayerName = "NoName";
-        newPlayerData.PlayerTotalExp = 0;
+        
         return newPlayerData;
     }
 }

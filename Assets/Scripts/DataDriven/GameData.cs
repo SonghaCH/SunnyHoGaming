@@ -69,6 +69,19 @@ public class ItemData : GameDataBase
 
 
 }
+
+
+[System.Serializable]
+public class QuestData : GameDataBase
+{
+    public string Title;
+    public string Description;
+}
+
+
+
+
+
 [System.Serializable]
 public class MonsterData : GameDataBase
 {

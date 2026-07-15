@@ -19,6 +19,8 @@ public static class GameUtil
         GameDataManager.Instance.LoadDialougeData("Dialouge");
         GameDataManager.Instance.LoadFixerData("Fixer");
         GameDataManager.Instance.LoadItemData("Item");
+        GameDataManager.Instance.LoadQuestData("Quest");
+
         //GameDataManager.Instance.LoadAll();
     }
 
