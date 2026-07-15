@@ -47,7 +47,7 @@ public static class GameUtil
 
     public static async UniTask<Sprite> LoadAndSetSpriteImage(Image targetImage, string spritePath)
     {
-        Sprite sprite = await ResourceManager.Inst.LoadSprite(spritePath);
+        Sprite sprite = await ResourceManager.Instance.LoadSprite(spritePath);
         if (sprite != null)
         {
             targetImage.sprite = sprite;
@@ -57,7 +57,7 @@ public static class GameUtil
 
     public static async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string audioPath, bool isLoop = false)
     {
-        AudioClip clip = await ResourceManager.Inst.LoadAsset<AudioClip>(audioPath);
+        AudioClip clip = await ResourceManager.Instance.LoadAsset<AudioClip>(audioPath);
         if (clip == null)
         {
             Debug.LogError($"{audioPath}를 찾을 수 없습니다! 어드레서블 설정이 되어 있는지 확인해주세요.");
@@ -80,7 +80,7 @@ public static class GameUtil
     {
         // 비동기로 로드하기 전까지는 해당 오브젝트를 잠깐 비활성화 해준다
         targetRawImage.gameObject.SetActive(false);
-        Texture texture = await ResourceManager.Inst.LoadAsset<Texture>(texturePath);
+        Texture texture = await ResourceManager.Instance.LoadAsset<Texture>(texturePath);
         if (texture != null)
         {
             targetRawImage.texture = texture;
@@ -91,7 +91,7 @@ public static class GameUtil
     public static async UniTask<Animator> LoadAndMeshObjectAndBindAnimator(Transform parent, string meshObjectPath, string specificAnimContollerPath = "")
     {
         // 1) 3D Mesh 오브젝트를 먼저 로드해서 동적 생성한다
-        var loadedMeshObject = await ResourceManager.Inst.InstantiateAsync(meshObjectPath, parent);
+        var loadedMeshObject = await ResourceManager.Instance.InstantiateAsync(meshObjectPath, parent);
         if (loadedMeshObject == null)
         {
             Debug.LogError($"{meshObjectPath}를 찾을 수 없습니다! 어드레서블 설정이 되어 있는지 확인해주세요.");
@@ -110,7 +110,7 @@ public static class GameUtil
         // ex.PlayerController 또는 NpcAnimController 같이 내가 만든 것을 써야할때
         if (string.IsNullOrEmpty(specificAnimContollerPath) == false)
         {
-            var loadedAnimatorController = await ResourceManager.Inst.LoadAsset<RuntimeAnimatorController>(specificAnimContollerPath);
+            var loadedAnimatorController = await ResourceManager.Instance.LoadAsset<RuntimeAnimatorController>(specificAnimContollerPath);
             animator.runtimeAnimatorController = loadedAnimatorController;
         }
 

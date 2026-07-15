@@ -7,11 +7,18 @@ using UnityEngine.UI;
 
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager Inst { get; set; }
+    public static ResourceManager Instance { get; set; }
 
     private void Awake()
     {
-        Inst = this;
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("[ResourceManager:Awake] 현재 인스턴스가 존재하여 중복 오브젝트를 파괴합니다.");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
     }
    
     // 로드된 에셋들을 관리하기 위한 캐시 (메모리 해제 시 필요)
@@ -104,6 +111,26 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    public async UniTask<GameObject> InstantiateAsync(string address, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(address, position, rotation, parent);
+
+        try
+        {
+            GameObject instance = await handle.ToUniTask();
+            return instance;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"프리팹 생성 실패: {address} / Error: {e.Message}");
+
+            if (handle.IsValid())
+                Addressables.Release(handle);
+
+            return null;
+        }
+    }
+
     // 2-1. 스프라이트 로드 함수
     public void LoadSprite(string address, System.Action<Sprite> callback)
     {
@@ -162,6 +189,22 @@ public class ResourceManager : MonoBehaviour
                 Addressables.Release(handleOrigin);
 
             return null;
+        }
+    }
+
+    public void ReleaseInstance(GameObject instance)
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        bool released = Addressables.ReleaseInstance(instance);
+
+        if (released == false)
+        {
+            Debug.LogWarning($"[ResourceManager] {instance.name}은(는) Addressables로 생성된 인스턴스가 아니어서 일반 Destroy로 처리합니다.");
+            Destroy(instance);
         }
     }
 
