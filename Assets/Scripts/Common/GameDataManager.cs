@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,20 +31,17 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, DialougeData> DialougeDataList { get; private set; } = new Dictionary<string, DialougeData>();
     public Dictionary<string, FixerData> FixerDataList { get; private set; } = new Dictionary<string, FixerData>();
     public Dictionary<string, ItemData> ItemDataList { get; private set; } = new Dictionary<string, ItemData>();
+    public Dictionary<string, QuestData> QuestDataList { get; private set; } = new Dictionary<string, QuestData>();
+
+
+
     public Dictionary<string, MonsterData> MonsterDataList { get; private set; } = new Dictionary<string, MonsterData>();
     public Dictionary<string, FieldObjectData> FieldObjectDataList { get; private set; } = new Dictionary<string, FieldObjectData>();
 
 
 
 
-
-
-
-    //private Dictionary<string, ItemData> GetItemDataList()
-    //{
-    //    return ItemDataList;
-    //}
-
+    
     private Dictionary<string, T> LoadData<T>(string tableName) where T : GameDataBase
     {
         // 1. 경로 설정 (확장자 .json 제외!)
@@ -98,17 +96,17 @@ public class GameDataManager : MonoBehaviour
         FixerDataList = LoadData<FixerData>(jsonPath);
     }
 
-    public void LoadCostumeData(string jsonPath)
-    {
-        ItemDataList = LoadData<ItemData>(jsonPath);
-    }
-
     public void LoadItemData(string jsonPath)
     {
         ItemDataList = LoadData<ItemData>(jsonPath);
     }
 
-   
+    public void LoadQuestData(string jsonPath)
+    {
+        QuestDataList = LoadData<QuestData>(jsonPath);
+    }
+
+
     //public void LoadAll()
     //{
     //    FieldObjectDataList = LoadData<FieldObjectData>("FieldObject");
@@ -146,6 +144,14 @@ public class GameDataManager : MonoBehaviour
 
         return ItemDataList.TryGetValue(id, out var data) ? data : null;
     }
+
+    public QuestData GetQuestData(string id)
+    {
+        if (QuestDataList == null || string.IsNullOrEmpty(id)) return null;
+
+        return QuestDataList.TryGetValue(id, out var data) ? data : null;
+    }
+
 
     public MonsterData GetMonsterData(string dataId)
     {

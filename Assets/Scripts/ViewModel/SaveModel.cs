@@ -6,11 +6,6 @@ using UnityEngine;
 [Serializable]
 public class PlayerModel
 {
-    public string PlayerName;
-    public int PlayerTotalExp;
-    public string LastMapDataId;
-    public Vector3 LastMapPosition;
-
     public List<ItemModel> ItemList = new List<ItemModel>();
 }
 
