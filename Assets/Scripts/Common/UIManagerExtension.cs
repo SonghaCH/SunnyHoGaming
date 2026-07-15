@@ -34,7 +34,8 @@ public enum UIType
     WorkPopupUI,
     InventoryPopupUI,
     JobcompletedPopupUI,
-    SimplePopup,
+    SimplePopup
+
 
 
 
@@ -207,13 +208,18 @@ public static class UIManagerExtension
     }
 
     //
-    public static void OpenSimplePopup(this UIManager uiManager)
+    public static void OpenSimplePopup(this UIManager uiManager, string msg)
     {
         var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.SimplePopup);
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
             return;
+        }
+
+        if (uiBase is SimplePopup simplePopup)
+        {
+            simplePopup.SetUI(msg);
         }
     }
     public static void CloseSimplePopup(this UIManager uiManager)
