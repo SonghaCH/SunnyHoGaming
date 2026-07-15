@@ -14,8 +14,7 @@ public class MainUI : UIBase
 
     private void OnClick_Setting()
     {
-        UIManager.Instance.OpenJobcompletedPopupUI();
-        UIManager.Instance.OpenFixerPopupUI();
+
     }
 
     private void OnClick_Inventory()

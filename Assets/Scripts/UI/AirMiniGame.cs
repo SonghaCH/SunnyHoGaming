@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class AirMiniGame : MonoBehaviour
+public class AirMiniGame : UIBase
 {
     [Header("UI Reference")]
     public Slider totalSlider;
@@ -39,6 +39,11 @@ public class AirMiniGame : MonoBehaviour
         CheckSuccess();
     }
 
+    private void OnEnable()
+    {
+        InitGame();
+    }
+
     private void AddGauge()
     {
         currentGauge += inputGain;
@@ -52,7 +57,23 @@ public class AirMiniGame : MonoBehaviour
         {
             isFinished = true;
             currentGauge = maxGauge;
+            UIManager.Instance.OpenSimplePopup("산소 공급 완료");
             Debug.Log("미니게임 승리");
+            UIManager.Instance.CloseAirRepairPopupUI();
         }
+    }
+
+    public void InitGame()
+    {
+        currentGauge = 0f;
+        isFinished = false;
+
+        if (totalSlider != null)
+        {
+            totalSlider.maxValue = 1f; 
+            totalSlider.value = 0f;
+        }
+
+        Debug.Log("산소 공급 미니게임이 초기화되었습니다.");
     }
 }

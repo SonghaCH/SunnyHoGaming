@@ -2,16 +2,16 @@
 using TMPro;
 using UnityEngine.UI;
 
-public class TemperatureMiniGame : MonoBehaviour
+public class TemperatureMiniGame : UIBase
 {
     [Header("UI References")]
     [SerializeField] private Slider tempSlider;         
     [SerializeField] private TextMeshProUGUI holdTimerText; 
 
     [Header("Temperature Settings")]
-    [SerializeField] private float currentTemp = 50f;     
-    [SerializeField] private float minSafetyTemp = 40f;   
-    [SerializeField] private float maxSafetyTemp = 60f;   
+    [SerializeField] private float defaultStartTemp = 50f;     
+    [SerializeField] private float minSafetyTemp = 45f;   
+    [SerializeField] private float maxSafetyTemp = 55f;   
 
     [Header("Physics Settings")]
     [SerializeField] private float naturalDriftSpeed = 15f; 
@@ -23,23 +23,25 @@ public class TemperatureMiniGame : MonoBehaviour
     [Header("Game Over Settings")]
     [SerializeField] private float maxOutsideTime = 3f;
 
+    private float currentTemp;
     private float currentHoldTime = 0f;
     private float currentOutsideTime = 0f;
     private bool isGameActive = true;
     private int driftDirection = 1; 
     private float driftChangeTimer = 0f;
 
-    void Start()
+    private void Update()
     {
-        tempSlider.maxValue = 100f;
-        tempSlider.minValue = 0f;
-        tempSlider.value = currentTemp;
-
-        driftDirection = Random.value > 0.5f ? 1 : -1;
-        currentOutsideTime = 0f;
+        GameStart();
     }
 
-    void Update()
+    private void OnEnable()
+    {
+        InitGame();
+
+    }
+
+    private void GameStart()
     {
         if (!isGameActive)
         {
@@ -53,7 +55,7 @@ public class TemperatureMiniGame : MonoBehaviour
         tempSlider.value = currentTemp;
     }
 
-    void HandleTemperaturePhysics()
+    private void HandleTemperaturePhysics()
     {
         driftChangeTimer += Time.deltaTime;
         if (driftChangeTimer >= Random.Range(1.5f, 3f))
@@ -67,7 +69,7 @@ public class TemperatureMiniGame : MonoBehaviour
         currentTemp = Mathf.Clamp(currentTemp, 0f, 100f);
     }
 
-    void HandleInput()
+    private void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -82,7 +84,7 @@ public class TemperatureMiniGame : MonoBehaviour
         currentTemp = Mathf.Clamp(currentTemp, 0f, 100f);
     }
 
-    void CheckSafetyZone()
+    private void CheckSafetyZone()
     {
         if (currentTemp >= minSafetyTemp && currentTemp <= maxSafetyTemp)
         {
@@ -117,19 +119,54 @@ public class TemperatureMiniGame : MonoBehaviour
         }
     }
 
-    void GameClear()
+    private void GameClear()
     {
         isGameActive = false;
         holdTimerText.color = Color.cyan;
         holdTimerText.text = "SYSTEM STABILIZED";
+        UIManager.Instance.OpenSimplePopup("온도 제어 성공! 시스템이 안정되었습니다.");
         Debug.Log("온도 제어 성공! 시스템이 안정되었습니다.");
+
+        UIManager.Instance.CloseTempRepairPopupUI();
+
     }
 
-    void GameOver()
+    private void GameOver()
     {
         isGameActive = false;
         holdTimerText.color = Color.red;
         holdTimerText.text = "SYSTEM MELTDOWN";
+        UIManager.Instance.OpenSimplePopup("온도 제어 실패! 시스템 과열/냉각 불능.");
         Debug.Log("온도 제어 실패! 시스템 과열/냉각 불능.");
+
+        UIManager.Instance.CloseTempRepairPopupUI();
+    }
+
+    public void InitGame()
+    {
+        currentTemp = defaultStartTemp;
+        currentHoldTime = 0f;
+        currentOutsideTime = 0f;
+        driftChangeTimer = 0f;
+        driftDirection = Random.value > 0.5f ? 1 : -1;
+
+        if (tempSlider != null)
+        {
+            tempSlider.maxValue = 100f;
+            tempSlider.minValue = 0f;
+            tempSlider.value = currentTemp;
+        }
+
+        if (holdTimerText != null)
+        {
+            holdTimerText.color = Color.white;
+        }
+
+        isGameActive = true;
+        GameStart();
+       
+        Debug.Log("온도 미니게임이 초기화되었습니다.");
+
+
     }
 }
