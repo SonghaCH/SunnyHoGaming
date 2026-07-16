@@ -15,6 +15,13 @@ public class PlayerMovementView : ViewBase
     {
         _characterController = GetComponent<CharacterController>();
     }
+    private void Start()
+    {
+        if (GameManager.Inst != null)
+        {
+            BindViewModel(GameManager.Inst.PlayerService.GetMovementViewModel());
+        }
+    }
 
     public void BindViewModel(PlayerMovementViewModel viewModel)
     {
