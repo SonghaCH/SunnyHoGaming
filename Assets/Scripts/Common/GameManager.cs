@@ -13,11 +13,22 @@ public class GameManager : MonoBehaviour
 
     // 플레이 중에 저장되어야 하는 정보들이 있는 위치
     private PlayerModel _playerModel = new PlayerModel();
+    public PlayerService PlayerService { get; private set; }
+    public GameStateService GameStateService { get; private set; }
+    public TimeService TimeService { get; private set; }
 
     private void Awake()
     {
         Inst = this;
+        InitServices();
     }
+    private void InitServices()
+    {
+        TimeService = new TimeService(1.0f);
+        PlayerService = new PlayerService();
+        GameStateService = new GameStateService();
+    }
+
 
     private void Start()
     {
@@ -46,5 +57,5 @@ public class GameManager : MonoBehaviour
         _playerModel = NetworkManager.Inst.RequstLoadSaveData();
     }
 
-  
+
 }

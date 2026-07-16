@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-
+﻿
 public class PlayerMovementViewModel : ViewModelBase
 {
     private float _baseSpeed = 5.0f;
@@ -60,5 +59,10 @@ public class PlayerMovementViewModel : ViewModelBase
                 OnPropertyChanged(nameof(CanMove));
             }
         }
+    }
+
+    public void ApplyHungerDebuff(float decreaseRate)
+    {
+        CurrentSpeed = _baseSpeed * decreaseRate;
     }
 }
