@@ -11,8 +11,23 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private string _mapAddressableKey;
 
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
-    private Transform _mainRoomSpawnPoint;
     private TimeViewModel _timeViewModel;
+    private Transform _mainRoomSpawnPoint;
+    public Transform MainRoomTransform
+    {
+        get
+        {
+            return _mainRoomSpawnPoint;
+        }
+    }
+    private Collider _roomAreaCollider;
+    public Collider RoomAreaCollider
+    {
+        get
+        {
+            return _roomAreaCollider;
+        }
+    }
 
     private void Awake()
     {
@@ -103,14 +118,17 @@ public class WorldManager : MonoBehaviour
 
             _fixerSpawnPoints[dayNumber].Add(marker.transform);
         }
-
+        
         Transform[] allChildren = mapRoot.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
             if (child.CompareTag("MainRoomSpawnPoint"))
             {
                 _mainRoomSpawnPoint = child;
-                break;
+            }
+            else if (child.CompareTag("RoomArea"))
+            {
+                _roomAreaCollider = child.GetComponent<Collider>();
             }
         }
     }
@@ -146,9 +164,10 @@ public class WorldManager : MonoBehaviour
 
         foreach (string fixerId in todayFixerIds)
         {
-            Vector3 spawnPos = todaySpawnPoints[spawnIndex % todaySpawnPoints.Count].position;
+            Transform targetSpawnPoint = todaySpawnPoints[spawnIndex % todaySpawnPoints.Count];
+            Vector3 spawnPos = targetSpawnPoint.position;
 
-            await GameObjectManager.Instance.SpawnFixerAsync(fixerId, spawnPos, FixerState.Rampaging);
+            await GameObjectManager.Instance.SpawnFixerAsync(fixerId, spawnPos, FixerState.Rampaging, targetSpawnPoint);
 
             spawnIndex++;
         }

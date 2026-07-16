@@ -12,6 +12,7 @@ public class FixerViewModel : MonoBehaviour
 
     public event Action<FixerState> OnStateChanged;
     public event Action<FixerState> OnAnimationStateChanged;
+    public event Action<FixerViewModel> OnArrivedAtWorkStation;
 
     [SerializeField] private FixerState currentState = FixerState.Rampaging;
 
@@ -125,18 +126,20 @@ public class FixerViewModel : MonoBehaviour
         _fixerModel = new FixerModel();
         _fixerModel.FixerID = instanceId;
 
-        FixerData masterData = GameDataManager.Instance.GetFixerData(dataId);
+        FixerData FixerData = GameDataManager.Instance.GetFixerData(dataId);
 
-        if (masterData != null)
+        if (FixerData != null)
         {
-            _fixerModel.Name = masterData.Name;
-            _fixerModel.O2Repair = masterData.O2Repair;
-            _fixerModel.ElectRepair = masterData.ElectRepair;
-            _fixerModel.WayRepair = masterData.WayRepair;
-            _fixerModel.FarmingRepair = masterData.FarmingRepair;
-            _fixerModel.TempRepair = masterData.TempRepair;
+            _fixerModel.Name = FixerData.Name;
+            _fixerModel.O2Repair = FixerData.O2Repair;
+            _fixerModel.ElectRepair = FixerData.ElectRepair;
+            _fixerModel.ControlRepair = FixerData.ControlRepair;
+            _fixerModel.TempRepair = FixerData.TempRepair;
+            _fixerModel.FarmingFood = FixerData.FarmingFood;
+            _fixerModel.FarmingScrap = FixerData.FarmingScrap;
 
-            Debug.Log($"[FixerViewModel] {masterData.Name} 초기화 완료 - 수리력 셋팅됨");
+
+            Debug.Log($"[FixerViewModel] {FixerData.Name} 초기화 완료 - 수리력 셋팅됨");
         }
         else
         {
@@ -144,5 +147,64 @@ public class FixerViewModel : MonoBehaviour
         }
 
         CurrentState = initialState;
+    }
+    public float GetWorkEfficiency(TaskType taskType)
+    {
+        if (_fixerModel == null) return 1f;
+
+        switch (taskType)
+        {
+            case TaskType.O2Repair: return _fixerModel.O2Repair;
+            case TaskType.ElectRepair: return _fixerModel.ElectRepair;
+            case TaskType.ControlRepair: return _fixerModel.ControlRepair;
+            case TaskType.TempRepair: return _fixerModel.TempRepair;
+            case TaskType.FarmingFood: return _fixerModel.FarmingFood;
+            case TaskType.FarmingScrap: return _fixerModel.FarmingScrap;
+            default: return 1f;
+        }
+    }
+    public void SetWorkTarget(Vector3 targetPosition)
+    {
+        CurrentState = FixerState.MoveToTarget;
+
+        if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
+        {
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("WorkTargetPosition", targetPosition);
+        }
+    }
+
+    public void TriggerArrivalEvent()
+    {
+        CurrentState = FixerState.Executing;
+
+        OnArrivedAtWorkStation?.Invoke(this);
+    }
+
+    public void SetMainRoomTransformToBlackboard(Transform mainRoomTransform)
+    {
+        if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
+        {
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("MainRoomTransform", mainRoomTransform);
+            Debug.Log($"[{gameObject.name}] 메인 룸 좌표 블랙보드 등록 완료!");
+        }
+    }
+
+    public void SetRoomAreaToBlackboard(Collider roomAreaCollider)
+    {
+        if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
+        {
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("RoomArea", roomAreaCollider);
+            Debug.Log($"[{gameObject.name}] 룸 에리어 구역 블랙보드 등록 완료!");
+        }
+    }
+
+    public void OrderReturn()
+    {
+        CurrentState = FixerState.Returning;
+    }
+
+    public void TriggerReturnComplete()
+    {
+        CurrentState = FixerState.Idle;
     }
 }
