@@ -17,7 +17,6 @@ public class PlayerStatusView : ViewBase
     }
     private void Start()
     {
-        // 스스로 매니저를 찾아가 뷰모델을 바인딩합니다.
         if (GameManager.Inst != null)
         {
             BindViewModel(GameManager.Inst.PlayerService.GetStatusViewModel());

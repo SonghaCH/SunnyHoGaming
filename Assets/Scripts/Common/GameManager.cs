@@ -27,6 +27,14 @@ public class GameManager : MonoBehaviour
         GameStateService = new GameStateService();
     }
 
+    private void Update()
+    {
+        if (TimeService != null)
+        {
+            TimeService.UpdateTime(Time.deltaTime);
+        }
+    }
+
 
     private void Start()
     {

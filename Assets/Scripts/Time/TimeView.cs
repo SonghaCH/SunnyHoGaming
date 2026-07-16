@@ -23,6 +23,7 @@ public class TimeView : ViewBase
         _viewModel = viewModel;
         _viewModel.PropertyChanged += OnPropertyChanged_View;
         UpdateTimeText();
+        UpdateDateText();
     }
 
     private void OnDestroy()
@@ -51,6 +52,7 @@ public class TimeView : ViewBase
                 break;
         }
     }
+
     private void UpdateDateText()
     {
         if (Text_Date != null)
@@ -63,7 +65,7 @@ public class TimeView : ViewBase
     {
         if (Text_Time != null)
         {
-            Text_Time.text = _viewModel.CurrentHour.ToString() + " : " + _viewModel.CurrentMinute.ToString();
+            Text_Time.text = _viewModel.CurrentHour.ToString("00") + " : " + _viewModel.CurrentMinute.ToString("00");
         }
     }
 }
