@@ -16,9 +16,9 @@ public class GameStateView : ViewBase
 
     private void Start()
     {
-        if (GameManager.Inst != null)
+        if (NetworkManager.Inst != null)
         {
-            BindViewModel(GameManager.Inst.GameStateService.GetViewModel());
+            BindViewModel(NetworkManager.Inst.GameStateService.GetViewModel());
         }
     }
 

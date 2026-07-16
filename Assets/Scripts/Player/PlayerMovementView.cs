@@ -17,9 +17,9 @@ public class PlayerMovementView : ViewBase
     }
     private void Start()
     {
-        if (GameManager.Inst != null)
+        if (NetworkManager.Inst != null)
         {
-            BindViewModel(GameManager.Inst.PlayerService.GetMovementViewModel());
+            BindViewModel(NetworkManager.Inst.PlayerService.GetMovementViewModel());
         }
     }
 

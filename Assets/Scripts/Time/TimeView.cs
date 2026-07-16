@@ -12,9 +12,9 @@ public class TimeView : ViewBase
 
     private void Start()
     {
-        if (GameManager.Inst != null)
+        if (NetworkManager.Inst != null)
         {
-            BindViewModel(GameManager.Inst.TimeService.GetViewModel());
+            BindViewModel(NetworkManager.Inst.TimeService.GetViewModel());
         }
     }
 

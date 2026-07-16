@@ -28,9 +28,9 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Inst != null && GameManager.Inst.TimeService != null)
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
         {
-            _timeViewModel = GameManager.Inst.TimeService.GetViewModel();
+            _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
             _timeViewModel.PropertyChanged += OnTimePropertyChanged;
         }
 

@@ -24,10 +24,12 @@
 
     public void PauseGame()
     {
-        if (_viewModel.CurrentGameState == GameState.Playing)
+        if (_viewModel.CurrentGameState != GameState.Playing)
         {
-            _viewModel.CurrentGameState = GameState.Paused;
+            return;
         }
+
+        _viewModel.CurrentGameState = GameState.Paused;
     }
 
     public void ResumeGame()

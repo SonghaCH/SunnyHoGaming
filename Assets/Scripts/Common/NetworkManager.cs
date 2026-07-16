@@ -9,6 +9,10 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager Inst { get; set; }
 
     public NetworkInventoryService InventoryService { get; private set; }
+    public PlayerService PlayerService { get; private set; }
+    public GameStateService GameStateService { get; private set; }
+    public TimeService TimeService { get; private set; }
+
 
     private void Awake()
     {
@@ -20,9 +24,18 @@ public class NetworkManager : MonoBehaviour
     {
         // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
         InventoryService = new NetworkInventoryService();
+        TimeService = new TimeService(1.0f);
+        PlayerService = new PlayerService();
+        GameStateService = new GameStateService();
     }
 
-    
+    private void Update()
+    {
+        if (TimeService != null)
+        {
+            TimeService.UpdateTime(Time.deltaTime);
+        }
+    }
 
     // 파일 저장 경로 설정 (C:/Users/이름/.../projectName/save.json)
     private string GetPath()

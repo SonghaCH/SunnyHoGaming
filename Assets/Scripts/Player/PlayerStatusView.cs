@@ -17,9 +17,9 @@ public class PlayerStatusView : ViewBase
     }
     private void Start()
     {
-        if (GameManager.Inst != null)
+        if (NetworkManager.Inst != null)
         {
-            BindViewModel(GameManager.Inst.PlayerService.GetStatusViewModel());
+            BindViewModel(NetworkManager.Inst.PlayerService.GetStatusViewModel());
         }
     }
     
