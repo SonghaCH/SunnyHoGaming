@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TimeView : ViewBase
 {
-    [SerializeField]
-    private TextMeshProUGUI _textMeshTime;
+    [SerializeField] private TextMeshProUGUI Text_Time;
+    [SerializeField] private TextMeshProUGUI Text_Date;
 
     private TimeViewModel _viewModel;
 
@@ -35,17 +35,35 @@ public class TimeView : ViewBase
 
     private void OnPropertyChanged_View(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(TimeViewModel.CurrentMinute) || e.PropertyName == nameof(TimeViewModel.CurrentHour) || e.PropertyName == nameof(TimeViewModel.CurrentDay))
+        switch (e.PropertyName)
         {
-            UpdateTimeText();
+            case nameof(TimeViewModel.CurrentDay):
+                {
+                    UpdateDateText();
+                }
+                break;
+            case nameof(TimeViewModel.CurrentMinute):
+                {
+                    UpdateTimeText();
+                }
+                break;
+            default: 
+                break;
+        }
+    }
+    private void UpdateDateText()
+    {
+        if (Text_Date != null)
+        {
+            Text_Date.text = "Day: " + _viewModel.CurrentDay.ToString();
         }
     }
 
     private void UpdateTimeText()
     {
-        if (_textMeshTime != null)
+        if (Text_Date != null)
         {
-            //_textMeshTime.text = 시간 관련 텍스트 UI;
+            Text_Date.text = _viewModel.CurrentHour.ToString() + " : " + _viewModel.CurrentMinute.ToString();
         }
     }
 }
