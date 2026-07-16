@@ -1,9 +1,7 @@
-﻿using Cysharp.Threading.Tasks; 
+﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using static SpawnDateSelector;
+using System.ComponentModel;
 
 public class WorldManager : MonoBehaviour
 {
@@ -14,6 +12,7 @@ public class WorldManager : MonoBehaviour
 
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
     private Transform _mainRoomSpawnPoint;
+    private TimeViewModel _timeViewModel;
 
     private void Awake()
     {
@@ -29,14 +28,37 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
+        if (GameManager.Inst != null && GameManager.Inst.TimeService != null)
+        {
+            _timeViewModel = GameManager.Inst.TimeService.GetViewModel();
+            _timeViewModel.PropertyChanged += OnTimePropertyChanged;
+        }
+
         InitializeWorldAsync().Forget();
+    }
+
+    private void OnTimePropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
+        {
+            int newDay = _timeViewModel.CurrentDay;
+            Debug.Log($"[WorldManager] 날짜 변경 감지: {newDay}일 차 시작!");
+
+            StartNewDayAsync(newDay).Forget();
+        }
     }
 
     private async UniTaskVoid InitializeWorldAsync()
     {
         await SpawnMapAsync();
 
-        await StartNewDayAsync(1);
+        int startDay = 1;
+        if (_timeViewModel != null)
+        {
+            startDay = _timeViewModel.CurrentDay;
+        }
+
+        await StartNewDayAsync(startDay);
     }
 
     private async UniTask SpawnMapAsync()
@@ -88,7 +110,7 @@ public class WorldManager : MonoBehaviour
             if (child.CompareTag("MainRoomSpawnPoint"))
             {
                 _mainRoomSpawnPoint = child;
-                break; 
+                break;
             }
         }
     }
@@ -97,12 +119,11 @@ public class WorldManager : MonoBehaviour
     {
         if (_fixerSpawnPoints.ContainsKey(currentDay) == false || _fixerSpawnPoints[currentDay].Count == 0)
         {
-            Debug.LogError($"[WorldManager] 스폰 실패: {currentDay}일 차 스폰 포인트가 맵에 없습니다!");
+            Debug.Log($"[WorldManager] {currentDay}일 차 스폰 포인트가 맵에 없습니다. 스폰을 건너뜁니다.");
             return;
         }
 
         List<Transform> todaySpawnPoints = _fixerSpawnPoints[currentDay];
-
         List<string> todayFixerIds = new List<string>();
 
         if (GameDataManager.Instance.FixerDataList != null)
@@ -118,7 +139,6 @@ public class WorldManager : MonoBehaviour
 
         if (todayFixerIds.Count == 0)
         {
-            Debug.LogError($"[WorldManager] 스폰 실패: {currentDay}일 차에 스폰할 픽서 데이터가 없습니다!");
             return;
         }
 

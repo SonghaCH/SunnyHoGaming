@@ -61,9 +61,9 @@ public class TimeView : ViewBase
 
     private void UpdateTimeText()
     {
-        if (Text_Date != null)
+        if (Text_Time != null)
         {
-            Text_Date.text = _viewModel.CurrentHour.ToString() + " : " + _viewModel.CurrentMinute.ToString();
+            Text_Time.text = _viewModel.CurrentHour.ToString() + " : " + _viewModel.CurrentMinute.ToString();
         }
     }
 }
