@@ -24,12 +24,6 @@ public class GameManager : MonoBehaviour
         LoadSaveData();
     }
 
-    public void StartGame()
-    {
-        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.LocalPlayerProfileUI);
-        UIManager.Instance.OpenUI(UIRootType.MainUI, UIType.MVVMTestUI);
-    }
-
     public void SaveData()
     {
         NetworkManager.Inst.RequstSaveData(_playerModel);

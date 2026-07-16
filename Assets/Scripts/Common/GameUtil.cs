@@ -16,7 +16,7 @@ public static class GameUtil
     {
         // 게임 로딩할 때 불러올 데이터는 여기서! 
         GameDataManager.Instance.LoadActiveData("Active");
-        GameDataManager.Instance.LoadDialougeData("Dialouge");
+        GameDataManager.Instance.LoadDialogueData("Dialogue");
         GameDataManager.Instance.LoadFixerData("Fixer");
         GameDataManager.Instance.LoadItemData("Item");
         GameDataManager.Instance.LoadQuestData("Quest");
@@ -119,25 +119,6 @@ public static class GameUtil
         return animator;
     }
 
-    //public static List<string> GetDialogueIdList(string dialogueGroupId)
-    //{
-    //    var list = new List<string>();
-
-    //    // "dialogue_group_mainstream_1_1"
-    //    var data = GameDataManager.Instance.GetD(dialogueGroupId);
-    //    if (data != null)
-    //    {
-    //        var idArr = data.DialogueIdList;
-    //        foreach(var id in idArr)
-    //        {
-    //            list.Add(id);
-    //        }
-    //    }
-
-    //    return list;
-    //}
-
-    // 그냥 유니크 키가 발급되어야 할 때 사용하려고 만든 것 (의미가 있는 건 아니므로 사용만 하세요)
     public static long GenerateUniqueId()
     {
         long newId = DateTime.UtcNow.Ticks;

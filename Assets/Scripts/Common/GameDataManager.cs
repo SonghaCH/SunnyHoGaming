@@ -28,15 +28,14 @@ public class GameDataManager : MonoBehaviour
     // ---------------------------------------------------
 
     public Dictionary<string, ActiveData> ActiveDataList { get; private set; } = new Dictionary<string, ActiveData>();
-    public Dictionary<string, DialougeData> DialougeDataList { get; private set; } = new Dictionary<string, DialougeData>();
+    public Dictionary<string, DialogueData> DialogueDataList { get; private set; } = new Dictionary<string, DialogueData>();
     public Dictionary<string, FixerData> FixerDataList { get; private set; } = new Dictionary<string, FixerData>();
     public Dictionary<string, ItemData> ItemDataList { get; private set; } = new Dictionary<string, ItemData>();
     public Dictionary<string, QuestData> QuestDataList { get; private set; } = new Dictionary<string, QuestData>();
 
 
 
-    public Dictionary<string, MonsterData> MonsterDataList { get; private set; } = new Dictionary<string, MonsterData>();
-    public Dictionary<string, FieldObjectData> FieldObjectDataList { get; private set; } = new Dictionary<string, FieldObjectData>();
+   
 
 
 
@@ -86,9 +85,9 @@ public class GameDataManager : MonoBehaviour
         ActiveDataList = LoadData<ActiveData>(jsonPath);
     }
 
-    public void LoadDialougeData(string jsonPath)
+    public void LoadDialogueData(string jsonPath)
     {
-        DialougeDataList = LoadData<DialougeData>(jsonPath);
+        DialogueDataList = LoadData<DialogueData>(jsonPath);
     }
 
     public void LoadFixerData(string jsonPath)
@@ -124,11 +123,11 @@ public class GameDataManager : MonoBehaviour
         return ActiveDataList.TryGetValue(id, out var item) ? item : null;
     }
 
-    public DialougeData GetDialougeData(string id)
+    public DialogueData GetDialogueData(string id)
     {
-        if (DialougeDataList == null || string.IsNullOrEmpty(id)) return null;
+        if (DialogueDataList == null || string.IsNullOrEmpty(id)) return null;
 
-        return DialougeDataList.TryGetValue(id, out var item) ? item : null;
+        return DialogueDataList.TryGetValue(id, out var item) ? item : null;
     }
 
     public FixerData GetFixerData(string id)
@@ -153,17 +152,5 @@ public class GameDataManager : MonoBehaviour
     }
 
 
-    public MonsterData GetMonsterData(string dataId)
-    {
-        if (MonsterDataList == null || string.IsNullOrEmpty(dataId)) return null;
-
-        return MonsterDataList.TryGetValue(dataId, out var data) ? data : null;
-    }
-
-    public FieldObjectData GetFieldObjectData(string dataId)
-    {
-        if (FieldObjectDataList == null || string.IsNullOrEmpty(dataId)) return null;
-
-        return FieldObjectDataList.TryGetValue(dataId, out var data) ? data : null;
-    }
+    
 }
