@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject GObj_StartObject;
-
     public static GameManager Inst { get; set; }
 
     // 플레이어를 캐싱 -> 게임을 할때 1개라서

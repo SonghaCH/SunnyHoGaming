@@ -11,12 +11,11 @@ public class TemperatureController : UIBase
             _isTrigger = true;
 
             //TODO HUD 나오게 하는  코드 작성
-            //UIManager.Instance.Open
+            UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //TODO 명진님이 만들어주시면 넣을거 온도 미니게임
-                //UIManager.Instance.OpenPopupUI(UIType.);
+                UIManager.Instance.OpenTempRepairPopupUI();
             }
         }
     }

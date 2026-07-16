@@ -28,7 +28,8 @@ public enum UIType
     ControlRepairPopupUI,
     AirRepairPopupUI,
     PasswordPopupUI,
-    DialogueUI
+    DialogueUI,
+    FPopupUI
 
 }
 

@@ -11,12 +11,11 @@ public class HintObject : UIBase
             _isTrigger = true;
 
             //TODO HUD 나오게 하는  코드 작성
-            //UIManager.Instance.Open
+            UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //TODO 명진님이 만들어주시면 넣을거 
-                //UIManager.Instance.OpenPopupUI(UIType.);
+                //TODO 힌트 노트 UI만들기
             }
         }
     }

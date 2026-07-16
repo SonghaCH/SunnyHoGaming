@@ -1,8 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class MainController : UIBase
 {
     private bool _isTrigger = false;
+
+    private void Update()
+    {
+        if (_isTrigger == true)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                UIManager.Instance.OpenControlRepairPopupUI();
+            }
+        }
+        
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -11,13 +24,9 @@ public class MainController : UIBase
             _isTrigger = true;
 
             //TODO HUD 나오게 하는  코드 작성
-            //UIManager.Instance.Open
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                //TODO 명진님이 만들어주시면 넣을거 조향 미니게임
-                //UIManager.Instance.OpenPopupUI(UIType.);
-            }
+            UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
+            
+            
         }
     }
 }
