@@ -237,7 +237,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3699943830584470589}
   - component: {fileID: 5892224416919028368}
-  - component: {fileID: 9097515454386673323}
   - component: {fileID: 5476449341989326887}
   m_Layer: 0
   m_Name: Player
@@ -288,22 +287,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &9097515454386673323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8288188630310845049}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da35e036fa8aa9a46bf8d796b50c74e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  playerCamera: {fileID: 593305769255096956}
-  _moveSpeed: 5
-  _mouseSensitivity: 2
-  _gravity: -10
 --- !u!114 &5476449341989326887
 MonoBehaviour:
   m_ObjectHideFlags: 0
