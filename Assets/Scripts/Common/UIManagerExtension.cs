@@ -13,19 +13,6 @@ public enum UIRootType
 
 public enum UIType
 {
-    MyProfilePopup, 
-    Inventory,
-    LoadingUI,
-    DialogueUI,
-    InfoBookUI,
-    RobbyUI,
-    GameBookUI,
-    HudUI,
-    LocalPlayerProfileUI,
-    MVVMTestUI,
-
-
-
     GameStartUI,
     MainUI,
     FixerPopupUI,
@@ -40,13 +27,8 @@ public enum UIType
     ElectricRepairPopupUI,
     ControlRepairPopupUI,
     AirRepairPopupUI,
-    PasswordPopupUI
-
-
-
-
-
-
+    PasswordPopupUI,
+    DialogueUI
 
 }
 
@@ -65,29 +47,6 @@ public static class UIManagerExtension
     {
         uiManager.OpenGameStartUI();
     }
-
-   
-
-    
-    
-
-    public static void OpenLoadingUI(this UIManager uiManager)
-    {
-        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
-        if (uiBase == null)
-        {
-            Debug.LogWarning($"UI가 생성되지 않았습니다");
-            return;
-        }
-    }
-    public static void CloseLoadingUI(this UIManager uiManager)
-    {
-        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.LoadingUI);
-    }
-
-
-
-
 
     //
     public static void OpenGameStartUI(this UIManager uiManager)
@@ -321,6 +280,8 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.PasswordPopupUI);
     }
+
+    //
 
 }
 

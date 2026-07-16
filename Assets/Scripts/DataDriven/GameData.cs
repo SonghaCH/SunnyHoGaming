@@ -33,11 +33,9 @@ public class ActiveData : GameDataBase
 }
 
 [System.Serializable]
-public class DialougeData : GameDataBase
+public class DialogueData : GameDataBase
 {
-    public string Type;
     public string Description;
-    public string Teller;
     public string NextId;
 }
 
@@ -82,30 +80,11 @@ public class QuestData : GameDataBase
 
 
 
-[System.Serializable]
-public class MonsterData : GameDataBase
-{
-    public string Name;
-    public string Description;
-    public int BaseHp;
-    public int BaseAtk;
-    public float NormalAtkMultiple;
-    public List<float> SkillAtkMultipleList;
-    public string IconPath;
-    public string PrefabPath;
-}
 
-[System.Serializable]
-public class FieldObjectData : GameDataBase
-{
-    public string Name;
-    public string Description;
-    public string FieldObjectType;
-    public List<int> DropCountRange;
-    public string DropItemDataId;
-    public string IconPath;
-    public string PrefabPath;
-}
+
+
+
+
 
 
 

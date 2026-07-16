@@ -110,24 +110,5 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public UIBase OpenContentUI(UIType uiType)
-    {
-        return OpenUI(UIRootType.ContentUI, uiType);
-    }
-
-    public UIBase OpenPopupUI(UIType uiType)
-    {
-        return OpenUI(UIRootType.PopupUI, uiType);
-    }
-
-    public void CloseContentUI(UIType uiType)
-    {
-        CloseUI(UIRootType.ContentUI, uiType);
-    }
-
-    public void ClosePopupUI(UIType uiType)
-    {
-        CloseUI(UIRootType.PopupUI, uiType);
-    }
-
+   
 }
