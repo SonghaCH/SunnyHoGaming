@@ -494,7 +494,9 @@ GameObject:
   - component: {fileID: 5700571913283673300}
   - component: {fileID: 3623715221333578769}
   - component: {fileID: 2750603195089818149}
+  - component: {fileID: 4705219827447947935}
   - component: {fileID: 8158743488737459200}
+  - component: {fileID: 6932393917782861838}
   m_Layer: 0
   m_Name: RedFixer
   m_TagString: Untagged
@@ -638,6 +640,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FixerViewModel
   currentState: 2
+--- !u!114 &4705219827447947935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649365569034178510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff27855a9182644ba9dea3e752e5e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerInteractController
 --- !u!114 &8158743488737459200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +668,6 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 323399651181199360
   - rid: 323399651181199361
-  - rid: 323399651181199362
   - rid: 323399651181199432
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
@@ -678,22 +691,35 @@ MonoBehaviour:
           m_Value1: 3503392246960669853
         Name: RoomArea
         m_Value: {fileID: 0}
-    - rid: 323399651181199362
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1485796024692875279
-          m_Value1: 11221292099474553822
-        Name: SampleWorkStation
-        m_Value: {fileID: 0}
     - rid: 323399651181199432
       type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
           m_Value0: 9973271424356458730
           m_Value1: 18373121149102550685
-        Name: MainRoom
+        Name: MainRoomTransform
         m_Value: {fileID: 0}
+--- !u!65 &6932393917782861838
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649365569034178510}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!1 &2668540167969723034
 GameObject:
   m_ObjectHideFlags: 0
