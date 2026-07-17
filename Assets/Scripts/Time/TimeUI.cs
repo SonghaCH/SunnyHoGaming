@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TimeView : ViewBase
+public class TimeUI : ViewBase
 {
     [SerializeField] private TextMeshProUGUI Text_Time;
     [SerializeField] private TextMeshProUGUI Text_Date;
