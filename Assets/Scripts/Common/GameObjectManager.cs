@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using Cysharp.Threading.Tasks;
+
 
 
 public class GameObjectManager : MonoBehaviour
@@ -31,7 +29,7 @@ public class GameObjectManager : MonoBehaviour
         Instance = this;
     }
 
-    public async UniTask<FixerViewModel> SpawnFixerAsync(string fixerDataId, Vector3 spawnPosition, FixerState initialState = FixerState.Rampaging)
+    public async UniTask<FixerViewModel> SpawnFixerAsync(string fixerDataId, Vector3 spawnPosition, FixerState initialState = FixerState.Rampaging, Transform roomDataTransform = null)
     {
         if (ResourceManager.Instance == null)
         {
@@ -50,14 +48,23 @@ public class GameObjectManager : MonoBehaviour
         _objectInstanceKey++;
         int instanceId = _objectInstanceKey;
 
-        FixerViewModel newFixer;
-        bool hasComponent = newFixerObject.TryGetComponent(out newFixer);
-
-        if (hasComponent == true)
+        if (newFixerObject.TryGetComponent(out FixerViewModel newFixer))
         {
             _fixerObjectContainer.Add(instanceId, newFixer);
-
             newFixer.InitFixer(instanceId, fixerDataId, initialState);
+
+            if (WorldManager.Instance != null && WorldManager.Instance.MainRoomTransform != null)
+            {
+                newFixer.SetMainRoomTransformToBlackboard(WorldManager.Instance.MainRoomTransform);
+            }
+
+            if (roomDataTransform != null && roomDataTransform.TryGetComponent(out SpawnDateSelector roomData))
+            {
+                if (roomData.RoomArea != null)
+                {
+                    newFixer.SetRoomAreaToBlackboard(roomData.RoomArea);
+                }
+            }
 
             return newFixer;
         }

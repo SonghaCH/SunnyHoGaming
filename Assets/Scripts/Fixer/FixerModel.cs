@@ -7,7 +7,8 @@ public class FixerModel
     public string Name;
     public float O2Repair;
     public float ElectRepair;
-    public float WayRepair;
-    public float FarmingRepair;
+    public float ControlRepair;
     public float TempRepair;
+    public float FarmingFood;
+    public float FarmingScrap;
 }

@@ -6,46 +6,45 @@ using Unity.Properties;
 using UnityEngine.AI;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "Fixer_MoveTOTarget", story: "[Self] [TargetState] to [Target]", category: "Action/Fixer", id: "fixer-move-action")]
-
-public partial class Fixer_MoveToTargetAction : Action
+[NodeDescription(name: "Fixer_MoveToWork", story: "[Self] moves to [WorkTargetPosition]", category: "Action/Fixer", id: "fixer-move-work-action")]
+public partial class Fixer_MoveToTarget : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
-    [SerializeReference] public BlackboardVariable<GameObject> Target;
-    [SerializeReference] public BlackboardVariable<FixerState> TargetState;
+    [SerializeReference] public BlackboardVariable<Vector3> WorkTargetPosition;
 
     private NavMeshAgent _navMeshAgent;
+    private FixerViewModel _viewModel;
 
     protected override Status OnStart()
     {
-        if (Self.Value == null || Target.Value == null)
-        {
-            return Status.Failure;
-        }
-        if (!Self.Value.TryGetComponent(out _navMeshAgent))
+        if (Self.Value == null)
         {
             return Status.Failure;
         }
 
-        if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
+        if (Self.Value.TryGetComponent(out _navMeshAgent) == false)
         {
-            if (TargetState != null)
-            {
-                viewModel.ChangeStateFromBrain(TargetState.Value);
-            }
+            return Status.Failure;
         }
 
-        _navMeshAgent.SetDestination(Target.Value.transform.position);
+        Self.Value.TryGetComponent(out _viewModel);
+
+        _navMeshAgent.SetDestination(WorkTargetPosition.Value);
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
+        if (_navMeshAgent.pathPending == false && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
-            return Status.Success; 
+            if (_viewModel != null)
+            {
+                _viewModel.TriggerArrivalEvent();
+            }
+
+            return Status.Success;
         }
+
         return Status.Running;
     }
 }
-

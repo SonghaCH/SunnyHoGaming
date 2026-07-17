@@ -46,9 +46,10 @@ public class FixerData : GameDataBase
     public int UnlockDate;
     public float O2Repair;
     public float ElectRepair;
-    public float WayRepair;
-    public float FarmingRepair;
+    public float ControlRepair;
     public float TempRepair;
+    public float FarmingFood;
+    public float FarmingScrap;
     public string PrefabPath;
     public string SoundPath;
 }

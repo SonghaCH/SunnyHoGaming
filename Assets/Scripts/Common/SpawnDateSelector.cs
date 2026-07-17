@@ -10,6 +10,21 @@ public enum SpawnDay
 
 public class SpawnDateSelector : MonoBehaviour
 {
-    [Header("스폰 포인트 활성화될 날짜 선택")]
+    [Header("방 해금 및 픽서 활성화 날짜")]
     public SpawnDay targetDay = SpawnDay.Day_1;
+
+    private Collider _roomAreaCollider;
+
+    private void Awake()
+    {
+        _roomAreaCollider = GetComponent<Collider>();
+    }
+
+    public Collider RoomArea
+    {
+        get
+        {
+            return _roomAreaCollider;
+        }
+    }
 }
