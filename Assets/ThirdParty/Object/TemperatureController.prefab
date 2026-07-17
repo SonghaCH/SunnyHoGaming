@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4765753460681545867}
   - component: {fileID: 4377351926741754874}
+  - component: {fileID: 6884587833773393682}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -53,6 +54,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.11, y: 3.84, z: 11.45}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6884587833773393682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2974652602458600494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b03cbb4423362b41b2b2b246b7b5368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TemperatureController
 --- !u!1 &4672812604483554537
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,7 +78,6 @@ GameObject:
   - component: {fileID: 5080025051569521020}
   - component: {fileID: 8108834216213166154}
   - component: {fileID: -2128892798864647920}
-  - component: {fileID: 2575545161812265944}
   m_Layer: 0
   m_Name: TemperatureController
   m_TagString: Untagged
@@ -161,21 +173,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3.6132812, y: 3.3398438, z: 9.980469}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2575545161812265944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4672812604483554537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b03cbb4423362b41b2b2b246b7b5368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TemperatureController

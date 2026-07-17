@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5152530605848535270}
   - component: {fileID: 5317260146796572982}
+  - component: {fileID: 2726676185321975776}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -51,8 +52,20 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.33, y: 3.58, z: 4.4}
+  m_Size: {x: 5.32, y: 3.58, z: 4.4}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2726676185321975776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5335994374110943106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad72c954a4fd75946b09554b86702edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnergyController
 --- !u!1 &6497430703186441028
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,7 +78,6 @@ GameObject:
   - component: {fileID: 5952036306542958264}
   - component: {fileID: 3245744254492485312}
   - component: {fileID: 7250695276428927528}
-  - component: {fileID: 5617051942102317710}
   m_Layer: 0
   m_Name: EnergyController
   m_TagString: Untagged
@@ -167,15 +179,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5019531, y: 2.6308594, z: 2.9941406}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5617051942102317710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6497430703186441028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad72c954a4fd75946b09554b86702edb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnergyController
