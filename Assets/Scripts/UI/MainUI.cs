@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MainUI : UIBase
 {
-    [SerializeField] private UIButton Btn_Setting;
     [SerializeField] private UIButton Btn_Inventory;
     [SerializeField] private TextMeshProUGUI Text_QuestName;
     [SerializeField] private TextMeshProUGUI Text_Description;
@@ -15,9 +14,7 @@ public class MainUI : UIBase
 
     private void OnEnable()
     {
-        Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
         Btn_Inventory.BindOnClickButtonEvent(OnClick_Inventory);
-
         RefreshQuestUI();
 
     }
@@ -49,13 +46,6 @@ public class MainUI : UIBase
             RefreshQuestUI();
         }
     }
-
-
-    private void OnClick_Setting()
-    {
-
-    }
-
     private void OnClick_Inventory()
     {
         UIManager.Instance.OpenInventoryPopupUI();
