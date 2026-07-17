@@ -6,7 +6,8 @@ public class TemperatureMiniGame : UIBase
 {
     [Header("UI References")]
     [SerializeField] private Slider tempSlider;         
-    [SerializeField] private TextMeshProUGUI holdTimerText; 
+    [SerializeField] private TextMeshProUGUI holdTimerText;
+    [SerializeField] private TextMeshProUGUI currentTempText;
 
     [Header("Temperature Settings")]
     [SerializeField] private float defaultStartTemp = 50f;     
@@ -52,7 +53,12 @@ public class TemperatureMiniGame : UIBase
         HandleInput();
         CheckSafetyZone();
 
-        tempSlider.value = currentTemp;
+        if (tempSlider != null)
+        {
+            tempSlider.value = currentTemp;
+        }
+
+        UpdateTempText();
     }
 
     private void HandleTemperaturePhysics()
@@ -119,6 +125,14 @@ public class TemperatureMiniGame : UIBase
         }
     }
 
+    private void UpdateTempText()
+    {
+        if (currentTempText != null)
+        {
+            currentTempText.text = currentTemp.ToString("F1");
+        }
+    }
+
     private void GameClear()
     {
         isGameActive = false;
@@ -163,6 +177,7 @@ public class TemperatureMiniGame : UIBase
         }
 
         isGameActive = true;
+        UpdateTempText();
         GameStart();
        
         Debug.Log("온도 미니게임이 초기화되었습니다.");
