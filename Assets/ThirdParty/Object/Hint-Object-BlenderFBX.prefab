@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1766255985998886338}
   - component: {fileID: 1222001345562372218}
+  - component: {fileID: 77132130378050854}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -53,6 +54,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &77132130378050854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4369168663652490575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c25a693efb916d4f87538e57ce0f413, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HintObject
 --- !u!1 &5678476699996507226
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +77,6 @@ GameObject:
   - component: {fileID: 8200140345036448840}
   - component: {fileID: 2903752204857366385}
   - component: {fileID: 5268457140777853396}
-  - component: {fileID: 3706066725973663532}
   m_Layer: 0
   m_Name: Hint-Object-BlenderFBX
   m_TagString: Untagged
@@ -145,15 +157,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3706066725973663532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5678476699996507226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c25a693efb916d4f87538e57ce0f413, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HintObject
