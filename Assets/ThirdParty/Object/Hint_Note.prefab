@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 217917563265617455}
   - component: {fileID: 787243908286405206}
   - component: {fileID: 6074702925025180598}
+  - component: {fileID: 283936153438292651}
   m_Layer: 0
   m_Name: Hint_Note
   m_TagString: Untagged
@@ -112,3 +113,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &283936153438292651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394912546820073848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63452ee749b470640a5a91a6685c3ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HintNote
