@@ -3,10 +3,8 @@ using UnityEngine;
 
 public class MainUI : UIBase
 {
-    [SerializeField] private UIButton Btn_Inventory;
     [SerializeField] private TextMeshProUGUI Text_QuestName;
     [SerializeField] private TextMeshProUGUI Text_Description;
-    
     
     //임시 날짜 대입
     [SerializeField] private int testCurrentDay = 2;
@@ -14,9 +12,11 @@ public class MainUI : UIBase
 
     private void OnEnable()
     {
-        Btn_Inventory.BindOnClickButtonEvent(OnClick_Inventory);
         RefreshQuestUI();
-
+        if (UserInputManager.instance != null)
+        {
+            UserInputManager.instance.OnInventoryKey += OpenInventoryUI;
+        }
     }
 
     public void RefreshQuestUI()
@@ -46,8 +46,12 @@ public class MainUI : UIBase
             RefreshQuestUI();
         }
     }
-    private void OnClick_Inventory()
+
+    private void OpenInventoryUI()
     {
-        UIManager.Instance.OpenInventoryPopupUI();
+            UIManager.Instance.OpenInventoryPopupUI();
     }
+
+
+
 }

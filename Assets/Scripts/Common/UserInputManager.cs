@@ -7,6 +7,7 @@ public class UserInputManager : MonoBehaviour
 
     public event Action OnInteractionKey;
     public event Action OnInventoryKey;
+    public event Action OnEscapeKey;
 
     private void Awake()
     {
@@ -23,6 +24,11 @@ public class UserInputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             OnInventoryKey?.Invoke();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnEscapeKey?.Invoke(); 
         }
     }
 }

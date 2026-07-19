@@ -27,7 +27,7 @@ public class DialogueTrigger : MonoBehaviour
             _hasTriggered = true;
 
             // 1. UIManager를 통해 DialogueUI를 가져오거나 새로 활성화합니다.
-            var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.DialogueUI);
+            var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
 
             if (uiBase is DialogueUI dialogueUi)
             {

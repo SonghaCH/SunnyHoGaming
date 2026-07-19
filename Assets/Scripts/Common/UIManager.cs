@@ -12,11 +12,10 @@ public class UIManager : MonoBehaviour
 
     public static UIManager Instance { get; set; }
 
-    // 얘는 생성과 제거에 관한 부분 -> Instancing과 가비지컬렉터와 연관이 있는 애
     private Dictionary<UIType, UIBase> _createdUIDic = new Dictionary<UIType, UIBase>();
-    // 얘는 활성과 비활성에 관한 부분 -> SetActive
     private HashSet<UIType> _openedUIDic = new HashSet<UIType>();
 
+    private Stack<UIType> _openedPopupStack = new Stack<UIType>();
 
     private void Awake()
     {
@@ -25,21 +24,39 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // 매니저들이 탄생한 후에 UI매니저가 처음으로 게임이 실행될 때 필요한 UI들을 오픈해준다!
         this.ShowStartupUIOnGameStart();
+
+        if (UserInputManager.instance != null)
+        {
+            UserInputManager.instance.OnEscapeKey += HandleEscapeInput;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (UserInputManager.instance != null)
+        {
+            UserInputManager.instance.OnEscapeKey -= HandleEscapeInput;
+        }
     }
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
     {
-        // 딱히 요청이 있진 않고 오픈만 하면 되는 UI에서 사용
-
         var openedUI = GetCreatedUI(uiRootType, uiType);
 
-        bool isSetActiveOnOpen = (isInitialHide == false); // 열었을 때 기본적으로 숨겨서 열 것인지 체크
+        bool isSetActiveOnOpen = (isInitialHide == false);
         if (_openedUIDic.Contains(uiType) == false)
         {
             openedUI.gameObject.SetActive(isSetActiveOnOpen);
             _openedUIDic.Add(uiType);
+
+            if (uiRootType == UIRootType.PopupUI && isSetActiveOnOpen)
+            {
+                if (_openedPopupStack.Contains(uiType) == false)
+                {
+                    _openedPopupStack.Push(uiType);
+                }
+            }
         }
 
         return openedUI;
@@ -52,29 +69,56 @@ public class UIManager : MonoBehaviour
             var openedUi = _createdUIDic[uiType];
             openedUi.gameObject.SetActive(false);
             _openedUIDic.Remove(uiType);
+
+            if (uiRootType == UIRootType.PopupUI)
+            {
+                RemovePopupFromStack(uiType);
+            }
+        }
+    }
+
+   
+    private void HandleEscapeInput()
+    {
+        if (_openedPopupStack.Count > 0)
+        {
+            UIType topPopup = _openedPopupStack.Peek();
+
+            CloseUI(UIRootType.PopupUI, topPopup);
+        }
+        else
+        {
+
+            this.OpenPausePopupUI();
+        }
+    }
+
+    
+    private void RemovePopupFromStack(UIType uiType)
+    {
+        if (_openedPopupStack.Contains(uiType))
+        {
+            List<UIType> temp = new List<UIType>(_openedPopupStack);
+            temp.Remove(uiType);
+
+            _openedPopupStack.Clear();
+            for (int i = temp.Count - 1; i >= 0; i--)
+            {
+                _openedPopupStack.Push(temp[i]);
+            }
         }
     }
 
     private Transform GetRootTransform(UIRootType uiRootType)
     {
         Transform root = null;
-        switch (uiRootType) 
+        switch (uiRootType)
         {
-            case UIRootType.BackgroundUI:
-                root = Canvas_BgRoot.transform;
-                break;
-            case UIRootType.MainUI:
-                root = Canvas_MainRoot.transform;
-                break;
-            case UIRootType.ContentUI:
-                root = Canvas_ContentRoot.transform;
-                break;
-            case UIRootType.PopupUI:
-                root = Canvas_PopupRoot.transform;
-                break;
-            case UIRootType.VeryFrontUI:
-                root = Canvas_VeryFrontRoot.transform;
-                break;
+            case UIRootType.BackgroundUI: root = Canvas_BgRoot.transform; break;
+            case UIRootType.MainUI: root = Canvas_MainRoot.transform; break;
+            case UIRootType.ContentUI: root = Canvas_ContentRoot.transform; break;
+            case UIRootType.PopupUI: root = Canvas_PopupRoot.transform; break;
+            case UIRootType.VeryFrontUI: root = Canvas_VeryFrontRoot.transform; break;
         }
         return root;
     }
@@ -108,7 +152,4 @@ public class UIManager : MonoBehaviour
         }
         return _createdUIDic[uiType];
     }
-
-
-   
 }

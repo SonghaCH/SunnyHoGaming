@@ -1,12 +1,62 @@
 [
   {
     "Id": "Dialogue_Day1_001",
-    "Description": "나만 살아남았다.",
+    "Description": "혼자 남게 되었다",
+    "NextId": "Dialogue_Day1_002"
+  },
+  {
+    "Id": "Dialogue_Day1_002",
+    "Description": "절망적이지만 나는 살아야만 한다",
+    "NextId": "Dialogue_Day1_003"
+  },
+  {
+    "Id": "Dialogue_Day1_003",
+    "Description": "정신차리고 주변을 살펴보자",
     "NextId": null
   },
   {
-    "Id": "Dialogue_Day4_002",
-    "Description": "여기는 구조대 생존자 있나요?",
+    "Id": "Dialogue_Day1_004",
+    "Description": "산소 공급기 또한 손상되었구나",
+    "NextId": "Dialogue_Day1_005"
+  },
+  {
+    "Id": "Dialogue_Day1_005",
+    "Description": "서둘러 수리해보자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_006",
+    "Description": "탐사선 내부 온도도 불안정하다",
+    "NextId": "Dialogue_Day1_007"
+  },
+  {
+    "Id": "Dialogue_Day1_007",
+    "Description": "정말 핵심 기능들이 많이 손상되었네",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_008",
+    "Description": "전력이 모두 소진되기전에 수리하자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_009",
+    "Description": "점점 지구와 멀어지고 있었다니",
+    "NextId": "Dialogue_Day1_010"
+  },
+  {
+    "Id": "Dialogue_Day1_010",
+    "Description": "서둘러 항로 제어기를 수리하자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_011",
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_012",
+    "Description": null,
     "NextId": null
   }
 ]

@@ -7,9 +7,7 @@ public class OxygenController : UIBase
         if (other.CompareTag("Player"))
         {
             UserInputManager.instance.OnInteractionKey += Ineterect;
-
             UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
-
         }
     }
 
