@@ -32,15 +32,16 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, FixerData> FixerDataList { get; private set; } = new Dictionary<string, FixerData>();
     public Dictionary<string, ItemData> ItemDataList { get; private set; } = new Dictionary<string, ItemData>();
     public Dictionary<string, QuestData> QuestDataList { get; private set; } = new Dictionary<string, QuestData>();
+    public Dictionary<string, ObjectData> ObjectDataList { get; private set; } = new Dictionary<string, ObjectData>();
 
 
 
-   
 
 
 
 
-    
+
+
     private Dictionary<string, T> LoadData<T>(string tableName) where T : GameDataBase
     {
         // 1. 경로 설정 (확장자 .json 제외!)
@@ -105,7 +106,10 @@ public class GameDataManager : MonoBehaviour
         QuestDataList = LoadData<QuestData>(jsonPath);
     }
 
-
+    public void LoadObjectData(string jsonPath)
+    {
+        ObjectDataList = LoadData<ObjectData>(jsonPath);
+    }
     //public void LoadAll()
     //{
     //    FieldObjectDataList = LoadData<FieldObjectData>("FieldObject");
@@ -151,6 +155,11 @@ public class GameDataManager : MonoBehaviour
         return QuestDataList.TryGetValue(id, out var data) ? data : null;
     }
 
+    public ObjectData GetObjectData(string id)
+    {
+        if (ObjectDataList == null || string.IsNullOrEmpty(id)) return null;
 
-    
+        return ObjectDataList.TryGetValue(id, out var data) ? data : null;
+    }
+
 }

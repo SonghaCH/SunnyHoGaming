@@ -283,7 +283,20 @@ public static class UIManagerExtension
     }
 
     //
+    public static void OpenFPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
 
+    public static void CloseFPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.FPopupUI);
+    }
 }
 
 

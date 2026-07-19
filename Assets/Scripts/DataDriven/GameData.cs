@@ -77,7 +77,12 @@ public class QuestData : GameDataBase
     public string Description;
 }
 
-
+[System.Serializable]
+public class ObjectData : GameDataBase
+{
+    public string Name;
+    public string PopupType;
+}
 
 
 

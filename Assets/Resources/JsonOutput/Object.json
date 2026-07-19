@@ -1,0 +1,32 @@
+[
+  {
+    "Id": "oxygen_supplier_01",
+    "Name": "산소 공급",
+    "PopupType": "AirRepairPopupUI"
+  },
+  {
+    "Id": "generator_01",
+    "Name": "전력 공급",
+    "PopupType": "ElectricRepairPopupUI"
+  },
+  {
+    "Id": "temp_controller_01",
+    "Name": "온도 제어",
+    "PopupType": "TempRepairPopupUI"
+  },
+  {
+    "Id": "censer_controler_01",
+    "Name": "향로 제어",
+    "PopupType": "ControlRepairPopupUI"
+  },
+  {
+    "Id": "note_someone_01",
+    "Name": "누군가의 쪽지",
+    "PopupType": "NotePopupUI"
+  },
+  {
+    "Id": "research_someone_01",
+    "Name": "누군가의 연구 기록",
+    "PopupType": "HiddenNotePopupUI"
+  }
+]

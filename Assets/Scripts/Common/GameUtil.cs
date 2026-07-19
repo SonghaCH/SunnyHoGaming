@@ -20,6 +20,8 @@ public static class GameUtil
         GameDataManager.Instance.LoadFixerData("Fixer");
         GameDataManager.Instance.LoadItemData("Item");
         GameDataManager.Instance.LoadQuestData("Quest");
+        GameDataManager.Instance.LoadObjectData("Object");
+
 
         //GameDataManager.Instance.LoadAll();
     }
