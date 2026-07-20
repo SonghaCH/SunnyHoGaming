@@ -134,7 +134,7 @@ public class NetworkInventoryService
         //    return;
         //}
 
-        if (itemUseType == "OpenPopup")
+        if (itemUseType == "OpenNotePopup")
         {
             UIManager.Instance.OpenHiddenNotePopupUI();
         }
@@ -151,6 +151,7 @@ public class NetworkInventoryService
             //}
 
         }
+        
        
     }
 

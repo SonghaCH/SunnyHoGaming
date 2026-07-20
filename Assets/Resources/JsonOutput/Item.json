@@ -8,7 +8,29 @@
     "ApplyFigure": null,
     "SoundPath": null,
     "IconPath": "Icon/Note",
-    "UseItemType": "OpenPopup"
+    "UseItemType": "OpenNotePopup"
+  },
+  {
+    "Id": "Item_Phone_01",
+    "Name": "위성 전화기",
+    "Description": null,
+    "ApplyEffective": null,
+    "MaxStackCount": 1,
+    "ApplyFigure": null,
+    "SoundPath": null,
+    "IconPath": "Icon/Phone",
+    "UseItemType": "OpenPhonePopup"
+  },
+  {
+    "Id": "Item_Photo_01",
+    "Name": "가족 사진",
+    "Description": "내가 지켜야할 가족들이다. 볼 때마다 힘이 난다.",
+    "ApplyEffective": null,
+    "MaxStackCount": 1,
+    "ApplyFigure": null,
+    "SoundPath": null,
+    "IconPath": "Icon/Photo",
+    "UseItemType": null
   },
   {
     "Id": "Item_Food_01",
