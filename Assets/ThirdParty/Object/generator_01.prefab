@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 5952036306542958264}
   - component: {fileID: 3245744254492485312}
   - component: {fileID: 7250695276428927528}
+  - component: {fileID: 5281061365331853103}
   m_Layer: 0
   m_Name: generator_01
   m_TagString: Untagged
@@ -182,3 +183,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5019531, y: 2.6308594, z: 2.9941406}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5281061365331853103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6497430703186441028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3116ee3d76415d04aa69b8fee7469ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RepairStation
+  FieldObjectId: 
+  StationWorkType: 1
+  TaskType: 1
+  DecayPerSecond: 30

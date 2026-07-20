@@ -52,8 +52,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.42, y: 2.9, z: 7.27}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 6.38453, y: 2.9, z: 7.27}
+  m_Center: {x: -0.482265, y: 0, z: 0}
 --- !u!114 &9025812605172220707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 791130814255529866}
   - component: {fileID: 6819677544648330124}
   - component: {fileID: 7248426237348961013}
+  - component: {fileID: 6346044758357903537}
   m_Layer: 0
   m_Name: censer_controler_01
   m_TagString: Untagged
@@ -216,6 +217,22 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6346044758357903537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4644765570755075445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3116ee3d76415d04aa69b8fee7469ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RepairStation
+  FieldObjectId: 
+  StationWorkType: 3
+  TaskType: 3
+  DecayPerSecond: 2
 --- !u!1 &5460597781439058647
 GameObject:
   m_ObjectHideFlags: 0

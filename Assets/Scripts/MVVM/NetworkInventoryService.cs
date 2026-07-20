@@ -151,8 +151,12 @@ public class NetworkInventoryService
             //}
 
         }
-        
-       
+        if (itemUseType == "OpenPhonePopup")
+        {
+            UIManager.Instance.OpenPasswordPopupUI();
+        }
+
+
     }
 
     private void RequestRemoveItem(long removeTargetUniqueId)

@@ -27,6 +27,7 @@ public class PausePopupUI : UIBase
     }
     private void Onclick_Exit()
     {
+        Application.Quit();
         UIManager.Instance.ClosePausePopupUI();
         //UIManager.Instance.OpenExitPopupUI();
 

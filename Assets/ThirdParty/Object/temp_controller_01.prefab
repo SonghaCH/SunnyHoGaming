@@ -52,8 +52,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7, y: 4, z: 12}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 8.112055, y: 4, z: 12}
+  m_Center: {x: 0.5560279, y: 0, z: 2.842171e-14}
 --- !u!114 &8584879698793380840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 5080025051569521020}
   - component: {fileID: 8108834216213166154}
   - component: {fileID: -2128892798864647920}
+  - component: {fileID: 1366770590556998358}
   m_Layer: 0
   m_Name: temp_controller_01
   m_TagString: Untagged
@@ -182,3 +183,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.6132812, y: 3.3398438, z: 9.980469}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1366770590556998358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4672812604483554537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3116ee3d76415d04aa69b8fee7469ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RepairStation
+  FieldObjectId: 
+  StationWorkType: 2
+  TaskType: 2
+  DecayPerSecond: 2

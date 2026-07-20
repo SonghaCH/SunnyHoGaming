@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40a87914221f0a04d85c4a4209678227
+    m_Address: Icon/Phone
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91120df9d941e674b84dd482d32fd20e
     m_Address: Fixer_03
     m_ReadOnly: 0

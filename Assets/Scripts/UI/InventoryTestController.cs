@@ -38,5 +38,12 @@ public class InventoryTestController : MonoBehaviour
             // 데이터 드리븐 ID "Item_Resources_01"로 아이템을 10개 추가합니다.
             NetworkManager.Inst.InventoryService.AddItem("Item_Photo_01", 1);
         }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Debug.Log("[Test] 위성전화기 획득 요청");
+
+            // 데이터 드리븐 ID "Item_Resources_01"로 아이템을 10개 추가합니다.
+            NetworkManager.Inst.InventoryService.AddItem("Item_Phone_01", 1);
+        }
     }
 }
