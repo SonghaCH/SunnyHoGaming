@@ -82,13 +82,17 @@ public static class UIManagerExtension
     }
 
     //
-    public static void OpenFixerPopupUI(this UIManager uiManager)
+    public static void OpenFixerPopupUI(this UIManager uiManager, FixerViewModel fixerViewModel = null)
     {
         var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.FixerPopupUI);
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
             return;
+        }
+        if (fixerViewModel != null && uiBase is FixerPopupUI popupUI)
+        {
+            popupUI.SetFixerInfo(fixerViewModel);
         }
     }
     public static void CloseFixerPopupUI(this UIManager uiManager)
@@ -127,13 +131,17 @@ public static class UIManagerExtension
     }
 
     //
-    public static void OpenWorkPopupUI(this UIManager uiManager)
+    public static void OpenWorkPopupUI(this UIManager uiManager, FixerViewModel fixerViewModel = null)
     {
         var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.WorkPopupUI);
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
             return;
+        }
+        if (fixerViewModel != null && uiBase is WorkPopupUI popupUI)
+        {
+            popupUI.SetFixerInfo(fixerViewModel);
         }
     }
     public static void CloseWorkPopupUI(this UIManager uiManager)

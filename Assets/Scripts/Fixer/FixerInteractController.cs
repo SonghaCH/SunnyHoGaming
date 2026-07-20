@@ -3,6 +3,10 @@
 [RequireComponent(typeof(Collider), typeof(FixerViewModel))]
 public class FixerInteractController : MonoBehaviour
 {
+    public static int FixersInRange = 0;
+
+    private static FixerInteractController _currentTargetFixer = null;
+
     private FixerViewModel _viewModel;
 
     private void Awake()
@@ -14,6 +18,10 @@ public class FixerInteractController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            FixersInRange++;
+
+            _currentTargetFixer = this;
+
             if (UserInputManager.instance != null)
             {
                 UserInputManager.instance.OnInteractionKey += Interact;
@@ -26,6 +34,14 @@ public class FixerInteractController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            FixersInRange--;
+            if (FixersInRange < 0) FixersInRange = 0;
+
+            if (_currentTargetFixer == this)
+            {
+                _currentTargetFixer = null;
+            }
+
             if (UserInputManager.instance != null)
             {
                 UserInputManager.instance.OnInteractionKey -= Interact;
@@ -36,26 +52,20 @@ public class FixerInteractController : MonoBehaviour
 
     private void Interact()
     {
-        if (_viewModel.CurrentState == FixerState.Rampaging)
+        if (_currentTargetFixer != null && _currentTargetFixer != this)
         {
-            _viewModel.CurrentState = FixerState.Returning;
-
             return;
         }
 
-        UIManager.Instance.OpenFixerPopupUI();
+        if (_viewModel.CurrentState == FixerState.Rampaging)
+        {
+            _viewModel.CurrentState = FixerState.Returning;
+            return;
+        }
 
-        //if (NetworkManager.Inst != null)
-        //{
-        //    var moveVM = NetworkManager.Inst.PlayerService.GetMovementViewModel();
-        //    if (moveVM != null)
-        //    {
-        //        moveVM.CanMove = false;
-        //    }
+        _viewModel.CurrentState = FixerState.Idle;
 
-        //    Cursor.lockState = CursorLockMode.None;
-        //    Cursor.visible = true;
-        //}
+        UIManager.Instance.OpenFixerPopupUI(_viewModel);
     }
 
     private void OnDisable()
@@ -63,6 +73,11 @@ public class FixerInteractController : MonoBehaviour
         if (UserInputManager.instance != null)
         {
             UserInputManager.instance.OnInteractionKey -= Interact;
+        }
+
+        if (_currentTargetFixer == this)
+        {
+            _currentTargetFixer = null;
         }
     }
 }

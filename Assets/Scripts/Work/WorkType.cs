@@ -1,5 +1,7 @@
-﻿
-public enum TaskType
+﻿using Unity.Behavior;
+
+[BlackboardEnum]
+public enum WorkType
 {
     O2Repair,
     ElectRepair,
