@@ -18,6 +18,7 @@ public class PausePopupUI : UIBase
     private void Onclick_Resume()
     {
         UIManager.Instance.ClosePausePopupUI();
+        NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
     }
     private void Onclick_Setting()
     {

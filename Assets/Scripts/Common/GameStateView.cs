@@ -3,14 +3,11 @@ using UnityEngine;
 
 public class GameStateView : ViewBase
 {
-    [SerializeField]
-    private GameObject _titleUI;
+    [SerializeField] private GameObject _titleUI;
 
-    [SerializeField]
-    private GameObject _pauseUI;
+    [SerializeField] private GameObject _pauseUI;
 
-    [SerializeField]
-    private GameObject _gameOverUI;
+    [SerializeField] private GameObject _gameOverUI;
 
     private GameStateViewModel _viewModel;
 
