@@ -7,6 +7,7 @@ public class FixerViewModel : MonoBehaviour
 {
     private FixerModel _fixerModel;
 
+    public FixerModel FixerModel { get; private set; }
     public int InstanceId { get; private set; }
     public string DataId { get; private set; }
 

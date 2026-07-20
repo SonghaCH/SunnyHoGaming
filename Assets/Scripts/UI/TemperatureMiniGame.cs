@@ -31,6 +31,8 @@ public class TemperatureMiniGame : UIBase
     private int driftDirection = 1; 
     private float driftChangeTimer = 0f;
 
+    private ActiveTaskType _taskType = ActiveTaskType.TemperatureControl;
+
     private void Update()
     {
         GameStart();
@@ -138,6 +140,9 @@ public class TemperatureMiniGame : UIBase
         isGameActive = false;
         holdTimerText.color = Color.cyan;
         holdTimerText.text = "SYSTEM STABILIZED";
+
+        ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+
         UIManager.Instance.OpenSimplePopup("온도 제어 성공! 시스템이 안정되었습니다.");
         Debug.Log("온도 제어 성공! 시스템이 안정되었습니다.");
 
@@ -150,6 +155,9 @@ public class TemperatureMiniGame : UIBase
         isGameActive = false;
         holdTimerText.color = Color.red;
         holdTimerText.text = "SYSTEM MELTDOWN";
+
+        ActiveManager.Instance.OnMiniGameResult(_taskType, false);
+
         UIManager.Instance.OpenSimplePopup("온도 제어 실패! 시스템 과열/냉각 불능.");
         Debug.Log("온도 제어 실패! 시스템 과열/냉각 불능.");
 
@@ -158,6 +166,13 @@ public class TemperatureMiniGame : UIBase
 
     public void InitGame()
     {
+        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        {
+            Debug.LogWarning("오늘 이미 클리어한 온도 조절 미니게임입니다!");
+            UIManager.Instance.CloseTempRepairPopupUI();
+            return;
+        }
+
         currentTemp = defaultStartTemp;
         currentHoldTime = 0f;
         currentOutsideTime = 0f;

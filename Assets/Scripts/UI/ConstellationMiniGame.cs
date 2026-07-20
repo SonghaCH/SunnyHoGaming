@@ -25,6 +25,7 @@ public class ConstellationMiniGame : UIBase
     private float currentTime;
     private bool isGameActive = true;
 
+    private ActiveTaskType _taskType = ActiveTaskType.RouteControl;
 
     private void Update()
     {
@@ -182,6 +183,9 @@ public class ConstellationMiniGame : UIBase
     private void GameOver(bool isSuccess)
     {
         isGameActive = false;
+
+        ActiveManager.Instance.OnMiniGameResult(_taskType, isSuccess);
+
         if (isSuccess)
         {
             UIManager.Instance.OpenSimplePopup("항로 제어 완료");
@@ -199,6 +203,13 @@ public class ConstellationMiniGame : UIBase
 
     public void InitGame()
     {
+        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        {
+            Debug.LogWarning("오늘 이미 클리어한 항로 제어 미니게임입니다!");
+            UIManager.Instance.CloseControlRepairPopupUI();
+            return;
+        }
+
         currentTime = limitTime;
         currentRow = 0;
         currentCorrectCount = 0;
@@ -220,6 +231,6 @@ public class ConstellationMiniGame : UIBase
 
         isGameActive = true;
         GameStart();
-        Debug.Log("별자리 미니게임이 초기화되었습니다.");
+        Debug.Log("항로 제어가 초기화되었습니다.");
     }
 }
