@@ -12,6 +12,7 @@ public class WorldManager : MonoBehaviour
 
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
     private TimeViewModel _timeViewModel;
+    private GameStateViewModel _gameStateViewModel;
     private Transform _mainRoomSpawnPoint;
     public Transform MainRoomTransform
     {
@@ -43,13 +44,21 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        if (NetworkManager.Inst != null)
         {
-            _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
-            _timeViewModel.PropertyChanged += OnTimePropertyChanged;
+            if(NetworkManager.Inst.TimeService != null)
+            {
+                _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
+                _timeViewModel.PropertyChanged += OnTimePropertyChanged;
+            }
+
+            if(NetworkManager.Inst.GameStateService != null)
+            {
+                _gameStateViewModel = NetworkManager.Inst.GameStateService.GetViewModel();
+                _gameStateViewModel.RequestingPlay += InitializeWorld;
+            }
         }
 
-        InitializeWorldAsync().Forget();
     }
 
     private void OnTimePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -61,6 +70,11 @@ public class WorldManager : MonoBehaviour
 
             StartNewDayAsync(newDay).Forget();
         }
+    }
+
+    private void InitializeWorld()
+    {
+        InitializeWorldAsync().Forget();
     }
 
     private async UniTaskVoid InitializeWorldAsync()
