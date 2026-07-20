@@ -28,5 +28,20 @@
     "Id": "research_someone_01",
     "Name": "누군가의 연구 기록",
     "PopupType": "HiddenNotePopupUI"
+  },
+  {
+    "Id": "origin_fixer_01",
+    "Name": "픽스",
+    "PopupType": "FixerPopupUI"
+  },
+  {
+    "Id": "ex_fixer_01",
+    "Name": "암스트숏",
+    "PopupType": "FixerPopupUI"
+  },
+  {
+    "Id": "red_fixer_01",
+    "Name": "볼트",
+    "PopupType": "FixerPopupUI"
   }
 ]

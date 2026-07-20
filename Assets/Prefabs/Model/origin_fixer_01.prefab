@@ -892,9 +892,10 @@ GameObject:
   - component: {fileID: 1349915095482027524}
   - component: {fileID: 2876567880640911498}
   - component: {fileID: 2622587725767587706}
+  - component: {fileID: -7571354933394573070}
   m_Layer: 0
-  m_Name: OriginFixer
-  m_TagString: Untagged
+  m_Name: origin_fixer_01
+  m_TagString: Fixer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1097,6 +1098,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &-7571354933394573070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552968531976532478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0aa13a0f9c3980409c6878b45f07f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainController
 --- !u!1 &3648604483688993867
 GameObject:
   m_ObjectHideFlags: 0
