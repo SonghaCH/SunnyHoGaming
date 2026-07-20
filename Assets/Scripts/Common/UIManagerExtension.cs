@@ -29,7 +29,8 @@ public enum UIType
     AirRepairPopupUI,
     PasswordPopupUI,
     DialogueUI,
-    FPopupUI
+    FPopupUI,
+    PausePopupUI
 
 }
 
@@ -297,6 +298,22 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.FPopupUI);
     }
+    public static void OpenPausePopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.PausePopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void ClosePausePopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.PausePopupUI);
+    }
+    
+
 }
 
 
