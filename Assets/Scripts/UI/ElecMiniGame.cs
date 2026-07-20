@@ -44,6 +44,8 @@ public class ElecMiniGame : UIBase
     public event System.Action OnMissionComplete;
     public event System.Action OnMissionFail;
 
+    private ActiveTaskType _taskType = ActiveTaskType.PowerSupply;
+
     private void Update()
     {
         if (_isMissionComplete || _isGameOver)
@@ -187,6 +189,9 @@ public class ElecMiniGame : UIBase
     private void CompleteMission()
     {
         _isMissionComplete = true;
+
+        ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+
         UIManager.Instance.OpenSimplePopup("전기 공급 완료");
         Debug.Log("미션 완료!");
         UIManager.Instance.CloseElectricRepairPopupUI();
@@ -200,6 +205,9 @@ public class ElecMiniGame : UIBase
     private void GameOver()
     {
         _isGameOver = true;
+
+        ActiveManager.Instance.OnMiniGameResult(_taskType, false);
+
         UIManager.Instance.OpenSimplePopup("전기 공급 실패!");
         Debug.Log("게임 오버! 최대 실패 횟수 도달.");
         UIManager.Instance.CloseElectricRepairPopupUI();
@@ -212,6 +220,13 @@ public class ElecMiniGame : UIBase
 
     public void InitGame()
     {
+        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        {
+            Debug.LogWarning("오늘 이미 클리어한 전력 미니게임입니다!");
+            UIManager.Instance.CloseElectricRepairPopupUI();
+            return;
+        }
+
         _progress = 0f;
         _currentAngle = 0f;
         _isMissionComplete = false;

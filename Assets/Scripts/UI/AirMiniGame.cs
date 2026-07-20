@@ -18,6 +18,8 @@ public class AirMiniGame : UIBase
     public float inputGain = 1f;           // 입력 1회당 증가량
     public bool isFinished = false;
 
+    private ActiveTaskType _taskType = ActiveTaskType.OxygenSupply;
+
     private void Update()
     {
         if (isFinished)
@@ -72,18 +74,9 @@ public class AirMiniGame : UIBase
             oxygenCylinderSlider.value = progressRatio;
         }
 
-        // 2-오류 대비. (만약 실린더가 Slider가 아니라 단순 Image 컴포넌트의 Filled 방식을 쓴다면 아래 주석을 해제하세요)
-        /*
-        if (oxygenCylinderImage != null)
-        {
-            oxygenCylinderImage.fillAmount = progressRatio;
-        }
-        */
-
         // 3. 0 ~ 100% 현황 텍스트 표기
         if (progressText != null)
         {
-            // 소수점 없이 정수로 깔끔하게 표현하기 위해 반올림(혹은 버림) 후 %를 붙임
             int percentage = Mathf.RoundToInt(progressRatio * 100f);
             progressText.text = $"{percentage}%";
         }
@@ -98,6 +91,8 @@ public class AirMiniGame : UIBase
 
             UpdateUI(); // 최종 완료 상태(100%)를 확실하게 UI에 한 번 더 갱신
 
+            ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+
             UIManager.Instance.OpenSimplePopup("산소 공급 완료");
             Debug.Log("미니게임 승리");
             UIManager.Instance.CloseAirRepairPopupUI();
@@ -106,6 +101,13 @@ public class AirMiniGame : UIBase
 
     public void InitGame()
     {
+        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        {
+            Debug.LogWarning("오늘 이미 클리어한 산소 미니게임입니다!");
+            UIManager.Instance.CloseAirRepairPopupUI();
+            return;
+        }
+
         currentGauge = 0f;
         isFinished = false;
 
