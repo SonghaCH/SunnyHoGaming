@@ -66,6 +66,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0aa13a0f9c3980409c6878b45f07f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainController
+  _outLineRenderer: {fileID: 5268457140777853396}
+  _outLineMaterial: {fileID: 2100000, guid: 6aa620fe69b15ba4bae7c80eaf58a84f, type: 2}
 --- !u!1 &5678476699996507226
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +136,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 5624834374086291313, guid: 674a650228bd3544abfb1555129c91e6, type: 3}
+  - {fileID: 2100000, guid: 6aa620fe69b15ba4bae7c80eaf58a84f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
