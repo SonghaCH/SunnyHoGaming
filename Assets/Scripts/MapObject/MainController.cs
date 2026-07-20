@@ -7,10 +7,11 @@ public class MainController : UIBase
 
     private void Awake()
     {
-        _data = GameDataManager.Instance.GetObjectData(gameObject.name);
+        string FixerId = gameObject.name.Replace("(Clone)", "").Trim();
+        _data = GameDataManager.Instance.GetObjectData(FixerId);
         if (_data == null)
         {
-            Debug.LogError($"[MainController] '{gameObject.name}'에 해당하는 ObjectData가 없습니다.", this);
+            Debug.LogError($"[MainController] '{gameObject.name}'에 해당하는 ObjectData가 없습니다.");
         }
     }
 
@@ -34,6 +35,13 @@ public class MainController : UIBase
         {
             UserInputManager.instance.OnInteractionKey -= Interact;
             UIManager.Instance.CloseFPopupUI();
+
+            if (!Enum.TryParse(_data.PopupType, out UIType popupUI))
+            {
+                Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
+                return;
+            }
+            UIManager.Instance.CloseUI(UIRootType.PopupUI, popupUI);
         }
     }
 
@@ -41,7 +49,7 @@ public class MainController : UIBase
     {
         if (!Enum.TryParse(_data.PopupType, out UIType popupType))
         {
-            Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.", this);
+            Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
             return;
         }
 
