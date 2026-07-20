@@ -3,6 +3,7 @@
     "Id": "active_01",
     "Name": "Oxygen Supply",
     "TimeTaken": 5,
+    "ItemId": null,
     "ResourcesCost": 100,
     "TimeToConsume": 3,
     "TexturePath": null,
@@ -12,6 +13,7 @@
     "Id": "active_02",
     "Name": "Power Supply",
     "TimeTaken": 5,
+    "ItemId": null,
     "ResourcesCost": 100,
     "TimeToConsume": 3,
     "TexturePath": null,
@@ -21,6 +23,7 @@
     "Id": "active_03",
     "Name": "Temperature Control",
     "TimeTaken": 5,
+    "ItemId": null,
     "ResourcesCost": 100,
     "TimeToConsume": 3,
     "TexturePath": null,
@@ -30,8 +33,29 @@
     "Id": "active_04",
     "Name": "Route Control",
     "TimeTaken": 5,
+    "ItemId": null,
     "ResourcesCost": 100,
     "TimeToConsume": 3,
+    "TexturePath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "active_05",
+    "Name": "Farming",
+    "TimeTaken": 5,
+    "ItemId": "Item_Resources_01,Item_Resources_02,Item_Resources_03,Item_Resources_04",
+    "ResourcesCost": null,
+    "TimeToConsume": null,
+    "TexturePath": null,
+    "SoundPath": null
+  },
+  {
+    "Id": "active_06",
+    "Name": "Food Supply",
+    "TimeTaken": 5,
+    "ItemId": "Item_Food_01",
+    "ResourcesCost": null,
+    "TimeToConsume": null,
     "TexturePath": null,
     "SoundPath": null
   }
