@@ -88,8 +88,8 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-
             this.OpenPausePopupUI();
+            NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
         }
     }
 

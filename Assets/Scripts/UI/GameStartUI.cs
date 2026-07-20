@@ -22,7 +22,9 @@ public class GameStartUI : UIBase
     {
         UIManager.Instance.CloseGameStartUI();
         UIManager.Instance.OpenMainUI();
+        NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPlay();
     }
+
     private void OnClick_Setting()
     {
         Debug.Log("세팅 버튼~");

@@ -5,6 +5,11 @@
     public GameStateService()
     {
         _viewModel = new GameStateViewModel();
+
+        _viewModel.RequestingTitle += EnterTitleScreen;
+        _viewModel.RequestingPlay += PlayGame;
+        _viewModel.RequestingPause += PauseGame;
+        _viewModel.RequestingResume += ResumeGame;
     }
 
     public GameStateViewModel GetViewModel()
@@ -12,39 +17,29 @@
         return _viewModel;
     }
 
-    public void EnterTitleScreen()
+    private void EnterTitleScreen()
     {
         _viewModel.CurrentGameState = GameState.Title;
     }
 
-    public void PlayGame()
+    private void PlayGame()
     {
         _viewModel.CurrentGameState = GameState.Playing;
     }
 
-    public void PauseGame()
+    private void PauseGame()
     {
-        if (_viewModel.CurrentGameState != GameState.Playing)
+        if (_viewModel.CurrentGameState == GameState.Playing)
         {
-            return;
+            _viewModel.CurrentGameState = GameState.Paused;
         }
-
-        _viewModel.CurrentGameState = GameState.Paused;
     }
 
-    public void ResumeGame()
+    private void ResumeGame()
     {
         if (_viewModel.CurrentGameState == GameState.Paused)
         {
             _viewModel.CurrentGameState = GameState.Playing;
-        }
-    }
-
-    public void TriggerGameOver()
-    {
-        if (_viewModel.CurrentGameState != GameState.GameOver)
-        {
-            _viewModel.CurrentGameState = GameState.GameOver;
         }
     }
 }

@@ -31,9 +31,25 @@ public class NetworkManager : MonoBehaviour
 
     private void Update()
     {
-        if (TimeService != null)
+        if (GameStateService != null)
         {
-            TimeService.UpdateTime(Time.deltaTime);
+            GameState currentGameState = GameStateService.GetViewModel().CurrentGameState;
+
+            if (currentGameState == GameState.Playing)
+            {
+                float deltaTime = Time.deltaTime;
+
+                if (TimeService != null)
+                {
+                    TimeService.UpdateTime(deltaTime);
+                }
+
+                if (PlayerService != null && TimeService != null)
+                {
+                    int currentDay = TimeService.GetViewModel().CurrentDay;
+                    PlayerService.UpdatePlayerState(currentDay, deltaTime);
+                }
+            }
         }
     }
 
