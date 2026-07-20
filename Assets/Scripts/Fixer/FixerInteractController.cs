@@ -1,10 +1,13 @@
-﻿using NUnit.Framework.Interfaces;
+﻿using NUnit.Framework.Interfaces; 
 using System;
+using System.Collections.Generic; 
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(FixerViewModel))]
 public class FixerInteractController : MonoBehaviour
 {
+    public static List<FixerInteractController> FixersInRange = new List<FixerInteractController>();
+
     private FixerViewModel _viewModel;
     private ObjectData _data;
 
@@ -25,6 +28,11 @@ public class FixerInteractController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!FixersInRange.Contains(this))
+            {
+                FixersInRange.Add(this);
+            }
+
             UserInputManager.instance.OnInteractionKey += Interact;
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
@@ -39,6 +47,11 @@ public class FixerInteractController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (FixersInRange.Contains(this))
+            {
+                FixersInRange.Remove(this);
+            }
+
             UserInputManager.instance.OnInteractionKey -= Interact;
             UIManager.Instance.CloseFPopupUI();
 
@@ -77,6 +90,11 @@ public class FixerInteractController : MonoBehaviour
 
     private void OnDisable()
     {
+        if (FixersInRange.Contains(this))
+        {
+            FixersInRange.Remove(this);
+        }
+
         if (UserInputManager.instance != null)
         {
             UserInputManager.instance.OnInteractionKey -= Interact;

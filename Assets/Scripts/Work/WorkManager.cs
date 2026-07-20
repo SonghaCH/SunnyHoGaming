@@ -39,7 +39,7 @@ public class WorkManager : MonoBehaviour
         }
 
         targetStation.LockStation();
-        fixer.SetWorkTarget(targetStation.transform.position, targetStation.StationTaskType);
+        fixer.SetWorkTarget(targetStation.transform.position, targetStation.StationWorkType);
 
         fixer.CurrentState = FixerState.MoveToTarget;
 
@@ -68,20 +68,15 @@ public class WorkManager : MonoBehaviour
 
         try
         {
-            float repairPower = fixer.GetWorkEfficiency(station.StationTaskType);
+            float repairPower = fixer.GetWorkEfficiency(station.StationWorkType);
             if (repairPower <= 0f) repairPower = 1f;
 
-            // 1. 실시간 틱(1.5초 루프) 제거. 전체 작업 시간(workDuration)만큼 대기합니다.
             await UniTask.Delay(TimeSpan.FromSeconds(workDuration), cancellationToken: cts.Token);
 
-            // ---------- [대기 종료 = 작업 완료] ----------
-
-            // 2. 작업이 100% 완료된 시점에 한 번에 작업량(보상) 증가
-            // (기존 1.5초 주기였던 것을 감안하여 총합 workPower를 계산하거나 기획 수치에 맞게 변경)
+            
             float totalWorkPower = repairPower * (workDuration / 1.5f);
-            station.ApplyWork(totalWorkPower); // 파밍 시설은 여기서 아이템을 1회 지급하고 끝납니다[cite: 7, 8].
+            station.ApplyWork(totalWorkPower); 
 
-            // 3. 일일 1회 제한 적용 (오늘 날짜를 기록하여 CanWorkToday를 false로 만듦)
             int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
             station.MarkWorkedCompleted(currentDay);
 
@@ -93,7 +88,7 @@ public class WorkManager : MonoBehaviour
         }
         finally
         {
-            station.UnlockStation(); // IsOccupied = false 처리
+            station.UnlockStation(); 
             _workCancellationTokens.Remove(fixer);
             fixer.OrderReturn();
         }

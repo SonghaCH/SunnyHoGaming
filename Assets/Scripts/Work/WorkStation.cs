@@ -4,7 +4,9 @@ public abstract class WorkStation : MonoBehaviour
 {
     public string FieldObjectId;
     private int _lastWorkedDay = -1;
-    public WorkType StationTaskType;
+    public WorkType StationWorkType;
+
+    public ActiveTaskType TaskType;
 
     public float MaxGauge { get; protected set; }
     public float CurrentGauge { get; protected set; }
@@ -43,7 +45,6 @@ public abstract class WorkStation : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -68,14 +69,11 @@ public abstract class WorkStation : MonoBehaviour
 
     private void Interact()
     {
-        if (FixerInteractController.FixersInRange > 0)
+        if (FixerInteractController.FixersInRange.Count > 0)
         {
             return;
         }
-       
-        Debug.Log($"[{gameObject.name}] 작업대 상호작용 실행!");
     }
-
 
     public virtual bool ApplyWork(float workPower)
     {
@@ -90,13 +88,12 @@ public abstract class WorkStation : MonoBehaviour
 
     public void AssignTaskToFixer(FixerViewModel fixerViewModel)
     {
-        fixerViewModel.SetWorkTarget(this.transform.position, this.StationTaskType);
-
+        fixerViewModel.SetWorkTarget(this.transform.position, this.StationWorkType);
         fixerViewModel.CurrentState = FixerState.MoveToTarget;
     }
+
     public bool CanWorkToday(int currentDay)
     {
-        // 누군가 점유 중이 아니고, 마지막 작업일이 오늘이 아니라면 작업 가능
         return !IsOccupied && _lastWorkedDay != currentDay;
     }
 

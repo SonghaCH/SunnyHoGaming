@@ -39,7 +39,6 @@ public class WorkSlotUI : MonoBehaviour
 
     private void RefreshButtonState()
     {
-        // 오늘 이미 작업(MarkWorkedCompleted)을 마친 시설이라면 버튼을 모두 끕니다.
         if (_isCompletedToday)
         {
             if (_btnSelectWork != null) _btnSelectWork.gameObject.SetActive(false);
@@ -47,7 +46,6 @@ public class WorkSlotUI : MonoBehaviour
         }
         else
         {
-            // 작업 중(IsOccupied)이라면 취소 버튼, 아니라면 시작 버튼 활성화[cite: 7]
             if (_btnSelectWork != null) _btnSelectWork.gameObject.SetActive(!_isWorking);
             if (_btnCancelWork != null) _btnCancelWork.gameObject.SetActive(_isWorking);
         }

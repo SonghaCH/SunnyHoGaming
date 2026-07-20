@@ -293,4 +293,12 @@ public class ActiveManager : MonoBehaviour
         }
     }
 
+    public void CancelFixerTask(ActiveTaskType taskType)
+    {
+        if (_assignmentDict.ContainsKey(taskType))
+        {
+            _assignmentDict[taskType].IsWorking = false;
+            Debug.Log($"[{taskType}] 작업장의 픽서 배정이 해제되었습니다.");
+        }
+    }
 }
