@@ -39,7 +39,9 @@ public class WorkManager : MonoBehaviour
         }
 
         targetStation.LockStation();
-        fixer.SetWorkTarget(targetStation.transform.position);
+        fixer.SetWorkTarget(targetStation.transform.position, targetStation.StationTaskType);
+
+        fixer.CurrentState = FixerState.MoveToTarget;
 
         _pendingOrders[fixer] = new WorkOrder { Station = targetStation, Duration = workDuration };
 
@@ -69,26 +71,29 @@ public class WorkManager : MonoBehaviour
             float repairPower = fixer.GetWorkEfficiency(station.StationTaskType);
             if (repairPower <= 0f) repairPower = 1f;
 
-            float actionCycleTime = 1.5f;
-            float elapsedTime = 0f;
+            // 1. 실시간 틱(1.5초 루프) 제거. 전체 작업 시간(workDuration)만큼 대기합니다.
+            await UniTask.Delay(TimeSpan.FromSeconds(workDuration), cancellationToken: cts.Token);
 
-            while (elapsedTime < workDuration)
-            {
-                cts.Token.ThrowIfCancellationRequested();
+            // ---------- [대기 종료 = 작업 완료] ----------
 
-                await UniTask.Delay(TimeSpan.FromSeconds(actionCycleTime), cancellationToken: cts.Token);
-                elapsedTime += actionCycleTime;
+            // 2. 작업이 100% 완료된 시점에 한 번에 작업량(보상) 증가
+            // (기존 1.5초 주기였던 것을 감안하여 총합 workPower를 계산하거나 기획 수치에 맞게 변경)
+            float totalWorkPower = repairPower * (workDuration / 1.5f);
+            station.ApplyWork(totalWorkPower); // 파밍 시설은 여기서 아이템을 1회 지급하고 끝납니다[cite: 7, 8].
 
-                bool isCompleted = station.ApplyWork(repairPower);
-                if (isCompleted) break;
-            }
+            // 3. 일일 1회 제한 적용 (오늘 날짜를 기록하여 CanWorkToday를 false로 만듦)
+            int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+            station.MarkWorkedCompleted(currentDay);
+
+            Debug.Log($"[{fixer.gameObject.name}] {station.gameObject.name} 작업 완료! (1일 제한 적용)");
         }
         catch (OperationCanceledException)
         {
+            
         }
         finally
         {
-            station.UnlockStation();
+            station.UnlockStation(); // IsOccupied = false 처리
             _workCancellationTokens.Remove(fixer);
             fixer.OrderReturn();
         }

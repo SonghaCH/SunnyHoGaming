@@ -10,6 +10,8 @@ public class FixerViewModel : MonoBehaviour
     public int InstanceId { get; private set; }
     public string DataId { get; private set; }
 
+    public WorkStation TargetStation { get; set; }
+
     public event Action<FixerState> OnStateChanged;
     public event Action<FixerState> OnAnimationStateChanged;
     public event Action<FixerViewModel> OnArrivedAtWorkStation;
@@ -74,7 +76,12 @@ public class FixerViewModel : MonoBehaviour
 
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
-            _behaviorGraphAgent.BlackboardReference.SetVariableValue("FixerState", currentState);
+            bool isSuccess = _behaviorGraphAgent.BlackboardReference.SetVariableValue("FixerState", currentState);
+
+            if (isSuccess == false)
+            {
+                Debug.LogError($" [동기화 에러] BT 블랙보드에 값을 넣지 못했습니다! C# 상태: {currentState}");
+            }
 
             if (isFromBrain == false)
             {
@@ -148,29 +155,30 @@ public class FixerViewModel : MonoBehaviour
 
         CurrentState = initialState;
     }
-    public float GetWorkEfficiency(TaskType taskType)
+    public float GetWorkEfficiency(WorkType taskType)
     {
         if (_fixerModel == null) return 1f;
 
         switch (taskType)
         {
-            case TaskType.O2Repair: return _fixerModel.O2Repair;
-            case TaskType.ElectRepair: return _fixerModel.ElectRepair;
-            case TaskType.ControlRepair: return _fixerModel.ControlRepair;
-            case TaskType.TempRepair: return _fixerModel.TempRepair;
-            case TaskType.FarmingFood: return _fixerModel.FarmingFood;
-            case TaskType.FarmingScrap: return _fixerModel.FarmingScrap;
+            case WorkType.O2Repair: return _fixerModel.O2Repair;
+            case WorkType.ElectRepair: return _fixerModel.ElectRepair;
+            case WorkType.ControlRepair: return _fixerModel.ControlRepair;
+            case WorkType.TempRepair: return _fixerModel.TempRepair;
+            case WorkType.FarmingFood: return _fixerModel.FarmingFood;
+            case WorkType.FarmingScrap: return _fixerModel.FarmingScrap;
             default: return 1f;
         }
     }
-    public void SetWorkTarget(Vector3 targetPosition)
+    public void SetWorkTarget(Vector3 targetPosition, WorkType taskType)
     {
-        CurrentState = FixerState.MoveToTarget;
-
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
             _behaviorGraphAgent.BlackboardReference.SetVariableValue("WorkTargetPosition", targetPosition);
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("CurrentTaskType", (int)taskType);
         }
+
+        CurrentState = FixerState.MoveToTarget;
     }
 
     public void TriggerArrivalEvent()
