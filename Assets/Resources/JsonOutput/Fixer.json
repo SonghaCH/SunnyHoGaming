@@ -10,7 +10,8 @@
     "FarmingRepair": 100,
     "TempRepair": 100,
     "PrefabPath": "Fixer_01",
-    "SoundPath": null
+    "SoundPath": null,
+    "IconPath": "Icons/OriginFixer_Icon"
   },
   {
     "Id": "Fixer_02",
@@ -23,7 +24,8 @@
     "FarmingRepair": 150,
     "TempRepair": 100,
     "PrefabPath": "Fixer_02",
-    "SoundPath": null
+    "SoundPath": null,
+    "IconPath": "Icons/EXFixer_Icon"
   },
   {
     "Id": "Fixer_03",
@@ -36,6 +38,7 @@
     "FarmingRepair": 100,
     "TempRepair": 100,
     "PrefabPath": "Fixer_03",
-    "SoundPath": null
+    "SoundPath": null,
+    "IconPath": "Icons/RedFixer_Icon"
   }
 ]
