@@ -140,9 +140,16 @@ public static class UIManagerExtension
             Debug.LogWarning($"UI가 생성되지 않았습니다");
             return;
         }
-        if (fixerViewModel != null && uiBase is WorkPopupUI popupUI)
+        if (uiBase is WorkPopupUI popupUI)
         {
-            popupUI.SetFixerInfo(fixerViewModel);
+            if (fixerViewModel != null)
+            {
+                popupUI.SetFixerInfo(fixerViewModel);
+            }
+            else
+            {
+                popupUI.RefreshWorkList();
+            }
         }
     }
     public static void CloseWorkPopupUI(this UIManager uiManager)

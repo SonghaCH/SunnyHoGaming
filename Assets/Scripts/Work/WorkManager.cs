@@ -17,6 +17,7 @@ public class WorkManager : MonoBehaviour
         public float Duration;
     }
     private Dictionary<FixerViewModel, WorkOrder> _pendingOrders = new Dictionary<FixerViewModel, WorkOrder>();
+    public event Action OnWorkStateChanged;
 
     private void Awake()
     {
@@ -38,15 +39,23 @@ public class WorkManager : MonoBehaviour
             return;
         }
 
-        targetStation.LockStation();
-        fixer.SetWorkTarget(targetStation.transform.position, targetStation.StationWorkType);
+        if (fixer.TargetStation != null)
+        {
+            CancelSpecificTask(fixer, fixer.TargetStation);
+        }
 
-        fixer.CurrentState = FixerState.MoveToTarget;
+        ActiveManager.Instance.AssignFixerToTask(targetStation.TaskType, fixer.InstanceId);
+
+        fixer.TargetStation = targetStation;
+        targetStation.AssignTaskToFixer(fixer);
+        targetStation.LockStation(); 
 
         _pendingOrders[fixer] = new WorkOrder { Station = targetStation, Duration = workDuration };
 
         fixer.OnArrivedAtWorkStation -= OnFixerArrived;
         fixer.OnArrivedAtWorkStation += OnFixerArrived;
+
+        OnWorkStateChanged?.Invoke();
     }
 
     private void OnFixerArrived(FixerViewModel fixer)
@@ -80,6 +89,8 @@ public class WorkManager : MonoBehaviour
             int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
             station.MarkWorkedCompleted(currentDay);
 
+            ActiveManager.Instance.OnMiniGameResult(station.TaskType, true);
+
             Debug.Log($"[{fixer.gameObject.name}] {station.gameObject.name} 작업 완료! (1일 제한 적용)");
         }
         catch (OperationCanceledException)
@@ -88,9 +99,14 @@ public class WorkManager : MonoBehaviour
         }
         finally
         {
+            ActiveManager.Instance.CancelFixerTask(station.TaskType);
             station.UnlockStation(); 
+            
             _workCancellationTokens.Remove(fixer);
+            fixer.TargetStation = null; 
             fixer.OrderReturn();
+
+            OnWorkStateChanged?.Invoke();
         }
     }
 
@@ -103,5 +119,32 @@ public class WorkManager : MonoBehaviour
 
         _pendingOrders.Remove(fixer);
         fixer.OnArrivedAtWorkStation -= OnFixerArrived;
+    }
+
+    public void CancelSpecificTask(FixerViewModel fixer, WorkStation station)
+    {
+        ActiveManager.Instance.CancelFixerTask(station.TaskType);
+
+        CancelWork(fixer); 
+        station.UnlockStation(); 
+
+        fixer.TargetStation = null;
+
+        OnWorkStateChanged?.Invoke();
+    }
+
+    public void CancelTaskByStation(WorkStation station)
+    {
+        int fixerId = ActiveManager.Instance.GetAssignedFixerId(station.TaskType);
+
+        if (fixerId != -1)
+        {
+            FixerViewModel fixer = GameObjectManager.Instance.GetFixerFromInstanceId(fixerId);
+            if (fixer != null)
+            {
+                CancelSpecificTask(fixer, station);
+                Debug.Log($"플레이어가 작업을 끝내서 픽서({fixerId})의 작업을 취소하고 돌려보냅니다.");
+            }
+        }
     }
 }

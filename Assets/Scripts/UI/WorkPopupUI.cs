@@ -13,40 +13,92 @@ public class WorkPopupUI : UIBase
 
     private void Start()
     {
-        if (_btnClose != null)
+        if (_btnClose != null) _btnClose.BindOnClickButtonEvent(ClosePopup);
+    }
+
+    private void OnEnable()
+    {
+        if (WorkManager.Instance != null)
         {
-            _btnClose.BindOnClickButtonEvent(ClosePopup);
+            WorkManager.Instance.OnWorkStateChanged += RefreshWorkList;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (WorkManager.Instance != null)
+        {
+            WorkManager.Instance.OnWorkStateChanged -= RefreshWorkList;
         }
     }
 
     public void SetFixerInfo(FixerViewModel fixer)
     {
         _currentSelectedFixer = fixer;
+
+        if (_currentSelectedFixer != null)
+        {
+            _currentSelectedFixer.FreezeMovement(true);
+        }
+
         RefreshWorkList();
     }
 
     public void ClosePopup()
     {
+        if (_currentSelectedFixer != null)
+        {
+            _currentSelectedFixer.FreezeMovement(false);
+        }
+
         UIManager.Instance.CloseWorkPopupUI();
     }
 
-    private void RefreshWorkList()
+    public void RefreshWorkList()
     {
-        foreach (var slot in _spawnedSlots) Destroy(slot.gameObject);
+        foreach (var slot in _spawnedSlots)
+        {
+            if (slot != null) Destroy(slot.gameObject);
+        }
         _spawnedSlots.Clear();
+
+        int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
 
         foreach (var station in WorkManager.Instance.AllWorkStations)
         {
-            ActiveTaskType currentTaskType = station.TaskType;
+            bool isCompletedToday = station.IsWorkCompletedToday(currentDay);
+            bool isOccupied = station.IsOccupied;
 
-            bool isOccupied = ActiveManager.Instance.IsTaskCurrentlyAssigned(currentTaskType);
+            if (isCompletedToday)
+            {
+                isOccupied = false;
+            }
 
-            bool isCompletedToday = !ActiveManager.Instance.CanPlayMiniGame(currentTaskType);
+            string currentWorkName = station.gameObject.name;
+            if (!string.IsNullOrEmpty(station.ActiveDataId))
+            {
+                var activeData = GameDataManager.Instance.GetActiveData(station.ActiveDataId);
+                if (activeData != null && !string.IsNullOrEmpty(activeData.Name))
+                    currentWorkName = activeData.Name;
+            }
 
-            string currentWorkName = string.IsNullOrEmpty(station.FieldObjectId) ? station.gameObject.name : station.FieldObjectId;
+            string assignedFixerName = "";
+            if (isOccupied)
+            {
+                int fixerId = ActiveManager.Instance.GetAssignedFixerId(station.TaskType);
+                if (fixerId != -1)
+                {
+                    FixerViewModel assignedFixer = GameObjectManager.Instance.GetFixerFromInstanceId(fixerId);
+                    if (assignedFixer != null)
+                    {
+                        var fixerData = GameDataManager.Instance.GetFixerData(assignedFixer.DataId);
+                        assignedFixerName = fixerData != null ? fixerData.Name : "이름 없음";
+                    }
+                }
+            }
 
             WorkSlotUI newSlot = Instantiate(_workSlotPrefab, _workListParent);
-            newSlot.SetupSlot(station, currentWorkName, isOccupied, isCompletedToday, AssignSpecificWork, CancelSpecificWork);
+            newSlot.SetupSlot(station, currentWorkName, isOccupied, isCompletedToday, assignedFixerName, AssignSpecificWork, CancelSpecificWork);
             _spawnedSlots.Add(newSlot);
         }
     }
@@ -55,35 +107,15 @@ public class WorkPopupUI : UIBase
     {
         if (_currentSelectedFixer == null) return;
 
-        if (_currentSelectedFixer.TargetStation != null)
-        {
-            ActiveManager.Instance.CancelFixerTask(_currentSelectedFixer.TargetStation.TaskType);
-            _currentSelectedFixer.TargetStation.UnlockStation();
-            WorkManager.Instance.CancelWork(_currentSelectedFixer);
-        }
+        WorkManager.Instance.AssignSpecificTask(_currentSelectedFixer, station, 10f); 
 
-        ActiveManager.Instance.AssignFixerToTask(station.TaskType, _currentSelectedFixer.InstanceId);
-
-        _currentSelectedFixer.TargetStation = station;
-        float workDuration = 10f;
-        WorkManager.Instance.AssignSpecificTask(_currentSelectedFixer, station, workDuration);
-
-        RefreshWorkList();
         ClosePopup();
     }
 
     private void CancelSpecificWork(WorkStation station)
     {
-        if (_currentSelectedFixer == null) return;
+        WorkManager.Instance.CancelTaskByStation(station);
 
-        ActiveManager.Instance.CancelFixerTask(station.TaskType);
-
-        WorkManager.Instance.CancelWork(_currentSelectedFixer);
-        station.UnlockStation();
-
-        _currentSelectedFixer.TargetStation = null;
-
-        RefreshWorkList();
         ClosePopup();
     }
 }

@@ -16,15 +16,28 @@ public class FixerPopupUI : UIBase
     public void SetFixerInfo(FixerViewModel fixerViewModel)
     {
         _targetFixer = fixerViewModel;
+        if (_targetFixer != null)
+        {
+            _targetFixer.FreezeMovement(true);
+        }
     }
 
     private void Onclick_Close()
     {
+        if (_targetFixer != null)
+        {
+            _targetFixer.FreezeMovement(false);
+        }
+
         UIManager.Instance.CloseFixerPopupUI();
     }
 
     private void Onclick_Order()
     {
+        if (_targetFixer != null)
+        {
+            _targetFixer.FreezeMovement(false);
+        }
         UIManager.Instance.CloseFixerPopupUI();
         UIManager.Instance.OpenWorkPopupUI(_targetFixer);
     }
