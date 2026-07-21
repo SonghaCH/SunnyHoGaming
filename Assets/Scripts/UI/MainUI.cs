@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.ComponentModel;
+using TMPro;
 using UnityEngine;
 
 public class MainUI : UIBase
@@ -6,11 +7,20 @@ public class MainUI : UIBase
     [SerializeField] private TextMeshProUGUI Text_QuestName;
     [SerializeField] private TextMeshProUGUI Text_Description;
 
-    [SerializeField] private GameObject Icon_MapKeyGuide; 
+    [SerializeField] private GameObject Icon_MapKeyGuide;
+
+    private TimeViewModel _timeViewModel;
 
     private void OnEnable()
     {
-        TimeViewModel.OnDayChanged += RefreshQuestUI;
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        {
+            _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
+            if (_timeViewModel != null)
+            {
+                _timeViewModel.PropertyChanged += OnTimeViewModelPropertyChanged;
+            }
+        }
 
         RefreshQuestUI();
         RefreshKeyGuideIcons();
@@ -18,12 +28,23 @@ public class MainUI : UIBase
 
     private void OnDisable()
     {
-        TimeViewModel.OnDayChanged -= RefreshQuestUI;
+        if (_timeViewModel != null)
+        {
+            _timeViewModel.PropertyChanged -= OnTimeViewModelPropertyChanged;
+        }
     }
 
     private void Update()
     {
         RefreshKeyGuideIcons();
+    }
+
+    private void OnTimeViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
+        {
+            RefreshQuestUI();
+        }
     }
 
     public void RefreshQuestUI()
@@ -70,7 +91,7 @@ public class MainUI : UIBase
         {
             if (slotVm != null && slotVm.ItemDataId == targetItemId && slotVm.ItemStackCount > 0)
             {
-                return true; 
+                return true;
             }
         }
 
@@ -79,9 +100,9 @@ public class MainUI : UIBase
 
     private int GetCurrentDay()
     {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        if (_timeViewModel != null)
         {
-            return NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+            return _timeViewModel.CurrentDay;
         }
         return 1;
     }
