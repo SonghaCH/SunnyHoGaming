@@ -322,7 +322,22 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.PausePopupUI);
     }
-    
+
+    public static void OpenMapPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.MapPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void ClsoeMapPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.MapPopupUI);
+    }
+
 
 }
 

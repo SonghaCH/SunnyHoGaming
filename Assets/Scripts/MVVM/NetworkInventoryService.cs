@@ -98,6 +98,16 @@ public class NetworkInventoryService
                 return true;
             }
 
+            if (itemDataId == "Item_Phone_01")
+            {
+                return true;
+            }
+
+            if (itemDataId == "Item_Map_01")
+            {
+                return true;
+            }
+
             itemSlotVm.ItemStackCount--;
             Debug.Log($"[아이템 소모] {itemData.Name} 사용됨. 남은 수량: {itemSlotVm.ItemStackCount}");
 
@@ -149,8 +159,7 @@ public class NetworkInventoryService
 
         else if (itemUseType == "OpenMapPopup")
         {
-            //UIManager.Instance.OpenMapPopupUI();
-            Debug.Log("픽서 부르미 열림");
+            UIManager.Instance.OpenMapPopupUI();
         }
 
 

@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb5f0857c4b41e44da110bdb5a4cc0d3
+    m_Address: Icons/EXFixer_Icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cfe79e0303a758c48bcb961a76330002
     m_Address: Fixer_02
     m_ReadOnly: 0

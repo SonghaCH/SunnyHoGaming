@@ -11,6 +11,17 @@
     "UseItemType": "OpenNotePopup"
   },
   {
+    "Id": "Item_Map_01",
+    "Name": "픽서 부르미",
+    "Description": "픽서들의 위치를 알 수 있고, 픽서들을 한 곳으로 모으는 장치이다.",
+    "ApplyEffective": null,
+    "MaxStackCount": 1,
+    "ApplyFigure": null,
+    "SoundPath": null,
+    "IconPath": "Icon/Map",
+    "UseItemType": "OpenMapPopup"
+  },
+  {
     "Id": "Item_Phone_01",
     "Name": "위성 전화기",
     "Description": "지구와 통신할 수 있는 연락 수단이다. 무엇을 입력해야하는거지?",
@@ -38,7 +49,7 @@
     "Description": "배고픔을 달랠 수 있는 우주 식량이다.",
     "ApplyEffective": "배고픔 수치 감소",
     "MaxStackCount": 999,
-    "ApplyFigure": -50,
+    "ApplyFigure": 20,
     "SoundPath": null,
     "IconPath": "Icon/Food",
     "UseItemType": "Reduce Hunger"
