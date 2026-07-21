@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.ComponentModel;
+using UnityEngine.AI; 
 
 public class WorldManager : MonoBehaviour
 {
@@ -10,24 +11,22 @@ public class WorldManager : MonoBehaviour
     [Header("맵 생성 세팅")]
     [SerializeField] private string _mapAddressableKey;
 
+    private float _gatherRadius = 2.5f;
+
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
     private TimeViewModel _timeViewModel;
     private GameStateViewModel _gameStateViewModel;
+
     private Transform _mainRoomSpawnPoint;
     public Transform MainRoomTransform
     {
-        get
-        {
-            return _mainRoomSpawnPoint;
-        }
+        get { return _mainRoomSpawnPoint; }
     }
+
     private Collider _roomAreaCollider;
     public Collider RoomAreaCollider
     {
-        get
-        {
-            return _roomAreaCollider;
-        }
+        get { return _roomAreaCollider; }
     }
 
     private void Awake()
@@ -46,19 +45,18 @@ public class WorldManager : MonoBehaviour
     {
         if (NetworkManager.Inst != null)
         {
-            if(NetworkManager.Inst.TimeService != null)
+            if (NetworkManager.Inst.TimeService != null)
             {
                 _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
                 _timeViewModel.PropertyChanged += OnTimePropertyChanged;
             }
 
-            if(NetworkManager.Inst.GameStateService != null)
+            if (NetworkManager.Inst.GameStateService != null)
             {
                 _gameStateViewModel = NetworkManager.Inst.GameStateService.GetViewModel();
                 _gameStateViewModel.RequestingPlay += InitializeWorld;
             }
         }
-
     }
 
     private void OnTimePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -69,6 +67,14 @@ public class WorldManager : MonoBehaviour
             Debug.Log($"[WorldManager] 날짜 변경 감지: {newDay}일 차 시작!");
 
             StartNewDayAsync(newDay).Forget();
+        }
+
+        if (e.PropertyName == "CurrentHour" || e.PropertyName == "CurrentMinute")
+        {
+            if (_timeViewModel.CurrentHour == 8 && _timeViewModel.CurrentMinute == 0)
+            {
+                GatherAllFixersToMainRoom();
+            }
         }
     }
 
@@ -132,7 +138,7 @@ public class WorldManager : MonoBehaviour
 
             _fixerSpawnPoints[dayNumber].Add(marker.transform);
         }
-        
+
         Transform[] allChildren = mapRoot.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {
@@ -205,5 +211,45 @@ public class WorldManager : MonoBehaviour
 
             await GameObjectManager.Instance.SpawnFixerAsync(savedData.fixerDataId, targetPosition, savedData.lastState);
         }
+    }
+
+    public void GatherAllFixersToMainRoom()
+    {
+        if (_mainRoomSpawnPoint == null)
+        {
+            Debug.LogWarning("[WorldManager] 메인룸 스폰 포인트(_mainRoomSpawnPoint)를 찾을 수 없어 픽서를 소환할 수 없습니다.");
+            return;
+        }
+
+        var allFixers = FindObjectsByType<FixerViewModel>(FindObjectsSortMode.None);
+
+        foreach (var fixer in allFixers)
+        {
+            if (fixer == null) continue;
+
+            if (fixer.CurrentState == FixerState.Rampaging) continue;
+
+            fixer.CurrentState = FixerState.Idle;
+            fixer.FreezeMovement(false);
+
+            if (fixer.TryGetComponent(out NavMeshAgent agent))
+            {
+                Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * _gatherRadius;
+                Vector3 targetPos = _mainRoomSpawnPoint.position + new Vector3(randomCircle.x, 0, randomCircle.y);
+
+                if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, _gatherRadius, NavMesh.AllAreas))
+                {
+                    agent.Warp(hit.position);
+                    agent.ResetPath();
+                }
+                else
+                {
+                    agent.Warp(_mainRoomSpawnPoint.position);
+                    agent.ResetPath();
+                }
+            }
+        }
+
+        Debug.Log("[WorldManager] 정상 상태의 모든 픽서를 메인룸으로 집합시켰습니다.");
     }
 }
