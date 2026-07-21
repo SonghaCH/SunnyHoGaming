@@ -43,5 +43,10 @@
     "Id": "red_fixer_01",
     "Name": "볼트",
     "PopupType": "FixerPopupUI"
+  },
+  {
+    "Id": "bad_01",
+    "Name": "침대",
+    "PopupType": null
   }
 ]
