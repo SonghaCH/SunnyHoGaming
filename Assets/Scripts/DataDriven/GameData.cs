@@ -52,6 +52,7 @@ public class FixerData : GameDataBase
     public float FarmingScrap;
     public string PrefabPath;
     public string SoundPath;
+    public string IconPath;
 }
 
 [System.Serializable]

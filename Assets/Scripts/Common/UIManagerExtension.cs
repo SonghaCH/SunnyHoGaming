@@ -30,8 +30,7 @@ public enum UIType
     PasswordPopupUI,
     DialogueUI,
     FPopupUI,
-    PausePopupUI
-
+    PausePopupUI,
 }
 
 public static class UIManagerExtension
