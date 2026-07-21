@@ -2,6 +2,7 @@
   {
     "Id": "active_01",
     "Name": "Oxygen Supply",
+    "UnlockDate": 1,
     "TimeTaken": 5,
     "ItemId": null,
     "ResourcesCost": 100,
@@ -12,6 +13,7 @@
   {
     "Id": "active_02",
     "Name": "Power Supply",
+    "UnlockDate": 1,
     "TimeTaken": 5,
     "ItemId": null,
     "ResourcesCost": 100,
@@ -22,6 +24,7 @@
   {
     "Id": "active_03",
     "Name": "Temperature Control",
+    "UnlockDate": 1,
     "TimeTaken": 5,
     "ItemId": null,
     "ResourcesCost": 100,
@@ -32,6 +35,7 @@
   {
     "Id": "active_04",
     "Name": "Route Control",
+    "UnlockDate": 1,
     "TimeTaken": 5,
     "ItemId": null,
     "ResourcesCost": 100,
@@ -42,6 +46,7 @@
   {
     "Id": "active_05",
     "Name": "Farming",
+    "UnlockDate": 3,
     "TimeTaken": 5,
     "ItemId": "Item_Resources_01,Item_Resources_02,Item_Resources_03,Item_Resources_04",
     "ResourcesCost": null,
@@ -52,6 +57,7 @@
   {
     "Id": "active_06",
     "Name": "Food Supply",
+    "UnlockDate": 4,
     "TimeTaken": 5,
     "ItemId": "Item_Food_01",
     "ResourcesCost": null,
