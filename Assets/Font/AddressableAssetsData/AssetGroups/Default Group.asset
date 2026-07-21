@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Group
   m_GUID: 840e4c6dbbdf50d4297451b0fc2df738
   m_SerializeEntries:
+  - m_GUID: 0cf9d3533572baf4a9f0e0ab211226f9
+    m_Address: Icon/Map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 141821c63148f3a47b6ee26598289877
     m_Address: Icon/Photo
     m_ReadOnly: 0

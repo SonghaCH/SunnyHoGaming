@@ -8,6 +8,10 @@ public class UserInputManager : MonoBehaviour
     public event Action OnInteractionKey;
     public event Action OnInventoryKey;
     public event Action OnEscapeKey;
+    public event Action OnQuestKey;
+    public event Action OnMapKey;
+
+
 
     private void Awake()
     {
@@ -29,6 +33,16 @@ public class UserInputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnEscapeKey?.Invoke(); 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            OnQuestKey?.Invoke();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            OnMapKey?.Invoke();
         }
     }
 }

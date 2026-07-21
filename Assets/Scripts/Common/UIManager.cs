@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
 
         if (UserInputManager.instance != null)
         {
+            UserInputManager.instance.OnInventoryKey += HandleInventoryInput;
+            UserInputManager.instance.OnQuestKey += HandleQuestInput;
+            UserInputManager.instance.OnMapKey += HandleMapInput;
             UserInputManager.instance.OnEscapeKey += HandleEscapeInput;
         }
     }
@@ -36,9 +39,77 @@ public class UIManager : MonoBehaviour
     {
         if (UserInputManager.instance != null)
         {
+            UserInputManager.instance.OnInventoryKey -= HandleInventoryInput;
+            UserInputManager.instance.OnQuestKey -= HandleQuestInput;
+            UserInputManager.instance.OnMapKey -= HandleMapInput;
             UserInputManager.instance.OnEscapeKey -= HandleEscapeInput;
         }
     }
+
+    private void HandleInventoryInput()
+    {
+        if (_openedUIDic.Contains(UIType.InventoryPopupUI))
+        {
+            CloseUI(UIRootType.PopupUI, UIType.InventoryPopupUI);
+        }
+        else
+        {
+            this.OpenInventoryPopupUI();
+        }
+    }
+
+    private void HandleQuestInput()
+    {
+        ToggleUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+    }
+
+    private void HandleMapInput()
+    {
+        ToggleUI(UIRootType.PopupUI, UIType.MapPopupUI);
+    }
+    public void ToggleUI(UIRootType rootType, UIType uiType)
+    {
+        if (_openedUIDic.Contains(uiType))
+        {
+            CloseUI(rootType, uiType);
+        }
+        else
+        {
+            OpenUI(rootType, uiType);
+        }
+    }
+    private void HandleEscapeInput()
+    {
+        if (_openedPopupStack.Count > 0)
+        {
+            UIType topPopup = _openedPopupStack.Peek();
+
+            CloseUI(UIRootType.PopupUI, topPopup);
+        }
+        else
+        {
+            this.OpenPausePopupUI();
+            NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
+        }
+    }
+
+
+    private void RemovePopupFromStack(UIType uiType)
+    {
+        if (_openedPopupStack.Contains(uiType))
+        {
+            List<UIType> temp = new List<UIType>(_openedPopupStack);
+            temp.Remove(uiType);
+
+            _openedPopupStack.Clear();
+            for (int i = temp.Count - 1; i >= 0; i--)
+            {
+                _openedPopupStack.Push(temp[i]);
+            }
+        }
+    }
+
+
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
     {
@@ -77,38 +148,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-   
-    private void HandleEscapeInput()
-    {
-        if (_openedPopupStack.Count > 0)
-        {
-            UIType topPopup = _openedPopupStack.Peek();
-
-            CloseUI(UIRootType.PopupUI, topPopup);
-        }
-        else
-        {
-            this.OpenPausePopupUI();
-            NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
-        }
-    }
-
     
-    private void RemovePopupFromStack(UIType uiType)
-    {
-        if (_openedPopupStack.Contains(uiType))
-        {
-            List<UIType> temp = new List<UIType>(_openedPopupStack);
-            temp.Remove(uiType);
-
-            _openedPopupStack.Clear();
-            for (int i = temp.Count - 1; i >= 0; i--)
-            {
-                _openedPopupStack.Push(temp[i]);
-            }
-        }
-    }
-
     private Transform GetRootTransform(UIRootType uiRootType)
     {
         Transform root = null;

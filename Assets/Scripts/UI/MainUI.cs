@@ -5,53 +5,84 @@ public class MainUI : UIBase
 {
     [SerializeField] private TextMeshProUGUI Text_QuestName;
     [SerializeField] private TextMeshProUGUI Text_Description;
-    
-    //임시 날짜 대입
-    [SerializeField] private int testCurrentDay = 2;
 
+    [SerializeField] private GameObject Icon_MapKeyGuide; 
 
     private void OnEnable()
     {
+        TimeViewModel.OnDayChanged += RefreshQuestUI;
+
         RefreshQuestUI();
-        if (UserInputManager.instance != null)
-        {
-            UserInputManager.instance.OnInventoryKey += OpenInventoryUI;
-        }
+        RefreshKeyGuideIcons();
+    }
+
+    private void OnDisable()
+    {
+        TimeViewModel.OnDayChanged -= RefreshQuestUI;
+    }
+
+    private void Update()
+    {
+        RefreshKeyGuideIcons();
     }
 
     public void RefreshQuestUI()
     {
-        //TODO 타임 매니저 들어오기 전에 테스트용 코드
-        string dynamicQuestId = $"Quest_Day{testCurrentDay}_001";
+        int currentDay = GetCurrentDay();
+
+        string dynamicQuestId = $"Quest_Day{currentDay}_001";
         QuestData questData = GameDataManager.Instance.GetQuestData(dynamicQuestId);
 
         if (questData != null)
         {
-            Text_QuestName.text = questData.Title;
-            Text_Description.text = questData.Description;
+            if (Text_QuestName != null) Text_QuestName.text = questData.Title;
+            if (Text_Description != null) Text_Description.text = questData.Description;
         }
         else
         {
-            Debug.LogWarning($"[MainUI] {dynamicQuestId}에 해당하는 퀘스트 데이터를 찾을 수 없습니다.");
-            Text_QuestName.text = "현재 진행 가능한 퀘스트가 없습니다.";
-            Text_Description.text = "";
+            if (Text_QuestName != null) Text_QuestName.text = "진행 중인 메인 퀘스트가 없습니다.";
+            if (Text_Description != null) Text_Description.text = string.Empty;
         }
     }
 
-    private void OnValidate()
+    public void RefreshKeyGuideIcons()
     {
-        // 에디터 모드 혹은 재생 중에 인스펙터에서 testCurrentDay 값을 바꾸면 즉시 텍스트가 갱신됩니다.
-        if (Application.isPlaying && Text_QuestName != null)
+        bool hasMapItem = CheckHasMapItem();
+
+        if (Icon_MapKeyGuide != null)
         {
-            RefreshQuestUI();
+            Icon_MapKeyGuide.SetActive(hasMapItem);
         }
     }
 
-    private void OpenInventoryUI()
+    private bool CheckHasMapItem()
     {
-            UIManager.Instance.OpenInventoryPopupUI();
+        if (NetworkManager.Inst == null || NetworkManager.Inst.InventoryService == null)
+            return false;
+
+        var inventoryVM = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+        if (inventoryVM == null || inventoryVM.ItemList == null)
+            return false;
+
+        string targetItemId = "Item_Map_01";
+
+        foreach (var slotVm in inventoryVM.ItemList.Values)
+        {
+            if (slotVm != null && slotVm.ItemDataId == targetItemId && slotVm.ItemStackCount > 0)
+            {
+                return true; 
+            }
+        }
+
+        return false;
     }
 
-
-
+    private int GetCurrentDay()
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        {
+            return NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+        }
+        return 1;
+    }
 }

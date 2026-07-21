@@ -140,20 +140,17 @@ public class NetworkInventoryService
         }
         else if (itemUseType == "Reduce Hunger")
         {
-            //var playerComponent = GetLocalPlayer();
-            //if (playerComponent != null)
-            //{
-            //    // 2. 기획 데이터의 수치인 -50 만큼 배고픔 수치를 감소(회복)시킵니다.
-            //    // (배고픔을 줄여주는 수치이므로 -50을 더하거나 빼주는 식으로 구현 형태에 맞춰 조절해 주세요!)
-            //    playerComponent.ReduceHunger(-50);
-
-            //    Debug.Log($"[아이템 효과] 배고픔이 50만큼 해소되었습니다!");
-            //}
 
         }
-        if (itemUseType == "OpenPhonePopup")
+        else if (itemUseType == "OpenPhonePopup")
         {
             UIManager.Instance.OpenPasswordPopupUI();
+        }
+
+        else if (itemUseType == "OpenMapPopup")
+        {
+            //UIManager.Instance.OpenMapPopupUI();
+            Debug.Log("픽서 부르미 열림");
         }
 
 

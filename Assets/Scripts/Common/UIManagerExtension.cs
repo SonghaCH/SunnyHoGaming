@@ -30,7 +30,9 @@ public enum UIType
     PasswordPopupUI,
     DialogueUI,
     FPopupUI,
-    PausePopupUI
+    PausePopupUI,
+    QuestPopupUI,
+    MapPopupUI
 
 }
 
