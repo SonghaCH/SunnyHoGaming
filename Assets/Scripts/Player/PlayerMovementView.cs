@@ -9,7 +9,7 @@ public class PlayerMovementView : ViewBase
     [SerializeField] private Transform _cameraTransform;
 
     private Rigidbody _rigidbody;
-    private PlayerMovementViewModel _viewModel;
+    private PlayerMovementViewModel _movementViewModel;
 
     private float _xRotation = 0.0f;
     private float _inputX = 0.0f;
@@ -25,22 +25,22 @@ public class PlayerMovementView : ViewBase
     {
         if (NetworkManager.Inst != null)
         {
-            BindViewModel(NetworkManager.Inst.PlayerService.GetMovementViewModel());
+            BindMovementViewModel(NetworkManager.Inst.PlayerService.GetMovementViewModel());
         }
     }
 
-    public void BindViewModel(PlayerMovementViewModel viewModel)
+    public void BindMovementViewModel(PlayerMovementViewModel viewModel)
     {
-        _viewModel = viewModel;
-        _viewModel.PropertyChanged += OnPropertyChanged_View;
-        _viewModel.InvokeOnceOnInit();
+        _movementViewModel = viewModel;
+        _movementViewModel.PropertyChanged += OnPropertyChanged_View;
+        _movementViewModel.InvokeOnceOnInit();
     }
 
     private void OnDestroy()
     {
-        if (_viewModel != null)
+        if (_movementViewModel != null)
         {
-            _viewModel.PropertyChanged -= OnPropertyChanged_View;
+            _movementViewModel.PropertyChanged -= OnPropertyChanged_View;
         }
     }
 
@@ -50,12 +50,12 @@ public class PlayerMovementView : ViewBase
 
     private void Update()
     {
-        if (_viewModel == null)
+        if (_movementViewModel == null)
         {
             return;
         }
 
-        if (!_viewModel.CanMove)
+        if (!_movementViewModel.CanMove)
         {
             _inputX = 0.0f;
             _inputZ = 0.0f;
@@ -67,11 +67,11 @@ public class PlayerMovementView : ViewBase
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            _viewModel.IsRunning = true;
+            _movementViewModel.IsRunning = true;
         }
         else
         {
-            _viewModel.IsRunning = false;
+            _movementViewModel.IsRunning = false;
         }
 
         float mouseX = Input.GetAxis("Mouse X");
@@ -81,12 +81,12 @@ public class PlayerMovementView : ViewBase
 
     private void FixedUpdate()
     {
-        if (_viewModel == null)
+        if (_movementViewModel == null)
         {
             return;
         }
 
-        if (!_viewModel.CanMove)
+        if (!_movementViewModel.CanMove)
         {
             return;
         }
@@ -94,18 +94,18 @@ public class PlayerMovementView : ViewBase
         Move(_inputX, _inputZ);
     }
 
-    public void Move(float moveX, float moveZ)
+    private void Move(float moveX, float moveZ)
     {
         Vector3 rightDirection = transform.right * moveX;
         Vector3 forwardDirection = transform.forward * moveZ;
 
         Vector3 moveDirection = (rightDirection + forwardDirection).normalized;
 
-        float finalSpeed = _viewModel.CurrentSpeed;
+        float finalSpeed = _movementViewModel.CurrentSpeed;
 
-        if (_viewModel.IsRunning)
+        if (_movementViewModel.IsRunning)
         {
-            finalSpeed = finalSpeed * _viewModel.RunSpeedMultiplier;
+            finalSpeed = finalSpeed * _movementViewModel.RunSpeedMultiplier;
         }
 
         Vector3 currentPosition = _rigidbody.position;
@@ -114,10 +114,10 @@ public class PlayerMovementView : ViewBase
         _rigidbody.MovePosition(targetPosition);
     }
 
-    public void Look(float mouseX, float mouseY)
+    private void Look(float mouseX, float mouseY)
     {
-        float lookX = mouseX * _viewModel.MouseSensitivity;
-        float lookY = mouseY * _viewModel.MouseSensitivity;
+        float lookX = mouseX * _movementViewModel.MouseSensitivity;
+        float lookY = mouseY * _movementViewModel.MouseSensitivity;
 
         _xRotation -= lookY;
         _xRotation = Mathf.Clamp(_xRotation, -90.0f, 90.0f);

@@ -57,5 +57,13 @@ public class PlayerService
             _movementViewModel.ApplyHungerDebuff(1.0f);
         }
     }
+
+    public void SetCanMove(bool canMove)
+    {
+        if (_movementViewModel != null)
+        {
+            _movementViewModel.CanMove = canMove;
+        }
+    }
 }
 

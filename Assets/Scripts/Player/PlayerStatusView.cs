@@ -7,27 +7,27 @@ public class PlayerStatusView : ViewBase
     [SerializeField]
     private TextMeshProUGUI _textMeshHunger;
 
-    private PlayerStatusViewModel _viewModel;
+    private PlayerStatusViewModel _statusViewModel;
 
-    public void BindViewModel(PlayerStatusViewModel viewModel)
+    public void BindStatusViewModel(PlayerStatusViewModel viewModel)
     {
-        _viewModel = viewModel;
-        _viewModel.PropertyChanged += OnPropertyChanged_View;
-        _viewModel.InvokeOnceOnInit();
+        _statusViewModel = viewModel;
+        _statusViewModel.PropertyChanged += OnPropertyChanged_View;
+        _statusViewModel.InvokeOnceOnInit();
     }
     private void Start()
     {
         if (NetworkManager.Inst != null)
         {
-            BindViewModel(NetworkManager.Inst.PlayerService.GetStatusViewModel());
+            BindStatusViewModel(NetworkManager.Inst.PlayerService.GetStatusViewModel());
         }
     }
     
     private void OnDestroy()
     {
-        if (_viewModel != null)
+        if (_statusViewModel != null)
         {
-            _viewModel.PropertyChanged -= OnPropertyChanged_View;
+            _statusViewModel.PropertyChanged -= OnPropertyChanged_View;
         }
     }
 
