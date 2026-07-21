@@ -3,8 +3,6 @@ using System.ComponentModel;
 
 public class TimeViewModel : ViewModelBase
 {
-    public static event Action OnDayChanged;
-
     private int _currentDay = 1;
     public int CurrentDay
     {
@@ -18,8 +16,6 @@ public class TimeViewModel : ViewModelBase
             {
                 _currentDay = value;
                 OnPropertyChanged(nameof(CurrentDay));
-
-                OnDayChanged?.Invoke();
             }
         }
     }

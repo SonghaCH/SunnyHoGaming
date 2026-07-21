@@ -141,12 +141,22 @@ public class TemperatureMiniGame : UIBase
         holdTimerText.color = Color.cyan;
         holdTimerText.text = "SYSTEM STABILIZED";
 
-        ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+        if (ActiveManager.Instance != null)
+        {
+            ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, true);
+        }
 
-        UIManager.Instance.OpenSimplePopup("온도 제어 성공! 시스템이 안정되었습니다.");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OpenSimplePopup("온도 제어 성공! 시스템이 안정되었습니다.");
+            UIManager.Instance.CloseTempRepairPopupUI();
+        }
+       
+
+
         Debug.Log("온도 제어 성공! 시스템이 안정되었습니다.");
 
-        UIManager.Instance.CloseTempRepairPopupUI();
+        
 
     }
 
@@ -156,17 +166,24 @@ public class TemperatureMiniGame : UIBase
         holdTimerText.color = Color.red;
         holdTimerText.text = "SYSTEM MELTDOWN";
 
-        ActiveManager.Instance.OnMiniGameResult(_taskType, false);
+        if (ActiveManager.Instance != null)
+        {
+            ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, false);
+        }
 
-        UIManager.Instance.OpenSimplePopup("온도 제어 실패! 시스템 과열/냉각 불능.");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OpenSimplePopup("온도 제어 실패! 시스템 과열/냉각 불능.");
+            UIManager.Instance.CloseTempRepairPopupUI();
+        }
+
         Debug.Log("온도 제어 실패! 시스템 과열/냉각 불능.");
 
-        UIManager.Instance.CloseTempRepairPopupUI();
     }
 
     public void InitGame()
     {
-        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 온도 조절 미니게임입니다!");
             UIManager.Instance.CloseTempRepairPopupUI();

@@ -41,7 +41,7 @@ public class WorkPopupUI : UIBase
 
             bool isOccupied = ActiveManager.Instance.IsTaskCurrentlyAssigned(currentTaskType);
 
-            bool isCompletedToday = !ActiveManager.Instance.CanPlayMiniGame(currentTaskType);
+            bool isCompletedToday = !ActiveManager.Instance.IsPlayerMiniGame(currentTaskType);
 
             string currentWorkName = string.IsNullOrEmpty(station.FieldObjectId) ? station.gameObject.name : station.FieldObjectId;
 
