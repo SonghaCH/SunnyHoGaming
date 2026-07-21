@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // TextMeshPro를 사용하기 위해 필요 (일반 Text라면 이 줄을 지우고 아래를 Text로 변경)
+using TMPro;
 
 public class AirMiniGame : UIBase
 {
     [Header("UI Reference")]
     public Slider totalSlider;             // 메인 게이지 바Slider
-    public Slider oxygenCylinderSlider;    // ★ 백그라운드에 있는 산소 레벨 실린더 Slider
+    public Slider oxygenCylinderSlider;    // 백그라운드에 있는 산소 레벨 실린더 Slider
                                            // public Image oxygenCylinderImage;   // (만약 실린더가 Slider가 아니라 Image Fill Amount 방식이면 이 주석을 풀고 쓰세요)
 
-    public TextMeshProUGUI progressText;  // ★ 산소 레벨 현황 텍스트 (ex: 0% ~ 100%)
+    public TextMeshProUGUI progressText;  // 산소 레벨 현황 텍스트 (ex: 0% ~ 100%)
 
     [Header("Game Settings")]
     public float currentGauge = 0f;        // 현재 게이지
@@ -56,25 +56,25 @@ public class AirMiniGame : UIBase
         currentGauge = Mathf.Min(currentGauge, maxGauge);
     }
 
-    // ★ 모든 UI 요소를 게이지에 연동하여 실시간 업데이트하는 메서드
+    // 모든 UI 요소를 게이지에 연동하여 실시간 업데이트하는 메서드
     private void UpdateUI()
     {
-        // 0.0 ~ 1.0 사이의 비율 계산
+        //0 ~ 1.0 사이의 비율 계산
         float progressRatio = currentGauge / maxGauge;
 
-        // 1. 메인 게이지 바 업데이트
+        // 메인 게이지 바 업데이트
         if (totalSlider != null)
         {
             totalSlider.value = progressRatio;
         }
 
-        // 2. 산소 레벨 실린더 업데이트 (Slider 방식일 때)
+        // 산소 레벨 실린더 업데이트 (Slider 방식일 때)
         if (oxygenCylinderSlider != null)
         {
             oxygenCylinderSlider.value = progressRatio;
         }
 
-        // 3. 0 ~ 100% 현황 텍스트 표기
+        // 0 ~ 100% 현황 텍스트 표기
         if (progressText != null)
         {
             int percentage = Mathf.RoundToInt(progressRatio * 100f);
@@ -91,17 +91,23 @@ public class AirMiniGame : UIBase
 
             UpdateUI(); // 최종 완료 상태(100%)를 확실하게 UI에 한 번 더 갱신
 
-            ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+            if (ActiveManager.Instance != null)
+            {
+                ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, true);
+            }
 
-            UIManager.Instance.OpenSimplePopup("산소 공급 완료");
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.OpenSimplePopup("산소 공급 완료");
+                UIManager.Instance.CloseAirRepairPopupUI();
+            }
             Debug.Log("미니게임 승리");
-            UIManager.Instance.CloseAirRepairPopupUI();
         }
     }
 
     public void InitGame()
     {
-        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 산소 미니게임입니다!");
             UIManager.Instance.CloseAirRepairPopupUI();

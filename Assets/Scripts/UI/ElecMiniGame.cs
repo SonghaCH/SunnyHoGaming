@@ -190,11 +190,17 @@ public class ElecMiniGame : UIBase
     {
         _isMissionComplete = true;
 
-        ActiveManager.Instance.OnMiniGameResult(_taskType, true);
+        if (ActiveManager.Instance != null)
+        {
+            ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, true);
+        }
 
-        UIManager.Instance.OpenSimplePopup("전기 공급 완료");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OpenSimplePopup("전기 공급 완료");
+            UIManager.Instance.CloseElectricRepairPopupUI();
+        }
         Debug.Log("미션 완료!");
-        UIManager.Instance.CloseElectricRepairPopupUI();
 
         if (OnMissionComplete != null)
         {
@@ -206,11 +212,18 @@ public class ElecMiniGame : UIBase
     {
         _isGameOver = true;
 
-        ActiveManager.Instance.OnMiniGameResult(_taskType, false);
+        if (ActiveManager.Instance != null)
+        {
+            ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, false);
+        }
 
-        UIManager.Instance.OpenSimplePopup("전기 공급 실패!");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OpenSimplePopup("전기 공급 실패!");
+            UIManager.Instance.CloseElectricRepairPopupUI();
+        }
+
         Debug.Log("게임 오버! 최대 실패 횟수 도달.");
-        UIManager.Instance.CloseElectricRepairPopupUI();
 
         if (OnMissionFail != null)
         {
@@ -220,7 +233,7 @@ public class ElecMiniGame : UIBase
 
     public void InitGame()
     {
-        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 전력 미니게임입니다!");
             UIManager.Instance.CloseElectricRepairPopupUI();

@@ -184,26 +184,31 @@ public class ConstellationMiniGame : UIBase
     {
         isGameActive = false;
 
-        ActiveManager.Instance.OnMiniGameResult(_taskType, isSuccess);
-
-        if (isSuccess)
+        if (ActiveManager.Instance != null)
         {
-            UIManager.Instance.OpenSimplePopup("항로 제어 완료");
-            Debug.Log("제어 성공!");
-            UIManager.Instance.CloseControlRepairPopupUI();
-
+            ActiveManager.Instance.OnPlayerMiniGameResult(_taskType, isSuccess);
         }
-        else
+
+        if (UIManager.Instance != null)
         {
-            UIManager.Instance.OpenSimplePopup("항로 제어 실패");
-            Debug.Log("제어 실패!");
+            if (isSuccess)
+            {
+                UIManager.Instance.OpenSimplePopup("항로 제어 완료");
+                Debug.Log("제어 성공!");
+            }
+            else
+            {
+                UIManager.Instance.OpenSimplePopup("항로 제어 실패");
+                Debug.Log("제어 실패!");
+            }
+
             UIManager.Instance.CloseControlRepairPopupUI();
         }
     }
 
     public void InitGame()
     {
-        if (!ActiveManager.Instance.CanPlayMiniGame(_taskType))
+        if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 항로 제어 미니게임입니다!");
             UIManager.Instance.CloseControlRepairPopupUI();

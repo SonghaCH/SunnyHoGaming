@@ -25,6 +25,7 @@ public class CharacterData : GameDataBase
 public class ActiveData : GameDataBase
 {
     public string Name;
+    public int UnlockDate;
     public float TimeTaken;
     public int ResourcesCost;
     public int TimeToConsume;
