@@ -24,6 +24,18 @@ public class PlayerService
         return _statusViewModel;
     }
 
+    public void FillHunger(float amount)
+    {
+        float newHunger = _statusViewModel.Hunger - amount;
+
+        if (newHunger > 100.0f)
+        {
+            newHunger = 100.0f;
+        }
+
+        _statusViewModel.Hunger = newHunger;
+    }
+
     public void UpdateHunger()
     {
         float newHunger = _statusViewModel.Hunger - _hungerDecreasePerSecond;
