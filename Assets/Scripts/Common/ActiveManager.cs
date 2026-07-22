@@ -117,6 +117,7 @@ public class ActiveManager : MonoBehaviour
 
     public string GetActiveDataId(ActiveTaskType type)
     {
+
         switch (type)
         {
             case ActiveTaskType.OxygenSupply: return "active_01";
@@ -127,6 +128,90 @@ public class ActiveManager : MonoBehaviour
             case ActiveTaskType.FoodSupply: return "active_06";
             default: return "active_01";
         }
+    }
+    public string GetRequiredResourceId(ActiveTaskType type)
+    {
+        switch (type)
+        {
+            case ActiveTaskType.OxygenSupply: return "Item_Resources_01";
+            case ActiveTaskType.PowerSupply: return "Item_Resources_02";
+            case ActiveTaskType.TemperatureControl: return "Item_Resources_03";
+            case ActiveTaskType.RouteControl: return "Item_Resources_04";
+            default: return string.Empty;
+        }
+    }
+    public int GetRequiredResourcesCost(ActiveTaskType type)
+    {
+        string activeDataId = GetActiveDataId(type);
+
+        if (GameDataManager.Instance != null)
+        {
+            ActiveData activeData = GameDataManager.Instance.GetActiveData(activeDataId);
+            if (activeData != null)
+            {
+                return activeData.ResourcesCost;
+            }
+        }
+        return 1; 
+    }
+
+    private int GetInventoryItemCount(string itemId)
+    {
+        if (NetworkManager.Inst == null || NetworkManager.Inst.InventoryService == null)
+            return 0;
+
+        var invenVM = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+        if (invenVM == null || invenVM.ItemList == null) return 0;
+
+        int total = 0;
+        foreach (var slot in invenVM.ItemList.Values)
+        {
+            if (slot != null && slot.ItemDataId == itemId)
+            {
+                total += slot.ItemStackCount;
+            }
+        }
+        return total;
+    }
+
+    private bool ConsumeInventoryItem(string itemId, int count)
+    {
+        if (NetworkManager.Inst == null || NetworkManager.Inst.InventoryService == null)
+            return false;
+
+        var invenVM = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+        if (invenVM == null || invenVM.ItemList == null) return false;
+
+        int remaining = count;
+        List<long> removeList = new List<long>();
+
+        foreach (var kvp in invenVM.ItemList)
+        {
+            var slot = kvp.Value;
+            if (slot != null && slot.ItemDataId == itemId)
+            {
+                if (slot.ItemStackCount <= remaining)
+                {
+                    remaining -= slot.ItemStackCount;
+                    slot.ItemStackCount = 0;
+                    removeList.Add(kvp.Key);
+                }
+                else
+                {
+                    slot.ItemStackCount -= remaining;
+                    remaining = 0;
+                    break;
+                }
+            }
+        }
+
+        foreach (long uniqueId in removeList)
+        {
+            invenVM.RemoveItemSlotViewModel(uniqueId);
+        }
+
+        invenVM.RefreshItemList();
+        return true;
     }
 
     public int GetTaskUnlockDate(ActiveTaskType type)
@@ -213,8 +298,21 @@ public class ActiveManager : MonoBehaviour
             reason = "현재 픽서가 작업 중인 구역입니다.";
             return false;
         }
+        string requiredResourceId = GetRequiredResourceId(type);
+        if (!string.IsNullOrEmpty(requiredResourceId))
+        {
+            int requiredCost = GetRequiredResourcesCost(type);
+            int currentResourceCount = GetInventoryItemCount(requiredResourceId);
+
+            if (currentResourceCount < requiredCost)
+            {
+                reason = $"수리에 필요한 자원이 부족합니다! ({currentResourceCount}/{requiredCost})";
+                return false;
+            }
+        }
 
         return true;
+
     }
 
     public bool IsPlayerMiniGame(ActiveTaskType type)
@@ -231,6 +329,13 @@ public class ActiveManager : MonoBehaviour
         if (!isSuccess)
         {
             return;
+        }
+
+        string requiredResourceId = GetRequiredResourceId(type);
+        if (!string.IsNullOrEmpty(requiredResourceId))
+        {
+            int requiredCost = GetRequiredResourcesCost(type);
+            ConsumeInventoryItem(requiredResourceId, requiredCost);
         }
 
         // 플레이어 성공 시: 당일 클리어 플래그 설정 및 기지 수리 진척도 가산
@@ -258,7 +363,7 @@ public class ActiveManager : MonoBehaviour
             Debug.LogWarning($"오늘 이미 완료된 작업([{taskType}])에는 픽서를 배정할 수 없습니다.");
             return;
         }
-
+        
         if (!_assignmentDict.ContainsKey(taskType))
         {
             _assignmentDict[taskType] = new ActiveAssignment();
@@ -284,6 +389,8 @@ public class ActiveManager : MonoBehaviour
 
         Debug.Log($"픽서({fixerId})가 [{taskType}] 작업장에 배정되었습니다. (소요 시간: {totalTime})");
     }
+
+    
 
     public float GetFixerWorkProgressRatio(ActiveTaskType taskType)
     {
@@ -316,10 +423,12 @@ public class ActiveManager : MonoBehaviour
         }
         else
         {
-            // 5~6번 파밍 작업 완료 시 보상 처리 로직
-            Debug.Log($"픽서({fixerId}) [{taskType}] 파밍 완료! (오늘 완료 처리됨)");
+
+            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 ➔ 정산 팝업 호출됨");
         }
     }
+
+    
 
     public void OnHourPassed()
     {
@@ -444,9 +553,10 @@ public class ActiveManager : MonoBehaviour
     }
     public void CancelFixerTask(ActiveTaskType taskType)
     {
-        if (_assignmentDict.ContainsKey(taskType))
+        if (_assignmentDict.ContainsKey(taskType) && _assignmentDict[taskType].IsWorking)
         {
             _assignmentDict[taskType].IsWorking = false;
+
             Debug.Log($"[{taskType}] 작업장의 픽서 배정이 해제되었습니다.");
         }
     }
