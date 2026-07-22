@@ -1,7 +1,7 @@
 ﻿public class TimeService
 {
     private const int _minutesPerHour = 60;
-    private const int _minutesPerDay = 1440;
+    private const int _minutesPerDay = 960;
 
     private float _secondsPerGameMinute;
     private float _timer = 0.0f;
@@ -30,7 +30,7 @@
             _totalGameMinutes += 1;
 
             _viewModel.CurrentMinute = _totalGameMinutes % _minutesPerHour;
-            _viewModel.CurrentHour = (_totalGameMinutes % _minutesPerDay +1) / _minutesPerHour;
+            _viewModel.CurrentHour = (_totalGameMinutes % _minutesPerDay +1) / _minutesPerHour + 8;
             _viewModel.CurrentDay = (_totalGameMinutes / _minutesPerDay) + 1;
         }
     }
