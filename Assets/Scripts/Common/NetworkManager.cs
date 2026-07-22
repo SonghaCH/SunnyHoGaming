@@ -54,7 +54,6 @@ public class NetworkManager : MonoBehaviour
                 if (PlayerService != null && TimeService != null)
                 {
                     int currentDay = TimeService.GetViewModel().CurrentDay;
-                    PlayerService.UpdatePlayerState(currentDay, deltaTime);
                 }
             }
         }

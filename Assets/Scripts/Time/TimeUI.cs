@@ -8,6 +8,7 @@ public class TimeUI : ViewBase
     [SerializeField] private TextMeshProUGUI Text_Date;
 
     private TimeViewModel _timeViewModel;
+    private PlayerService _playerService;
 
 
     private void Start()
@@ -15,6 +16,7 @@ public class TimeUI : ViewBase
         if (NetworkManager.Inst != null)
         {
             BindTimeViewModel(NetworkManager.Inst.TimeService.GetViewModel());
+            _playerService = NetworkManager.Inst.PlayerService;
         }
     }
 
@@ -43,6 +45,11 @@ public class TimeUI : ViewBase
                     UpdateDateText();
                 }
                 break;
+            case nameof(TimeViewModel.CurrentHour):
+                {
+                    UpdateHunger();
+                }
+                break;
             case nameof(TimeViewModel.CurrentMinute):
                 {
                     UpdateTimeText();
@@ -67,5 +74,10 @@ public class TimeUI : ViewBase
         {
             Text_Time.text = _timeViewModel.CurrentHour.ToString("00") + " : " + _timeViewModel.CurrentMinute.ToString("00");
         }
+    }
+
+    private void UpdateHunger()
+    {
+        _playerService.UpdateHunger();
     }
 }

@@ -24,19 +24,19 @@ public class PlayerService
         return _statusViewModel;
     }
 
-    public void UpdatePlayerState(int currentDay, float deltaTime)
+    public void UpdateHunger()
     {
-        if (currentDay >= 2)
+        float newHunger = _statusViewModel.Hunger - _hungerDecreasePerSecond;
+
+        if (newHunger < 0.0f)
         {
-            float newHunger = _statusViewModel.Hunger - (_hungerDecreasePerSecond * deltaTime);
+            newHunger = 0.0f;
+        }
 
-            if (newHunger < 0.0f)
-            {
-                newHunger = 0.0f;
-            }
+        _statusViewModel.Hunger = newHunger;
 
-            _statusViewModel.Hunger = newHunger;
-
+        if (NetworkManager.Inst.TimeService.GetViewModel().CurrentDay > 2)
+        {
             ApplyHungerDebuff();
         }
     }

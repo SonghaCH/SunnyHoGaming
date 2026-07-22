@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerStatusView : ViewBase
+public class PlayerStatusUI : ViewBase
 {
-    [SerializeField]
-    private TextMeshProUGUI _textMeshHunger;
+    [SerializeField] private Slider Slider_Hunger;
 
     private PlayerStatusViewModel _statusViewModel;
 
@@ -35,16 +35,15 @@ public class PlayerStatusView : ViewBase
     {
         if (e.PropertyName == nameof(PlayerStatusViewModel.Hunger))
         {
-            UpdateHungerText();
+            UpdateHungerSlider();
         }
     }
 
-    private void UpdateHungerText()
+    private void UpdateHungerSlider()
     {
-        if (_textMeshHunger != null)
+        if (Slider_Hunger != null)
         {
-            // 배고픔 수치 UI 연결
-            //_textMeshHunger.text = 
+            Slider_Hunger.value = _statusViewModel.Hunger;
         }
     }
 }
