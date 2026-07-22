@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (GameStateService != null)
         {
-            GameState currentGameState = GameStateService.GetViewModel().CurrentGameState;
+            GameState currentGameState = GameStateService.GetCurrentState();
 
             if (currentGameState == GameState.Playing)
             {
@@ -81,7 +81,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (GameStateService != null && PlayerService != null)
         {
-            GameState currentGameState = GameStateService.GetViewModel().CurrentGameState;
+            GameState currentGameState = GameStateService.GetCurrentState();
 
             if (currentGameState == GameState.Playing)
             {
