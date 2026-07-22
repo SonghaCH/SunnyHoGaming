@@ -229,6 +229,11 @@ public class WorldManager : MonoBehaviour
 
             if (fixer.CurrentState == FixerState.Rampaging) continue;
 
+            if (fixer.TargetStation != null)
+            {
+                WorkManager.Instance.CancelSpecificTask(fixer, fixer.TargetStation);
+            }
+
             fixer.CurrentState = FixerState.Idle;
             fixer.FreezeMovement(false);
 
@@ -250,6 +255,6 @@ public class WorldManager : MonoBehaviour
             }
         }
 
-        Debug.Log("[WorldManager] 정상 상태의 모든 픽서를 메인룸으로 집합시켰습니다.");
+        Debug.Log("[WorldManager] 정상 상태의 모든 픽서를 메인룸으로 집합시키고 작업을 취소했습니다.");
     }
 }

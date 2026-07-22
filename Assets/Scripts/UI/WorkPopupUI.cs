@@ -11,13 +11,13 @@ public class WorkPopupUI : UIBase
     private List<WorkSlotUI> _spawnedSlots = new List<WorkSlotUI>();
     private FixerViewModel _currentSelectedFixer;
 
-    private void Start()
-    {
-        if (_btnClose != null) _btnClose.BindOnClickButtonEvent(ClosePopup);
-    }
-
     private void OnEnable()
     {
+        if (_btnClose != null)
+        {
+            _btnClose.BindOnClickButtonEvent(ClosePopup);
+        }
+
         if (WorkManager.Instance != null)
         {
             WorkManager.Instance.OnWorkStateChanged += RefreshWorkList;
@@ -107,7 +107,17 @@ public class WorkPopupUI : UIBase
     {
         if (_currentSelectedFixer == null) return;
 
-        WorkManager.Instance.AssignSpecificTask(_currentSelectedFixer, station, 10f); 
+        float workDuration = 5f;
+        if (!string.IsNullOrEmpty(station.ActiveDataId))
+        {
+            var activeData = GameDataManager.Instance.GetActiveData(station.ActiveDataId);
+            if (activeData != null)
+            {
+                workDuration = activeData.TimeTaken;
+            }
+        }
+
+        WorkManager.Instance.AssignSpecificTask(_currentSelectedFixer, station, workDuration);
 
         ClosePopup();
     }
