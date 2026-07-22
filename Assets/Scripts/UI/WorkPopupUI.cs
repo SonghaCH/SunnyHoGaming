@@ -65,6 +65,10 @@ public class WorkPopupUI : UIBase
         foreach (var station in WorkManager.Instance.AllWorkStations)
         {
             ActiveTaskType currentTaskType = station.TaskType;
+            if(ActiveManager.Instance.IsTaskUnlocked(currentTaskType) == false)
+            {
+                continue;
+            }
 
             bool isOccupied = ActiveManager.Instance.IsTaskCurrentlyAssigned(currentTaskType);
 
