@@ -181,20 +181,45 @@ public class ActiveManager : MonoBehaviour
     
 
     // 플레이어 구간
-    public bool IsPlayerMiniGame(ActiveTaskType type)
+    public bool CanPlayMiniGame(ActiveTaskType type, out string reason)
     {
-        if (type > ActiveTaskType.RouteControl)
+        reason = string.Empty;
+
+        // 날짜 해금 여부 체크
+        if (!IsTaskUnlocked(type))
         {
-            Debug.LogWarning("[type] 작업은 픽서 전용 작업입니다.");
+            int unlockDay = GetTaskUnlockDate(type);
+            reason = $"해당 작업은 {unlockDay}일차에 해금됩니다.";
             return false;
         }
 
-        if (IsTaskClearedToday(type))
+        // 픽서 전용 작업 여부 체크 (파밍/음식 등)
+        if (type > ActiveTaskType.RouteControl)
         {
-            Debug.LogWarning("오늘 이미 완료 처리된 작업입니다: [type]");
+            reason = "해당 작업은 픽서 전용 작업입니다.";
             return false;
         }
+
+        // 당일 완료 여부 체크 (픽서 or 플레이어가 이미 클리어함)
+        if (IsTaskClearedToday(type))
+        {
+            reason = "오늘 이미 수리가 완료된 구역입니다!";
+            return false;
+        }
+
+        // 현재 픽서 작업 중 여부 체크
+        if (IsTaskCurrentlyAssigned(type))
+        {
+            reason = "현재 픽서가 작업 중인 구역입니다.";
+            return false;
+        }
+
         return true;
+    }
+
+    public bool IsPlayerMiniGame(ActiveTaskType type)
+    {
+        return CanPlayMiniGame(type, out _);
     }
 
     public void OnPlayerMiniGameResult(ActiveTaskType type, bool isSuccess)
@@ -215,6 +240,7 @@ public class ActiveManager : MonoBehaviour
     }
 
     // 픽서 구간
+
     // 픽서에게 작업 배정 (해금 날짜 및 오늘 완료 여부 검사)
     public void AssignFixerToTask(ActiveTaskType taskType, int fixerId)
     {

@@ -78,6 +78,37 @@ public class MainController : UIBase
             Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
             return;
         }
+
+        if (TryGetTaskTypeFromUIType(popupType, out ActiveTaskType taskType))
+        {
+            if (ActiveManager.Instance != null && !ActiveManager.Instance.CanPlayMiniGame(taskType, out string reason))
+            {
+                UIManager.Instance?.OpenSimplePopup(reason);
+                return;
+            }
+        }
         UIManager.Instance.OpenUI(UIRootType.PopupUI, popupType);
+    }
+
+    private bool TryGetTaskTypeFromUIType(UIType uiType, out ActiveTaskType taskType)
+    {
+        switch (uiType)
+        {
+            case UIType.AirRepairPopupUI:
+                taskType = ActiveTaskType.OxygenSupply;
+                return true;
+            case UIType.ElectricRepairPopupUI:
+                taskType = ActiveTaskType.PowerSupply;
+                return true;
+            case UIType.TempRepairPopupUI:
+                taskType = ActiveTaskType.TemperatureControl;
+                return true;
+            case UIType.ControlRepairPopupUI:
+                taskType = ActiveTaskType.RouteControl;
+                return true;
+            default:
+                taskType = ActiveTaskType.OxygenSupply;
+                return false;
+        }
     }
 }

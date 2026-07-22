@@ -186,6 +186,7 @@ public class TemperatureMiniGame : UIBase
         if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 온도 조절 미니게임입니다!");
+            UIManager.Instance.OpenSimplePopup("오늘 이미 클리어한 온도 조절 미니게임입니다!");
             UIManager.Instance.CloseTempRepairPopupUI();
             return;
         }
