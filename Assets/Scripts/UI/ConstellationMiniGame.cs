@@ -211,6 +211,7 @@ public class ConstellationMiniGame : UIBase
         if (!ActiveManager.Instance.IsPlayerMiniGame(_taskType))
         {
             Debug.LogWarning("오늘 이미 클리어한 항로 제어 미니게임입니다!");
+            UIManager.Instance.OpenSimplePopup("오늘 이미 클리어한 항로 제어 미니게임입니다!");
             UIManager.Instance.CloseControlRepairPopupUI();
             return;
         }
