@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class PlayerService
 {
     private PlayerMovementViewModel _movementViewModel;
@@ -63,6 +65,17 @@ public class PlayerService
         if (_movementViewModel != null)
         {
             _movementViewModel.CanMove = canMove;
+
+            if (canMove)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 }
