@@ -62,30 +62,28 @@ public class WorkPopupUI : UIBase
         }
         _spawnedSlots.Clear();
 
-        int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
-
         foreach (var station in WorkManager.Instance.AllWorkStations)
         {
-            bool isCompletedToday = station.IsWorkCompletedToday(currentDay);
-            bool isOccupied = station.IsOccupied;
+            ActiveTaskType currentTaskType = station.TaskType;
 
-            if (isCompletedToday)
-            {
-                isOccupied = false;
-            }
+            bool isOccupied = ActiveManager.Instance.IsTaskCurrentlyAssigned(currentTaskType);
+
+            bool isCompletedToday = ActiveManager.Instance.IsTaskClearedToday(currentTaskType);
 
             string currentWorkName = station.gameObject.name;
             if (!string.IsNullOrEmpty(station.ActiveDataId))
             {
                 var activeData = GameDataManager.Instance.GetActiveData(station.ActiveDataId);
                 if (activeData != null && !string.IsNullOrEmpty(activeData.Name))
+                {
                     currentWorkName = activeData.Name;
+                }
             }
 
             string assignedFixerName = "";
             if (isOccupied)
             {
-                int fixerId = ActiveManager.Instance.GetAssignedFixerId(station.TaskType);
+                int fixerId = ActiveManager.Instance.GetAssignedFixerId(currentTaskType);
                 if (fixerId != -1)
                 {
                     FixerViewModel assignedFixer = GameObjectManager.Instance.GetFixerFromInstanceId(fixerId);
