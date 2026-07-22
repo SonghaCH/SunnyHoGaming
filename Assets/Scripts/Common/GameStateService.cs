@@ -10,6 +10,7 @@
         _viewModel.RequestingPlay += PlayGame;
         _viewModel.RequestingPause += PauseGame;
         _viewModel.RequestingResume += ResumeGame;
+        _viewModel.RequestingGameOver += TriggerGameOver;
     }
 
     public GameStateViewModel GetViewModel()
@@ -44,6 +45,14 @@
         if (_viewModel.CurrentGameState == GameState.Paused)
         {
             _viewModel.CurrentGameState = GameState.Playing;
+        }
+    }
+
+    private void TriggerGameOver()
+    {
+        if (_viewModel.CurrentGameState != GameState.GameOver)
+        {
+            _viewModel.CurrentGameState = GameState.GameOver;
         }
     }
 }
