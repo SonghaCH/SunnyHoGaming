@@ -10,6 +10,7 @@ public class WorkSlotUI : MonoBehaviour
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI _txtWorkName;
+    [SerializeField] private TextMeshProUGUI _txtAssignedFixer;
 
     private WorkStation _currentStation;
     private Action<WorkStation> _onSelectCallback;
@@ -18,7 +19,7 @@ public class WorkSlotUI : MonoBehaviour
     private bool _isWorking;
     private bool _isCompletedToday;
 
-    public void SetupSlot(WorkStation station, string workName, bool isWorking, bool isCompletedToday, Action<WorkStation> onSelect, Action<WorkStation> onCancel)
+    public void SetupSlot(WorkStation station, string workName, bool isWorking, bool isCompletedToday, string assignedFixerName, Action<WorkStation> onSelect, Action<WorkStation> onCancel)
     {
         _currentStation = station;
         _isWorking = isWorking;
@@ -27,6 +28,20 @@ public class WorkSlotUI : MonoBehaviour
         _onCancelCallback = onCancel;
 
         if (_txtWorkName != null) _txtWorkName.text = workName;
+
+        if (_txtAssignedFixer != null)
+        {
+            if (!string.IsNullOrEmpty(assignedFixerName))
+            {
+                _txtAssignedFixer.text = $"[담당: {assignedFixerName}]";
+                _txtAssignedFixer.gameObject.SetActive(true);
+            }
+            else
+            {
+                _txtAssignedFixer.text = "";
+                _txtAssignedFixer.gameObject.SetActive(false); 
+            }
+        }
 
         if (_btnSelectWork != null) _btnSelectWork.BindOnClickButtonEvent(OnClickSelect);
         if (_btnCancelWork != null) _btnCancelWork.BindOnClickButtonEvent(OnClickCancel);

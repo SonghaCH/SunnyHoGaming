@@ -2,7 +2,7 @@
 
 public abstract class WorkStation : MonoBehaviour
 {
-    public string FieldObjectId;
+    public string ActiveDataId;
     private int _lastWorkedDay = -1;
     public WorkType StationWorkType;
 
@@ -73,6 +73,13 @@ public abstract class WorkStation : MonoBehaviour
         {
             return;
         }
+
+        int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+        if (!CanWorkToday(currentDay))
+        {
+            Debug.Log("오늘은 이미 완료된 작업장이라 수리할 수 없습니다.");
+            return;
+        }
     }
 
     public virtual bool ApplyWork(float workPower)
@@ -100,6 +107,11 @@ public abstract class WorkStation : MonoBehaviour
     public void MarkWorkedCompleted(int currentDay)
     {
         _lastWorkedDay = currentDay;
+    }
+
+    public bool IsWorkCompletedToday(int currentDay)
+    {
+        return _lastWorkedDay == currentDay || (MaxGauge > 0 && CurrentGauge >= MaxGauge);
     }
 
     public void LockStation() { IsOccupied = true; }

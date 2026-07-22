@@ -1,5 +1,4 @@
-﻿using NUnit.Framework.Interfaces; 
-using System;
+﻿using System;
 using System.Collections.Generic; 
 using UnityEngine;
 
@@ -11,6 +10,7 @@ public class FixerInteractController : MonoBehaviour
     private FixerViewModel _viewModel;
     private ObjectData _data;
 
+    private float _lastInteractTime = 0f;
 
     private void Awake()
     {
@@ -33,6 +33,7 @@ public class FixerInteractController : MonoBehaviour
                 FixersInRange.Add(this);
             }
 
+            UserInputManager.instance.OnInteractionKey -= Interact;
             UserInputManager.instance.OnInteractionKey += Interact;
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
@@ -66,6 +67,8 @@ public class FixerInteractController : MonoBehaviour
 
     private void Interact()
     {
+        if (Time.time - _lastInteractTime < 0.2f) return;
+        _lastInteractTime = Time.time;
         if (_viewModel.CurrentState == FixerState.Rampaging)
         {
             _viewModel.CurrentState = FixerState.Returning;
@@ -73,19 +76,7 @@ public class FixerInteractController : MonoBehaviour
             return;
         }
 
-        UIManager.Instance.OpenFixerPopupUI();
-
-        //if (NetworkManager.Inst != null)
-        //{
-        //    var moveVM = NetworkManager.Inst.PlayerService.GetMovementViewModel();
-        //    if (moveVM != null)
-        //    {
-        //        moveVM.CanMove = false;
-        //    }
-
-        //    Cursor.lockState = CursorLockMode.None;
-        //    Cursor.visible = true;
-        //}
+        UIManager.Instance.OpenFixerPopupUI(_viewModel);
     }
 
     private void OnDisable()

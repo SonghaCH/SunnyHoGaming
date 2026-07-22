@@ -10,6 +10,7 @@ public class FixerViewModel : MonoBehaviour
     public FixerModel FixerModel { get; private set; }
     public int InstanceId { get; private set; }
     public string DataId { get; private set; }
+    private float _originalSpeed = -1f;
 
     public WorkStation TargetStation { get; set; }
 
@@ -215,5 +216,32 @@ public class FixerViewModel : MonoBehaviour
     public void TriggerReturnComplete()
     {
         CurrentState = FixerState.Idle;
+    }
+
+    public void FreezeMovement(bool freeze)
+    {
+        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent))
+        {
+            if (freeze)
+            {
+                if (_originalSpeed < 0)
+                {
+                    _originalSpeed = agent.speed;
+                }
+
+                agent.speed = 0f;
+                agent.velocity = Vector3.zero; 
+
+                GetComponent<Animator>().SetFloat("MoveSpeed", 0f); 
+            }
+            else
+            {
+                if (_originalSpeed >= 0)
+                {
+                    agent.speed = _originalSpeed;
+                    _originalSpeed = -1f;
+                }
+            }
+        }
     }
 }

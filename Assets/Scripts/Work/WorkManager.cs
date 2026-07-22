@@ -17,6 +17,7 @@ public class WorkManager : MonoBehaviour
         public float Duration;
     }
     private Dictionary<FixerViewModel, WorkOrder> _pendingOrders = new Dictionary<FixerViewModel, WorkOrder>();
+    public event Action OnWorkStateChanged;
 
     private void Awake()
     {
@@ -38,15 +39,23 @@ public class WorkManager : MonoBehaviour
             return;
         }
 
-        targetStation.LockStation();
-        fixer.SetWorkTarget(targetStation.transform.position, targetStation.StationWorkType);
+        if (fixer.TargetStation != null)
+        {
+            CancelSpecificTask(fixer, fixer.TargetStation);
+        }
 
-        fixer.CurrentState = FixerState.MoveToTarget;
+        ActiveManager.Instance.AssignFixerToTask(targetStation.TaskType, fixer.InstanceId);
+
+        fixer.TargetStation = targetStation;
+        targetStation.AssignTaskToFixer(fixer);
+        targetStation.LockStation();
 
         _pendingOrders[fixer] = new WorkOrder { Station = targetStation, Duration = workDuration };
 
         fixer.OnArrivedAtWorkStation -= OnFixerArrived;
         fixer.OnArrivedAtWorkStation += OnFixerArrived;
+
+        OnWorkStateChanged?.Invoke();
     }
 
     private void OnFixerArrived(FixerViewModel fixer)
@@ -55,7 +64,7 @@ public class WorkManager : MonoBehaviour
 
         if (_pendingOrders.TryGetValue(fixer, out WorkOrder order))
         {
-            _pendingOrders.Remove(fixer); 
+            _pendingOrders.Remove(fixer);
 
             ProcessWorkTickAsync(fixer, order.Station, order.Duration).Forget();
         }
@@ -73,24 +82,32 @@ public class WorkManager : MonoBehaviour
 
             await UniTask.Delay(TimeSpan.FromSeconds(workDuration), cancellationToken: cts.Token);
 
-            
             float totalWorkPower = repairPower * (workDuration / 1.5f);
-            station.ApplyWork(totalWorkPower); 
+            station.ApplyWork(totalWorkPower);
 
             int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
             station.MarkWorkedCompleted(currentDay);
+
+            // [수정됨] 존재하지 않는 OnMiniGameResult 대신 픽서 전용 완료 처리 호출
+            // ActiveManager는 string 형식의 fixerId를 원하므로 DataId를 전달
+            ActiveManager.Instance.OnFixerWorkCompleted(station.TaskType, fixer.DataId);
 
             Debug.Log($"[{fixer.gameObject.name}] {station.gameObject.name} 작업 완료! (1일 제한 적용)");
         }
         catch (OperationCanceledException)
         {
-            
+            // 작업이 중간에 취소(Cancel)된 경우 예외 무시
         }
         finally
         {
-            station.UnlockStation(); 
+            ActiveManager.Instance.CancelFixerTask(station.TaskType);
+            station.UnlockStation();
+
             _workCancellationTokens.Remove(fixer);
+            fixer.TargetStation = null;
             fixer.OrderReturn();
+
+            OnWorkStateChanged?.Invoke();
         }
     }
 
@@ -103,5 +120,32 @@ public class WorkManager : MonoBehaviour
 
         _pendingOrders.Remove(fixer);
         fixer.OnArrivedAtWorkStation -= OnFixerArrived;
+    }
+
+    public void CancelSpecificTask(FixerViewModel fixer, WorkStation station)
+    {
+        ActiveManager.Instance.CancelFixerTask(station.TaskType);
+
+        CancelWork(fixer);
+        station.UnlockStation();
+
+        fixer.TargetStation = null;
+
+        OnWorkStateChanged?.Invoke();
+    }
+
+    public void CancelTaskByStation(WorkStation station)
+    {
+        int fixerId = ActiveManager.Instance.GetAssignedFixerId(station.TaskType);
+
+        if (fixerId != -1)
+        {
+            FixerViewModel fixer = GameObjectManager.Instance.GetFixerFromInstanceId(fixerId);
+            if (fixer != null)
+            {
+                CancelSpecificTask(fixer, station);
+                Debug.Log($"작업장({station.gameObject.name})의 픽서({fixerId}) 강제 작업 취소 및 복귀 처리 완료.");
+            }
+        }
     }
 }
