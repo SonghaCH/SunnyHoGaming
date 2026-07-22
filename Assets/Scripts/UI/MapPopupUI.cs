@@ -9,6 +9,7 @@ public class MapPopupUI : UIBase
     public static MapPopupUI Instance { get; private set; }
 
     [SerializeField] private Transform _anchorRoot; // Anchor_XXX 들이 자식으로 들어있는 부모 (지도 이미지)
+    [SerializeField] private UIButton Btn_CallFixer;
 
     private Dictionary<RoomType, RectTransform> _anchorLookup;
 
@@ -47,6 +48,7 @@ public class MapPopupUI : UIBase
 
     private void OnEnable()
     {
+
         if (FixerMapManager.Instance == null)
         {
             return;
@@ -56,6 +58,19 @@ public class MapPopupUI : UIBase
         FixerMapManager.Instance.OnFixerLeftRoom += HandleFixerLeftRoom;
 
         SyncAllFixerIcons();
+        Btn_CallFixer.BindOnClickButtonEvent(OnClickGatherButton);
+    }
+
+    private void OnClickGatherButton()
+    {
+        if (WorldManager.Instance != null)
+        {
+            WorldManager.Instance.GatherAllFixersToMainRoom();
+        }
+        else
+        {
+            Debug.LogWarning("[GatherButtonUI] WorldManager 인스턴스가 존재하지 않아 집합 명령을 내릴 수 없습니다.");
+        }
     }
 
     private void SyncAllFixerIcons()

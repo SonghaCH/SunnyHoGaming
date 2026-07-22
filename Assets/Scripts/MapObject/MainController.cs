@@ -46,7 +46,7 @@ public class MainController : UIBase
             UserInputManager.instance.OnInteractionKey += Interact;
             SetOutline(true);
 
-            var uiBase = UIManager.Instance.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
+            var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);
             if (uiBase is FPopupUI fPopupUI)
             {
                 fPopupUI.SetInteractName(_data.Name);

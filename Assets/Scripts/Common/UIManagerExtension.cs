@@ -303,7 +303,7 @@ public static class UIManagerExtension
     //
     public static void OpenFPopupUI(this UIManager uiManager)
     {
-        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.FPopupUI);
+        var uiBase = uiManager.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
@@ -313,7 +313,7 @@ public static class UIManagerExtension
 
     public static void CloseFPopupUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.PopupUI, UIType.FPopupUI);
+        uiManager.CloseUI(UIRootType.ContentUI, UIType.FPopupUI);
     }
     public static void OpenPausePopupUI(this UIManager uiManager)
     {
