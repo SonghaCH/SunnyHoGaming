@@ -85,6 +85,11 @@ public class UIManager : MonoBehaviour
             UIType topPopup = _openedPopupStack.Peek();
 
             CloseUI(UIRootType.PopupUI, topPopup);
+
+            if(topPopup == UIType.PausePopupUI)
+            {
+                NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
+            }
         }
         else
         {
