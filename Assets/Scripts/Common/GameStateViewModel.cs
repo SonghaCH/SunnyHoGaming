@@ -16,6 +16,7 @@ public class GameStateViewModel : ViewModelBase
     public event Action RequestingPlay;
     public event Action RequestingPause;
     public event Action RequestingResume;
+    public event Action RequestingGameOver;
 
     public GameState CurrentGameState
     {
@@ -62,6 +63,14 @@ public class GameStateViewModel : ViewModelBase
         if (RequestingResume != null)
         {
             RequestingResume.Invoke();
+        }
+    }
+
+    public void OnRequestingGameOver()
+    {
+        if (RequestingGameOver != null)
+        {
+            RequestingGameOver.Invoke();
         }
     }
 }
