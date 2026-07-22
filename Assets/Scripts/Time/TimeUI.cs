@@ -7,30 +7,32 @@ public class TimeUI : ViewBase
     [SerializeField] private TextMeshProUGUI Text_Time;
     [SerializeField] private TextMeshProUGUI Text_Date;
 
-    private TimeViewModel _viewModel;
+    private TimeViewModel _timeViewModel;
+    private PlayerService _playerService;
 
 
     private void Start()
     {
         if (NetworkManager.Inst != null)
         {
-            BindViewModel(NetworkManager.Inst.TimeService.GetViewModel());
+            BindTimeViewModel(NetworkManager.Inst.TimeService.GetViewModel());
+            _playerService = NetworkManager.Inst.PlayerService;
         }
     }
 
-    public void BindViewModel(TimeViewModel viewModel)
+    public void BindTimeViewModel(TimeViewModel viewModel)
     {
-        _viewModel = viewModel;
-        _viewModel.PropertyChanged += OnPropertyChanged_View;
+        _timeViewModel = viewModel;
+        _timeViewModel.PropertyChanged += OnPropertyChanged_View;
         UpdateTimeText();
         UpdateDateText();
     }
 
     private void OnDestroy()
     {
-        if (_viewModel != null)
+        if (_timeViewModel != null)
         {
-            _viewModel.PropertyChanged -= OnPropertyChanged_View;
+            _timeViewModel.PropertyChanged -= OnPropertyChanged_View;
         }
     }
 
@@ -41,6 +43,11 @@ public class TimeUI : ViewBase
             case nameof(TimeViewModel.CurrentDay):
                 {
                     UpdateDateText();
+                }
+                break;
+            case nameof(TimeViewModel.CurrentHour):
+                {
+                    UpdateHunger();
                 }
                 break;
             case nameof(TimeViewModel.CurrentMinute):
@@ -57,7 +64,7 @@ public class TimeUI : ViewBase
     {
         if (Text_Date != null)
         {
-            Text_Date.text = "Day: " + _viewModel.CurrentDay.ToString();
+            Text_Date.text = "Day: " + _timeViewModel.CurrentDay.ToString();
         }
     }
 
@@ -65,7 +72,12 @@ public class TimeUI : ViewBase
     {
         if (Text_Time != null)
         {
-            Text_Time.text = _viewModel.CurrentHour.ToString("00") + " : " + _viewModel.CurrentMinute.ToString("00");
+            Text_Time.text = _timeViewModel.CurrentHour.ToString("00") + " : " + _timeViewModel.CurrentMinute.ToString("00");
         }
+    }
+
+    private void UpdateHunger()
+    {
+        _playerService.UpdateHunger();
     }
 }

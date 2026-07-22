@@ -16,6 +16,10 @@
     {
         return _viewModel;
     }
+    public GameState GetCurrentState()
+    {
+        return _viewModel.CurrentGameState;
+    }
 
     private void EnterTitleScreen()
     {

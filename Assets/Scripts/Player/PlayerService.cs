@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class PlayerService
 {
     private PlayerMovementViewModel _movementViewModel;
@@ -22,19 +24,19 @@ public class PlayerService
         return _statusViewModel;
     }
 
-    public void UpdatePlayerState(int currentDay, float deltaTime)
+    public void UpdateHunger()
     {
-        if (currentDay >= 2)
+        float newHunger = _statusViewModel.Hunger - _hungerDecreasePerSecond;
+
+        if (newHunger < 0.0f)
         {
-            float newHunger = _statusViewModel.Hunger - (_hungerDecreasePerSecond * deltaTime);
+            newHunger = 0.0f;
+        }
 
-            if (newHunger < 0.0f)
-            {
-                newHunger = 0.0f;
-            }
+        _statusViewModel.Hunger = newHunger;
 
-            _statusViewModel.Hunger = newHunger;
-
+        if (NetworkManager.Inst.TimeService.GetViewModel().CurrentDay > 2)
+        {
             ApplyHungerDebuff();
         }
     }
@@ -55,6 +57,25 @@ public class PlayerService
         else
         {
             _movementViewModel.ApplyHungerDebuff(1.0f);
+        }
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        if (_movementViewModel != null)
+        {
+            _movementViewModel.CanMove = canMove;
+
+            if (canMove)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 }

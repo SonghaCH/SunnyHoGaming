@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine;
 
@@ -20,20 +21,26 @@ public class NetworkManager : MonoBehaviour
         InitNetworkService();
     }
 
-    private void InitNetworkService()
+    private void Start()
     {
-        // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
-        InventoryService = new NetworkInventoryService();
-        TimeService = new TimeService(0.01f);
-        PlayerService = new PlayerService();
-        GameStateService = new GameStateService();
+        if (GameStateService != null)
+        {
+            GameStateViewModel gameStateViewModel = GameStateService.GetViewModel();
+
+            if (gameStateViewModel != null)
+            {
+                gameStateViewModel.PropertyChanged += OnGameStateChanged;
+            }
+
+            GameStateService.GetViewModel().OnRequestingTitle();
+        }
     }
 
     private void Update()
     {
         if (GameStateService != null)
         {
-            GameState currentGameState = GameStateService.GetViewModel().CurrentGameState;
+            GameState currentGameState = GameStateService.GetCurrentState();
 
             if (currentGameState == GameState.Playing)
             {
@@ -47,8 +54,41 @@ public class NetworkManager : MonoBehaviour
                 if (PlayerService != null && TimeService != null)
                 {
                     int currentDay = TimeService.GetViewModel().CurrentDay;
-                    PlayerService.UpdatePlayerState(currentDay, deltaTime);
                 }
+            }
+        }
+    }
+
+    private void InitNetworkService()
+    {
+        // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
+        InventoryService = new NetworkInventoryService();
+        TimeService = new TimeService(0.01f);
+        PlayerService = new PlayerService();
+        GameStateService = new GameStateService();
+    }
+
+    private void OnGameStateChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GameStateViewModel.CurrentGameState))
+        {
+            UpdatePlayerCanMove();
+        }
+    }
+
+    private void UpdatePlayerCanMove()
+    {
+        if (GameStateService != null && PlayerService != null)
+        {
+            GameState currentGameState = GameStateService.GetCurrentState();
+
+            if (currentGameState == GameState.Playing)
+            {
+                PlayerService.SetCanMove(true);
+            }
+            else
+            {
+                PlayerService.SetCanMove(false);
             }
         }
     }

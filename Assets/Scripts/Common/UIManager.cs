@@ -85,6 +85,11 @@ public class UIManager : MonoBehaviour
             UIType topPopup = _openedPopupStack.Peek();
 
             CloseUI(UIRootType.PopupUI, topPopup);
+
+            if(topPopup == UIType.PausePopupUI)
+            {
+                NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
+            }
         }
         else
         {
@@ -130,6 +135,14 @@ public class UIManager : MonoBehaviour
             }
         }
 
+        if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Playing)
+        {
+            if (uiRootType == UIRootType.PopupUI)
+            {
+                NetworkManager.Inst.PlayerService.SetCanMove(false);
+            }
+        }
+
         return openedUI;
     }
 
@@ -144,6 +157,14 @@ public class UIManager : MonoBehaviour
             if (uiRootType == UIRootType.PopupUI)
             {
                 RemovePopupFromStack(uiType);
+            }
+        }
+
+        if(NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Playing)
+        {
+            if (uiRootType == UIRootType.PopupUI)
+            {
+                NetworkManager.Inst.PlayerService.SetCanMove(true);
             }
         }
     }
