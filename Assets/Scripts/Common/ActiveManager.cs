@@ -41,6 +41,8 @@ public class ActiveManager : MonoBehaviour
 {
     public static ActiveManager Instance { get; private set; }
 
+    public event Action OnActiveDataChanged;
+
     [Header("Default Balance Setting")]
     [SerializeField] private float miniGameSuccessRestoreValue = 25f; // 미니게임 성공 시 복구량
     [SerializeField] private float fixerBaseRepairValue = 20f;  // 픽서 수리 기본 복구량
@@ -341,6 +343,9 @@ public class ActiveManager : MonoBehaviour
         // 플레이어 성공 시: 당일 클리어 플래그 설정 및 기지 수리 진척도 가산
         _miniGameClearedTodayDict[type] = true;
         AddSystemProgress(type, miniGameSuccessRestoreValue);
+
+        OnActiveDataChanged?.Invoke();
+
         Debug.Log($"[플레이어] {type} 미니게임 완수! 수리 진척도 +{miniGameSuccessRestoreValue}% (오늘 완료 처리됨)");
     }
 
@@ -419,12 +424,15 @@ public class ActiveManager : MonoBehaviour
             float finalAmount = fixerBaseRepairValue * (repairStat / 100f);
             AddSystemProgress(taskType, finalAmount);
 
+            OnActiveDataChanged?.Invoke();
+
+
             Debug.Log($"픽서({fixerId}) [{taskType}] 수리 완료! 수리 진척도 +{finalAmount}% (오늘 완료 처리됨)");
         }
         else
         {
 
-            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 ➔ 정산 팝업 호출됨");
+            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 정산 팝업 호출됨");
         }
     }
 
@@ -442,6 +450,9 @@ public class ActiveManager : MonoBehaviour
             // 1시간당 차감 적용 (0% ~ 100% 범주 유지)
             _systemProgressDict[repairTask] = Mathf.Clamp(currentProgress - consumeAmount, 0f, 100f);
         }
+
+        OnActiveDataChanged?.Invoke();
+
         Debug.Log("인게임 1시간 경과: 엑셀 TimeToConsume 수치만큼 기지 수리 진척도가 감소했습니다.");
     }
 
