@@ -4,7 +4,6 @@ using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Fixer_Rampaging", story: "[Self] wander within [RoomArea] at spped of [Speed]", category: "Action/Fixer", id: "fixer-Rampage-action")]
@@ -13,6 +12,8 @@ public partial class Fixer_RampagingAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<Collider> RoomArea;
     [SerializeReference] public BlackboardVariable<float> Speed;
+    
+    [SerializeReference] public BlackboardVariable<float> MinWallDistance = new BlackboardVariable<float>(0.6f);
 
     private NavMeshAgent _navMeshAgent;
     private float _currentWanderTime = 0.0f;
@@ -20,9 +21,9 @@ public partial class Fixer_RampagingAction : Action
 
     protected override Status OnStart()
     {
-        if (Self.Value == null) 
+        if (Self.Value == null)
         {
-            return Status.Failure; 
+            return Status.Failure;
         }
 
         if (RoomArea.Value == null)
@@ -42,7 +43,11 @@ public partial class Fixer_RampagingAction : Action
 
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
 
-        if (TryGetValidRoomDestination(RoomArea.Value.bounds, out Vector3 targetDestination))
+        if (FixerNavmeshUtil.TryGetSafeRoomPoint(
+                RoomArea.Value.bounds,
+                Self.Value.transform.position.y,
+                MinWallDistance.Value,
+                out Vector3 targetDestination))
         {
             _navMeshAgent.SetDestination(targetDestination);
             _currentWanderTime = Time.time;
@@ -57,12 +62,12 @@ public partial class Fixer_RampagingAction : Action
     {
         if (Time.time - _currentWanderTime > _maxWanderTime)
         {
-            return Status.Success; 
+            return Status.Success;
         }
 
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
-            return Status.Success; 
+            return Status.Success;
         }
 
         return Status.Running;
@@ -74,32 +79,5 @@ public partial class Fixer_RampagingAction : Action
         {
             _navMeshAgent.ResetPath();
         }
-    }
-
-    private bool TryGetValidRoomDestination(Bounds roomBounds, out Vector3 destination)
-    {
-        destination = Vector3.zero;
-
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 randomPoint = new Vector3(
-                Random.Range(roomBounds.min.x, roomBounds.max.x),
-                Self.Value.transform.position.y,
-                Random.Range(roomBounds.min.z, roomBounds.max.z)
-            );
-
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, 2.0f, NavMesh.AllAreas))
-            {
-                if (hit.position.x >= roomBounds.min.x && hit.position.x <= roomBounds.max.x &&
-                    hit.position.z >= roomBounds.min.z && hit.position.z <= roomBounds.max.z)
-                {
-                    destination = hit.position;
-                    return true; 
-                }
-            }
-        }
-
-        return false; 
     }
 }

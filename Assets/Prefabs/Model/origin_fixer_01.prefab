@@ -893,6 +893,7 @@ GameObject:
   - component: {fileID: 2876567880640911498}
   - component: {fileID: 2622587725767587706}
   - component: {fileID: -7571354933394573070}
+  - component: {fileID: -7971428640694886169}
   m_Layer: 0
   m_Name: origin_fixer_01
   m_TagString: Fixer
@@ -1112,6 +1113,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainController
   _outLineRenderer: {fileID: 0}
   _outLineMaterial: {fileID: 0}
+--- !u!114 &-7971428640694886169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3552968531976532478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111767cc85b7aed498a481b5f717af5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerPlayerDetector
+  playerTag: Player
+  rotationSpeed: 5
+  reactableStates: 04000000000000000300000005000000
 --- !u!1 &3648604483688993867
 GameObject:
   m_ObjectHideFlags: 0

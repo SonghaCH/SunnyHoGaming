@@ -10,6 +10,7 @@ public class FixerViewModel : MonoBehaviour
     public FixerModel FixerModel { get; private set; }
     public int InstanceId { get; private set; }
     public string DataId { get; private set; }
+    public bool IsInteractingLock { get; private set; } = false;
     private float _originalSpeed = -1f;
 
     public WorkStation TargetStation { get; set; }
@@ -39,6 +40,15 @@ public class FixerViewModel : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            SetPlayerToBlackboard(player);
+        }
+    }
+
     public FixerState CurrentState
     {
         get
@@ -48,18 +58,28 @@ public class FixerViewModel : MonoBehaviour
 
         set
         {
-            UpdateStateInternal(value, isSilent: false, isFromBrain: false);
+            UpdateStateInternal(value, isFromBrain: false);
         }
     }
 
-    public void ChangeStateFromBrain(FixerState newState, bool isSilent = false)
+    public void ChangeStateFromBrain(FixerState newState)
     {
-        UpdateStateInternal(newState, isSilent, isFromBrain: true);
+        UpdateStateInternal(newState, isFromBrain: true);
     }
 
-    private void UpdateStateInternal(FixerState newState, bool isSilent, bool isFromBrain)
+    public void SetInteractingLock(bool isLocked)
+    {
+        IsInteractingLock = isLocked;
+    }
+
+    private void UpdateStateInternal(FixerState newState, bool isFromBrain)
     {
         if (hasBeenRepaired == true && newState == FixerState.Rampaging)
+        {
+            return;
+        }
+
+        if (IsInteractingLock && isFromBrain)
         {
             return;
         }
@@ -96,12 +116,9 @@ public class FixerViewModel : MonoBehaviour
             OnAnimationStateChanged.Invoke(currentState);
         }
 
-        if (isSilent == false)
+        if (OnStateChanged != null)
         {
-            if (OnStateChanged != null)
-            {
-                OnStateChanged.Invoke(currentState);
-            }
+            OnStateChanged.Invoke(currentState);
         }
     }
 
@@ -208,6 +225,14 @@ public class FixerViewModel : MonoBehaviour
         }
     }
 
+    public void SetPlayerToBlackboard(GameObject player)
+    {
+        if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
+        {
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("Player", player);
+        }
+    }
+
     public void OrderReturn()
     {
         CurrentState = FixerState.Returning;
@@ -230,9 +255,9 @@ public class FixerViewModel : MonoBehaviour
                 }
 
                 agent.speed = 0f;
-                agent.velocity = Vector3.zero; 
+                agent.velocity = Vector3.zero;
 
-                GetComponent<Animator>().SetFloat("MoveSpeed", 0f); 
+                GetComponent<Animator>().SetFloat("MoveSpeed", 0f);
             }
             else
             {
