@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 158118280f27251409399d83ab16a5cb
+    m_Address: Sprite/Image_OriginFixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 204118c0ece9fd14ca3b1851215b67d9
     m_Address: Prefabs/map
     m_ReadOnly: 0
@@ -40,13 +45,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 91120df9d941e674b84dd482d32fd20e
-    m_Address: Fixer_03
+  - m_GUID: 670954ecf44fc8a4b9d2e34a3b05aa2c
+    m_Address: Sprite/Image_RedFixer
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a83bee332b41f9349a3c3aeabea33c6c
-    m_Address: Icons/EXFixer_Icon
+  - m_GUID: 77ecd68b3a0a016448d77c7729d69100
+    m_Address: Sprite/Image_EXFixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91120df9d941e674b84dd482d32fd20e
+    m_Address: Fixer_03
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

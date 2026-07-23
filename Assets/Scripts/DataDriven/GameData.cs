@@ -44,6 +44,7 @@ public class DialogueData : GameDataBase
 public class FixerData : GameDataBase
 {
     public string Name;
+    public string Description;
     public int UnlockDate;
     public float O2Repair;
     public float ElectRepair;
@@ -54,6 +55,8 @@ public class FixerData : GameDataBase
     public string PrefabPath;
     public string SoundPath;
     public string IconPath;
+    public string ImagePath;
+
 }
 
 [System.Serializable]
