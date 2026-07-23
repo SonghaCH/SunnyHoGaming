@@ -43,32 +43,5 @@
     "Title": "최선을 다해 생존하시오",
     "Description": "픽서와 함께 힘을 합쳐 기능을 수리 하자!",
     "SubTasks": "산소 공급 장치 수리:OxygenSupply|전력 공급 장치 수리:PowerSupply|온도 제어 장치 수리:TemperatureControl|항로 제어 장치 수리:RouteControl"
-  },
-  {
-    "Id": null,
-    "Type": null,
-    "QuestName": null,
-    "UnlockDay": null,
-    "Title": null,
-    "Description": null,
-    "SubTasks": null
-  },
-  {
-    "Id": null,
-    "Type": null,
-    "QuestName": null,
-    "UnlockDay": null,
-    "Title": null,
-    "Description": null,
-    "SubTasks": null
-  },
-  {
-    "Id": null,
-    "Type": null,
-    "QuestName": null,
-    "UnlockDay": null,
-    "Title": null,
-    "Description": null,
-    "SubTasks": null
   }
 ]

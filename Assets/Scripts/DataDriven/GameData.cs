@@ -75,11 +75,36 @@ public class ItemData : GameDataBase
 }
 
 
-[System.Serializable]
+public enum SubTaskTargetType
+{
+    Task,
+    Item
+}
+
+[Serializable]
+public class SubTaskData
+{
+    public string subTaskText;
+    public SubTaskTargetType targetType;
+    public string targetKey;
+    public bool isCompleted;
+}
+
+[Serializable]
 public class QuestData : GameDataBase
 {
+    public string Type;
+    public string QuestName;
+    public int UnlockDay;
     public string Title;
     public string Description;
+    public string SubTasks; 
+
+    [NonSerialized]
+    public List<SubTaskData> subTaskList = new List<SubTaskData>();
+
+    [NonSerialized]
+    public bool isCleared;
 }
 
 [System.Serializable]

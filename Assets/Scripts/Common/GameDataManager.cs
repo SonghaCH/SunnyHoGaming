@@ -69,8 +69,24 @@ public class GameDataManager : MonoBehaviour
             if (wrapper != null && wrapper.items != null)
             {
                 Debug.Log($"{typeof(T).Name} 데이터를 {wrapper.items.Count}개 로드했습니다.");
-                // ToDictionary를 사용하려면 각 클래스(T)에 Id 필드가 있어야 합니다.
-                return wrapper.items.ToDictionary(item => item.Id.ToString());
+
+                Dictionary<string, T> dict = new Dictionary<string, T>();
+                foreach (var item in wrapper.items)
+                {
+                    // item이 null이 아니고 Id가 정상적으로 존재하는지 확인
+                    if (item != null && !string.IsNullOrEmpty(item.Id))
+                    {
+                        if (!dict.ContainsKey(item.Id))
+                        {
+                            dict.Add(item.Id, item);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[{typeof(T).Name}] 중복된 ID가 포함되어 있어 건너뜁니다: {item.Id}");
+                        }
+                    }
+                }
+                return dict;
             }
         }
         catch (Exception ex)
@@ -104,6 +120,11 @@ public class GameDataManager : MonoBehaviour
     public void LoadQuestData(string jsonPath)
     {
         QuestDataList = LoadData<QuestData>(jsonPath);
+
+        if (QuestManager.Instance != null && QuestDataList != null)
+        {
+            QuestManager.Instance.InitializeQuests(QuestDataList.Values.ToList());
+        }
     }
 
     public void LoadObjectData(string jsonPath)

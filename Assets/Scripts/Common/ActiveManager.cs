@@ -344,6 +344,11 @@ public class ActiveManager : MonoBehaviour
         _miniGameClearedTodayDict[type] = true;
         AddSystemProgress(type, miniGameSuccessRestoreValue);
 
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.CheckTaskProgress(type.ToString());
+        }
+
         OnActiveDataChanged?.Invoke();
 
         Debug.Log($"[플레이어] {type} 미니게임 완수! 수리 진척도 +{miniGameSuccessRestoreValue}% (오늘 완료 처리됨)");
@@ -408,16 +413,19 @@ public class ActiveManager : MonoBehaviour
 
     public void OnFixerWorkCompleted(ActiveTaskType taskType, string fixerId)
     {
-        // 픽서 배정 상태 해제
         if (_assignmentDict.ContainsKey(taskType))
         {
             _assignmentDict[taskType].IsWorking = false;
         }
 
-        // 오늘 완료 플래그 설정 (누가 하든 1회 완료)
         _miniGameClearedTodayDict[taskType] = true;
 
-        // 1~4번 수리 작업인 경우 수리 진척도 가산
+        // 🌟 [핵심 추가] 픽서가 작업을 마쳤을 때도 퀘스트 진행 상황 체크!
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.CheckTaskProgress(taskType.ToString());
+        }
+
         if (taskType <= ActiveTaskType.RouteControl)
         {
             float repairStat = GetFixerRepairStat(taskType, fixerId);
@@ -426,17 +434,15 @@ public class ActiveManager : MonoBehaviour
 
             OnActiveDataChanged?.Invoke();
 
-
             Debug.Log($"픽서({fixerId}) [{taskType}] 수리 완료! 수리 진척도 +{finalAmount}% (오늘 완료 처리됨)");
         }
         else
         {
-
             Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 정산 팝업 호출됨");
         }
     }
 
-    
+
 
     public void OnHourPassed()
     {

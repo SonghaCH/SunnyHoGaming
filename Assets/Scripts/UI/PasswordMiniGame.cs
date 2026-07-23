@@ -153,7 +153,7 @@ public class PasswordMiniGame : UIBase
         UIManager.Instance.OpenSimplePopup("위성전화 연결 성공! 데이터 복구 완료.");
         Debug.Log("비밀번호 일치! 미션 성공");
 
-        //QuestManager.Instance.CheckTaskProgress("SatellitePhone");
+        QuestManager.Instance.CheckTaskProgress("SatellitePhone");
 
         UIManager.Instance.ClosePasswordPopupUI();
     }

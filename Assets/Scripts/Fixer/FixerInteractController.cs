@@ -73,7 +73,7 @@ public class FixerInteractController : MonoBehaviour
         {
             _viewModel.CurrentState = FixerState.Returning;
 
-            //QuestManager.Instance.CheckTaskProgress("FixerCalm");
+            QuestManager.Instance.CheckTaskProgress("FixerCalm");
 
             return;
         }
