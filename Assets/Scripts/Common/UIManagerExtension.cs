@@ -345,7 +345,20 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.PopupUI, UIType.MapPopupUI);
     }
 
+    public static void OpenQuestPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
 
+    public static void CloseQuestPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+    }
 }
 
 

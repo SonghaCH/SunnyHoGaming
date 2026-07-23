@@ -63,7 +63,7 @@ public class NetworkManager : MonoBehaviour
     {
         // 앞으로 네트워크 매니저에서 사용할 다양한 서비스를 생성
         InventoryService = new NetworkInventoryService();
-        TimeService = new TimeService(0.15f);
+        TimeService = new TimeService(0.01f);
         PlayerService = new PlayerService();
         GameStateService = new GameStateService();
     }

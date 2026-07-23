@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class QuestPopupUI : UIBase
 {
-    [Header("Left Tab/List Container")]
     [SerializeField] private Transform tabListParent;
     [SerializeField] private GameObject mainQuestSlotPrefab;
     [SerializeField] private GameObject dailyQuestSlotPrefab;
+    [SerializeField] private UIButton Btn_Exit;
 
-    [Header("Right Quest Info UI")]
     [SerializeField] private TextMeshProUGUI questTitleText;
     [SerializeField] private TextMeshProUGUI questDescriptionText;
 
-    [Header("SubTask Dynamic Spawn")]
     [SerializeField] private Transform subTaskParent;
     [SerializeField] private GameObject subTaskSlotPrefab;
 
@@ -27,8 +25,7 @@ public class QuestPopupUI : UIBase
         {
             QuestManager.Instance.OnQuestUpdated += RefreshQuestUI;
         }
-
-        // 🌟 탭 목록을 해금 날짜 기준으로 생성
+        Btn_Exit.BindOnClickButtonEvent(Onclick_Exit);
         InitTabList();
     }
 
@@ -40,7 +37,11 @@ public class QuestPopupUI : UIBase
         }
     }
 
-    // 🌟 NetworkManager -> TimeService에서 현재 날짜(CurrentDay) 안전하게 가져오기
+    private void Onclick_Exit()
+    {
+        UIManager.Instance.CloseQuestPopupUI();
+    }
+
     private int GetCurrentDay()
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
@@ -51,7 +52,7 @@ public class QuestPopupUI : UIBase
                 return timeVM.CurrentDay;
             }
         }
-        return 1; // 서비스 참조 실패 시 기본값 1일차
+        return 1; 
     }
 
     private void InitTabList()
@@ -68,7 +69,6 @@ public class QuestPopupUI : UIBase
             return;
         }
 
-        // 기존 탭 슬롯 자식 오브젝트들 완벽 청소
         if (tabListParent != null)
         {
             foreach (Transform child in tabListParent)
@@ -78,10 +78,8 @@ public class QuestPopupUI : UIBase
         }
         _spawnedTabSlots.Clear();
 
-        // 🌟 현재 진행 일수 가져오기 (예: 1일차면 1)
         int currentDay = GetCurrentDay();
 
-        // 🌟 UnlockDay가 현재 날짜 이하인 퀘스트만 필터링
         List<QuestData> unlockedQuests = new List<QuestData>();
         foreach (var quest in QuestManager.Instance.activeQuests)
         {
@@ -93,7 +91,6 @@ public class QuestPopupUI : UIBase
 
         Debug.Log($"[QuestPopupUI] 현재 {currentDay}일차 기준, 해금된 퀘스트 {unlockedQuests.Count}개를 생성합니다.");
 
-        // 해금된 퀘스트에 한해서만 슬롯 생성
         foreach (var quest in unlockedQuests)
         {
             GameObject prefab = (quest.Type == "Main") ? mainQuestSlotPrefab : dailyQuestSlotPrefab;
@@ -109,7 +106,6 @@ public class QuestPopupUI : UIBase
             }
         }
 
-        // 🌟 해금된 첫 번째 퀘스트를 기본 선택
         if (unlockedQuests.Count > 0)
         {
             SelectQuest(unlockedQuests[0]);
@@ -126,7 +122,6 @@ public class QuestPopupUI : UIBase
     {
         if (_selectedQuest == null) return;
 
-        // 1. 오른쪽 타이틀 및 설명 대입
         if (questTitleText != null)
         {
             questTitleText.text = _selectedQuest.QuestName;
@@ -137,7 +132,6 @@ public class QuestPopupUI : UIBase
             questDescriptionText.text = _selectedQuest.Title;
         }
 
-        // 2. 서브태스크 부모(subTaskParent) 밑의 기존 슬롯 청소
         if (subTaskParent != null)
         {
             foreach (Transform child in subTaskParent)
@@ -147,7 +141,6 @@ public class QuestPopupUI : UIBase
         }
         _spawnedSubTaskSlots.Clear();
 
-        // 3. 최신 데이터로 서브태스크 슬롯 새로 생성
         if (_selectedQuest.subTaskList != null)
         {
             foreach (var subTask in _selectedQuest.subTaskList)

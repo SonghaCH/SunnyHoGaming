@@ -109,8 +109,26 @@ public class QuestManager : MonoBehaviour
             UpdateQuestUI();
         }
     }
+    public void ResetDailyQuests()
+    {
+        if (activeQuests == null) return;
 
-   
+        foreach (var quest in activeQuests)
+        {
+            if (quest.Type == "Daily" || quest.Type == "Sub")
+            {
+                foreach (var subTask in quest.subTaskList)
+                {
+                    subTask.isCompleted = false;
+                }
+            }
+        }
+
+        UpdateQuestUI();
+        Debug.Log("[QuestManager] 일일 퀘스트 진행 상황이 리셋되었습니다.");
+    }
+
+
     public void CheckItemProgress(string itemId)
     {
         bool isUpdated = false;
