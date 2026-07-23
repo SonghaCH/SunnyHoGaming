@@ -43,6 +43,12 @@ public class MainController : UIBase
     {
         if (other.CompareTag("Player"))
         {
+            var door = GetComponent<Door>();
+            if (door != null && !door.Interact())
+            {
+                return;
+            }
+            
             UserInputManager.instance.OnInteractionKey += Interact;
             SetOutline(true);
 

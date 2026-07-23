@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 public class PasswordMiniGame : UIBase
-    {
+{
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI passwordDisplayText;
     [SerializeField] private UIButton Btn_Back;
@@ -15,13 +15,10 @@ public class PasswordMiniGame : UIBase
     private string _currentInput = "";                         
     private bool _isGameActive = false;                           
 
-
-
     private void OnEnable()
     {
         Btn_Back.BindOnClickButtonEvent(OnClick_Back);
         InitializeGame();
-
     }
 
 
