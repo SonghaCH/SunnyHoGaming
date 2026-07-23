@@ -1,27 +1,74 @@
 [
   {
-    "Id": "Quest_Day1_001",
-    "Title": "1일차 퀘스트: 고장난 모든 기능을 수리하시오",
-    "Description": "표시되어 있는 곳에서 기능을 직접 수리하자"
+    "Id": "Quest_Day_001",
+    "Type": "Main",
+    "QuestName": "메인 퀘스트",
+    "UnlockDay": 1,
+    "Title": "고장난 모든 기능을 수리하시오",
+    "Description": "표시되어 있는 곳에서 기능을 직접 수리하자!",
+    "SubTasks": "산소 공급 장치 수리:OxygenSupply|전력 공급 장치 수리:PowerSupply|온도 제어 장치 수리:TemperatureControl|항로 제어 장치 수리:RouteControl"
   },
   {
     "Id": "Quest_Day2_001",
-    "Title": "2일차 퀘스트: 폭주한 픽서들을 진정시키시오",
-    "Description": "표시되어 있는 방으로 가서 픽서들을 진정시키자"
+    "Type": "DayQuest",
+    "QuestName": "2일차 퀘스트",
+    "UnlockDay": 2,
+    "Title": "폭주한 픽서들을 진정시키시오",
+    "Description": "획득한 아이템을 참고하여 픽서를 진정시키자!",
+    "SubTasks": "픽서 부르미 획득하기:Item:Item_Map_01|폭주한 픽서 진정시키기 (1):Task:FixerCalm_1|폭주한 픽서 진정시키기 (2):Task:FixerCalm_2|폭주한 픽서 진정시키기 (3):Task:FixerCalm_3"
   },
   {
     "Id": "Quest_Day3_001",
-    "Title": "3일차 퀘스트: 픽서를 통해 식량을 획득하십시오.",
-    "Description": "픽서에게 식량 수급을 지시하자"
+    "Type": "DayQuest",
+    "QuestName": "3일차 퀘스트",
+    "UnlockDay": 3,
+    "Title": "픽서를 통해 식량을 획득하십시오",
+    "Description": "픽서에게 식량 수급을 지시하자!",
+    "SubTasks": "픽서에게 식당에서 음식 픽업 업무 시키기:FoodSupply"
   },
   {
     "Id": "Quest_Day4_001",
-    "Title": "4일차 퀘스트: 지구에 구조 요청하시오",
-    "Description": "픽서가 가지고온 위성전화로 지구와 통신하자"
+    "Type": "DayQuest",
+    "QuestName": "4일차 퀘스트",
+    "UnlockDay": 4,
+    "Title": "지구에 구조 요청하시오",
+    "Description": "픽서가 가지고온 위성전화로 지구와 통신하자!",
+    "SubTasks": "위성전화를 작동시켜 올바른 번호를 입력하자:Task:SatellitePhone"
   },
   {
     "Id": "Quest_Day5_001",
-    "Title": "5일차 퀘스트: 최선을 다해 생존하시오",
-    "Description": "픽서와 함께 구조대를 기다리자"
+    "Type": "DayQuest",
+    "QuestName": "5일차 퀘스트",
+    "UnlockDay": 5,
+    "Title": "최선을 다해 생존하시오",
+    "Description": "픽서와 함께 힘을 합쳐 기능을 수리 하자!",
+    "SubTasks": "산소 공급 장치 수리:OxygenSupply|전력 공급 장치 수리:PowerSupply|온도 제어 장치 수리:TemperatureControl|항로 제어 장치 수리:RouteControl"
+  },
+  {
+    "Id": null,
+    "Type": null,
+    "QuestName": null,
+    "UnlockDay": null,
+    "Title": null,
+    "Description": null,
+    "SubTasks": null
+  },
+  {
+    "Id": null,
+    "Type": null,
+    "QuestName": null,
+    "UnlockDay": null,
+    "Title": null,
+    "Description": null,
+    "SubTasks": null
+  },
+  {
+    "Id": null,
+    "Type": null,
+    "QuestName": null,
+    "UnlockDay": null,
+    "Title": null,
+    "Description": null,
+    "SubTasks": null
   }
 ]

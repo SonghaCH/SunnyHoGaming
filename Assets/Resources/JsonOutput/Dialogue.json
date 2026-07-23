@@ -51,12 +51,117 @@
   },
   {
     "Id": "Dialogue_Day1_011",
-    "Description": null,
+    "Description": "가슴이 찢어질 것 같아... 산소 공급 장치가 어디 있지?!",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day1_012",
+    "Description": "헉... 헉... 숨이... 막혀온다…",
+    "NextId": "Dialogue_Day1_013"
+  },
+  {
+    "Id": "Dialogue_Day1_013",
+    "Description": "가슴이 찢어질 것 같아... 산소 공급 장치가 어디 있지?!",
+    "NextId": "Dialogue_Day1_014"
+  },
+  {
+    "Id": "Dialogue_Day1_014",
+    "Description": "아무래도 이건가 보군",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_015",
+    "Description": "후... 이제야 살 것 같군. 산소 농도가 안정되었어",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_016",
+    "Description": "전력이 모두 소진되기 전에, 항로 제어기를 서둘러 수리하자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day1_017",
+    "Description": "오늘은 이쯤에서 쉬도록 할까?",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day2_001",
+    "Description": "무사히 하루를 넘겼군",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day2_002",
+    "Description": "바닥에 무언가 떨어져 있다. 이게 뭐지?",
+    "NextId": "Dialogue_Day2_003"
+  },
+  {
+    "Id": "Dialogue_Day2_003",
+    "Description": "이건... 먼서 떠난 동료가 남긴 숨겨진 노트잖아?",
+    "NextId": "Dialogue_Day2_004"
+  },
+  {
+    "Id": "Dialogue_Day2_004",
+    "Description": "동료가 남긴 기록이 앞으로의 생존에 도움이 될 것 같다. 잘 챙겨두자.",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day3_001",
+    "Description": "이녀석은 유용하게 쓸 수 있겠군",
+    "NextId": null
+  },
+  {
+    "Id": null,
     "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": null,
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": null,
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day4_001",
+    "Description": "앞으로 잘 부탁한다.",
+    "NextId": null
+  },
+  {
+    "Id": null,
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": null,
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": null,
+    "Description": null,
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day5_001",
+    "Description": "Fixer? 이번엔 뭘 가져온거지?",
+    "NextId": "Dialogue_Day5_002"
+  },
+  {
+    "Id": "Dialogue_Day5_002",
+    "Description": "이건... '위성전화기'?! 도대체 이걸 어디서 찾아온 거지?",
+    "NextId": "Dialogue_Day5_003"
+  },
+  {
+    "Id": "Dialogue_Day5_003",
+    "Description": "당장 신호를 보내보자",
+    "NextId": "Dialogue_Day5_004"
+  },
+  {
+    "Id": "Dialogue_Day5_004",
+    "Description": "치지직…치직…여기는..치지 지구본부..생존자 있습니까?",
     "NextId": null
   }
 ]

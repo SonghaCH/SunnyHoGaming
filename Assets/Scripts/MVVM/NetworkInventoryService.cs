@@ -70,6 +70,8 @@ public class NetworkInventoryService
 
         // 4. 리스트 변경 사항을 이벤트를 통해 UI에 강제 갱신 유도합니다.
         invenVm.RefreshItemList();
+
+        //QuestManager.Instance.CheckItemProgress(itemId);
     }
 
     public bool RequestUseItem(long requestUseTargetItemUniqueId)
