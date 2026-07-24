@@ -10,6 +10,7 @@ public class MainController : UIBase
     private Material[] _originalMaterials;
     private Material[] _outlineMaterials;
 
+
     private void Awake()
     {
         string FixerId = gameObject.name.Replace("(Clone)", "").Trim();
@@ -43,6 +44,12 @@ public class MainController : UIBase
     {
         if (other.CompareTag("Player"))
         {
+            var door = GetComponent<Door>();
+            if (door != null && !door.Interact())
+            {
+                return;
+            }
+            
             UserInputManager.instance.OnInteractionKey += Interact;
             SetOutline(true);
 

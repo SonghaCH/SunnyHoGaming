@@ -48,5 +48,10 @@
     "Id": "bad_01",
     "Name": "침대",
     "PopupType": null
+  },
+  {
+    "Id": "Door_01",
+    "Name": "문",
+    "PopupType": "DoorPopupUI"
   }
 ]

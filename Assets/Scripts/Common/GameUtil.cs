@@ -58,7 +58,7 @@ public static class GameUtil
         return sprite;
     }
 
-    public static async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string audioPath, bool isLoop = false)
+    public static async UniTaskVoid LoadAndPlayAudioClip(AudioSource audioSource, string audioPath, bool isLoop = false, CancellationToken cancellationToken = default)
     {
         AudioClip clip = await ResourceManager.Instance.LoadAsset<AudioClip>(audioPath);
         if (clip == null)
