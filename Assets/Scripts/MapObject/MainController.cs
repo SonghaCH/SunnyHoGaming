@@ -106,6 +106,9 @@ public class MainController : UIBase
             case UIType.ControlRepairPopupUI:
                 taskType = ActiveTaskType.RouteControl;
                 return true;
+            case UIType.RepairDisplayUI:
+                taskType = default;
+                return false;
             default:
                 taskType = ActiveTaskType.OxygenSupply;
                 return false;
