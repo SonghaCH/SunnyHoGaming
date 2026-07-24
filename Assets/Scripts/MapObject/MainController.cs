@@ -74,7 +74,6 @@ public class MainController : UIBase
                 Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
                 return;
             }
-            UIManager.Instance.CloseUI(UIRootType.PopupUI, popupUI);
         }
     }
 

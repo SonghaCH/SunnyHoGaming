@@ -32,7 +32,8 @@ public enum UIType
     FPopupUI,
     PausePopupUI,
     QuestPopupUI,
-    MapPopupUI
+    MapPopupUI,
+    DoorPopupUI
 
 }
 
@@ -358,6 +359,21 @@ public static class UIManagerExtension
     public static void CloseQuestPopupUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+    }
+
+    public static void OpenDoorPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.DoorPopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseDoorPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.DoorPopupUI);
     }
 }
 
