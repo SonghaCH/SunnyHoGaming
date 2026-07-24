@@ -51,57 +51,32 @@
   },
   {
     "Id": "Dialogue_Day1_011",
-    "Description": "가슴이 찢어질 것 같아... 산소 공급 장치가 어디 있지?!",
-    "NextId": null
+    "Description": "정말 상황이 안좋지만 내일도 생존하려면 잠을 자야한다",
+    "NextId": "Dialogue_Day1_012"
   },
   {
     "Id": "Dialogue_Day1_012",
-    "Description": "헉... 헉... 숨이... 막혀온다…",
-    "NextId": "Dialogue_Day1_013"
-  },
-  {
-    "Id": "Dialogue_Day1_013",
-    "Description": "가슴이 찢어질 것 같아... 산소 공급 장치가 어디 있지?!",
-    "NextId": "Dialogue_Day1_014"
-  },
-  {
-    "Id": "Dialogue_Day1_014",
-    "Description": "아무래도 이건가 보군",
-    "NextId": null
-  },
-  {
-    "Id": "Dialogue_Day1_015",
-    "Description": "후... 이제야 살 것 같군. 산소 농도가 안정되었어",
-    "NextId": null
-  },
-  {
-    "Id": "Dialogue_Day1_016",
-    "Description": "전력이 모두 소진되기 전에, 항로 제어기를 서둘러 수리하자",
-    "NextId": null
-  },
-  {
-    "Id": "Dialogue_Day1_017",
-    "Description": "오늘은 이쯤에서 쉬도록 할까?",
+    "Description": "하루 일과를 잘 마무리하고 적절한 시간에 잠에 들자",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day2_001",
-    "Description": "무사히 하루를 넘겼군",
+    "Description": "이런 장비들이 있었다니 잘만 사용하면 유용하겠어",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day2_002",
-    "Description": "바닥에 무언가 떨어져 있다. 이게 뭐지?",
-    "NextId": "Dialogue_Day2_003"
+    "Description": "그저 창고라고 생각했는데 ",
+    "NextId": null
   },
   {
     "Id": "Dialogue_Day2_003",
-    "Description": "이건... 먼서 떠난 동료가 남긴 숨겨진 노트잖아?",
-    "NextId": "Dialogue_Day2_004"
+    "Description": null,
+    "NextId": null
   },
   {
     "Id": "Dialogue_Day2_004",
-    "Description": "동료가 남긴 기록이 앞으로의 생존에 도움이 될 것 같다. 잘 챙겨두자.",
+    "Description": null,
     "NextId": null
   },
   {

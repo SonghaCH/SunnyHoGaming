@@ -53,5 +53,10 @@
     "Id": "System_Control_01",
     "Name": "관제 시스템",
     "PopupType": "RepairDisplayUI"
+  },
+  {
+    "Id": "Door_01",
+    "Name": "문",
+    "PopupType": "DoorPopupUI"
   }
 ]

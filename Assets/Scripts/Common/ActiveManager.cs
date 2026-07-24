@@ -361,7 +361,7 @@ public class ActiveManager : MonoBehaviour
     // 픽서 구간
 
     // 픽서에게 작업 배정 (해금 날짜 및 오늘 완료 여부 검사)
-    public void AssignFixerToTask(ActiveTaskType taskType, int fixerId)
+    public void AssignFixerToTask(ActiveTaskType taskType, int fixerId, float actualTimeTaken)
     {
         // 해금 날짜 조건 검사 (3/4일차 해금 파밍 등 차단)
         if (!IsTaskUnlocked(taskType))
@@ -377,21 +377,10 @@ public class ActiveManager : MonoBehaviour
             Debug.LogWarning($"오늘 이미 완료된 작업([{taskType}])에는 픽서를 배정할 수 없습니다.");
             return;
         }
-        
+
         if (!_assignmentDict.ContainsKey(taskType))
         {
             _assignmentDict[taskType] = new ActiveAssignment();
-        }
-
-        float totalTime = 5;
-        string activeDataId = GetActiveDataId(taskType);
-        if (GameDataManager.Instance != null)
-        {
-            ActiveData activeData = GameDataManager.Instance.GetActiveData(activeDataId);
-            if (activeData != null)
-            {
-                totalTime = activeData.TimeTaken;
-            }
         }
 
         ActiveAssignment assignment = _assignmentDict[taskType];
@@ -399,12 +388,13 @@ public class ActiveManager : MonoBehaviour
         assignment.FixerID = fixerId;
         assignment.IsWorking = true;
         assignment.CurrentWorkTime = 0f;
-        assignment.TotalTimeTaken = totalTime;
 
-        Debug.Log($"픽서({fixerId})가 [{taskType}] 작업장에 배정되었습니다. (소요 시간: {totalTime})");
+        assignment.TotalTimeTaken = actualTimeTaken;
+
+        Debug.Log($"픽서({fixerId})가 [{taskType}] 작업장에 배정되었습니다. (효율이 적용된 소요 시간: {actualTimeTaken}초)");
     }
 
-    
+
 
     public float GetFixerWorkProgressRatio(ActiveTaskType taskType)
     {
@@ -417,32 +407,71 @@ public class ActiveManager : MonoBehaviour
 
     public void OnFixerWorkCompleted(ActiveTaskType taskType, string fixerId)
     {
+        // 픽서 배정 상태 해제
         if (_assignmentDict.ContainsKey(taskType))
         {
             _assignmentDict[taskType].IsWorking = false;
         }
 
+        // 오늘 완료 플래그 설정 (누가 하든 1회 완료)
         _miniGameClearedTodayDict[taskType] = true;
 
-        // 🌟 [핵심 추가] 픽서가 작업을 마쳤을 때도 퀘스트 진행 상황 체크!
-        if (QuestManager.Instance != null)
-        {
-            QuestManager.Instance.CheckTaskProgress(taskType.ToString());
-        }
-
+        // 1~4번 수리 작업인 경우 수리 진척도 가산
         if (taskType <= ActiveTaskType.RouteControl)
         {
             float repairStat = GetFixerRepairStat(taskType, fixerId);
             float finalAmount = fixerBaseRepairValue * (repairStat / 100f);
             AddSystemProgress(taskType, finalAmount);
 
-            OnActiveDataChanged?.Invoke();
-
             Debug.Log($"픽서({fixerId}) [{taskType}] 수리 완료! 수리 진척도 +{finalAmount}% (오늘 완료 처리됨)");
         }
         else
         {
-            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 정산 팝업 호출됨");
+
+            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 ➔ 정산 및 아이템 지급 처리");
+
+            string dataId = GetActiveDataId(taskType);
+            if (GameDataManager.Instance != null)
+            {
+                ActiveData activeData = GameDataManager.Instance.GetActiveData(dataId);
+
+                if (activeData != null && !string.IsNullOrEmpty(activeData.ItemId))
+                {
+                    string[] possibleItems = activeData.ItemId.Split(',');
+
+                    List<ItemSlotViewModel> resultList = new List<ItemSlotViewModel>();
+
+                    if (taskType == ActiveTaskType.Farming)
+                    {
+                        foreach (string itemStr in possibleItems)
+                        {
+                            string selectedItem = itemStr.Trim();
+                            int rewardAmount = UnityEngine.Random.Range(100, 131);
+
+                            NetworkManager.Inst.InventoryService?.AddItem(selectedItem, rewardAmount);
+
+                            resultList.Add(new ItemSlotViewModel { ItemDataId = selectedItem, ItemStackCount = rewardAmount });
+                        }
+                    }
+                    else if (taskType == ActiveTaskType.FoodSupply)
+                    {
+                        string selectedItem = possibleItems[0].Trim();
+                        int rewardAmount = 2;
+
+                        NetworkManager.Inst.InventoryService?.AddItem(selectedItem, rewardAmount);
+
+                        resultList.Add(new ItemSlotViewModel { ItemDataId = selectedItem, ItemStackCount = rewardAmount });
+                    }
+
+                    var popupUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.JobcompletedPopupUI) as JobcompletedPopupUI;
+                    if (popupUI != null)
+                    {
+                        string taskNameStr = taskType == ActiveTaskType.Farming ? "자원 파밍" : "음식 보급";
+
+                        popupUI.SetResultData(taskNameStr, resultList);
+                    }
+                }
+            }
         }
     }
 
