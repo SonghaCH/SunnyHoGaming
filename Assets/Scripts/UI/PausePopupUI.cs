@@ -23,7 +23,7 @@ public class PausePopupUI : UIBase
     private void Onclick_Setting()
     {
         UIManager.Instance.ClosePausePopupUI();
-        //UIManager.Instance.OpenSettingPopupUI();
+        UIManager.Instance.OpenSettingPopupUI();
     }
     private void Onclick_Exit()
     {

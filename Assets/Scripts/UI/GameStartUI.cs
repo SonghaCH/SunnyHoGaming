@@ -27,7 +27,7 @@ public class GameStartUI : UIBase
 
     private void OnClick_Setting()
     {
-        UIManager.Instance.OpenMainUI();
+        UIManager.Instance.OpenSettingPopupUI();
         Debug.Log("세팅 버튼~");
     }
    
