@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class MainUI : UIBase
 {
-    [SerializeField] private TextMeshProUGUI Text_QuestName;
-    [SerializeField] private TextMeshProUGUI Text_Description;
+    [Header("Main Quest UI")]
+    [SerializeField] private TextMeshProUGUI Text_MainQuestTitle; 
+    [SerializeField] private TextMeshProUGUI Text_MainQuestName;  
 
+    [Header("Daily Quest UI")]
+    [SerializeField] private TextMeshProUGUI Text_DailyQuestTitle; 
+    [SerializeField] private TextMeshProUGUI Text_DailyQuestName;  
+
+    [Header("Key Guide UI")]
     [SerializeField] private GameObject Icon_MapKeyGuide;
 
     private TimeViewModel _timeViewModel;
@@ -22,6 +28,11 @@ public class MainUI : UIBase
             }
         }
 
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.OnQuestUpdated += RefreshQuestUI;
+        }
+
         RefreshQuestUI();
         RefreshKeyGuideIcons();
     }
@@ -31,6 +42,11 @@ public class MainUI : UIBase
         if (_timeViewModel != null)
         {
             _timeViewModel.PropertyChanged -= OnTimeViewModelPropertyChanged;
+        }
+
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.OnQuestUpdated -= RefreshQuestUI;
         }
     }
 
@@ -49,21 +65,68 @@ public class MainUI : UIBase
 
     public void RefreshQuestUI()
     {
+        if (QuestManager.Instance == null) return;
+
         int currentDay = GetCurrentDay();
 
-        string dynamicQuestId = $"Quest_Day{currentDay}_001";
-        QuestData questData = GameDataManager.Instance.GetQuestData(dynamicQuestId);
-
-        if (questData != null)
+        
+        QuestData mainQuest = QuestManager.Instance.activeQuests.Find(q => q.Type == "Main");
+        if (mainQuest != null)
         {
-            if (Text_QuestName != null) Text_QuestName.text = questData.Title;
-            if (Text_Description != null) Text_Description.text = questData.Description;
+            bool isCompleted = IsQuestAllCompleted(mainQuest);
+
+            string titleText = $"{mainQuest.QuestName}:";
+            string nameText = mainQuest.Title;
+
+            if (isCompleted)
+            {
+                titleText = $"<s>{titleText}</s>";
+                nameText = $"<s>{nameText}</s>";
+            }
+
+            if (Text_MainQuestTitle != null) Text_MainQuestTitle.text = titleText;
+            if (Text_MainQuestName != null) Text_MainQuestName.text = nameText;
         }
         else
         {
-            if (Text_QuestName != null) Text_QuestName.text = "진행 중인 메인 퀘스트가 없습니다.";
-            if (Text_Description != null) Text_Description.text = string.Empty;
+            if (Text_MainQuestTitle != null) Text_MainQuestTitle.text = string.Empty;
+            if (Text_MainQuestName != null) Text_MainQuestName.text = string.Empty;
         }
+
+       
+        QuestData dailyQuest = QuestManager.Instance.activeQuests.Find(q => q.Type == "DayQuest" && q.UnlockDay == currentDay);
+        if (dailyQuest != null)
+        {
+            bool isCompleted = IsQuestAllCompleted(dailyQuest);
+
+            string titleText = $"{dailyQuest.QuestName}:";
+            string nameText = dailyQuest.Title;
+
+            if (isCompleted)
+            {
+                titleText = $"<s>{titleText}</s>";
+                nameText = $"<s>{nameText}</s>";
+            }
+
+            if (Text_DailyQuestTitle != null) Text_DailyQuestTitle.text = titleText;
+            if (Text_DailyQuestName != null) Text_DailyQuestName.text = nameText;
+        }
+        else
+        {
+            if (Text_DailyQuestTitle != null) Text_DailyQuestTitle.text = string.Empty;
+            if (Text_DailyQuestName != null) Text_DailyQuestName.text = string.Empty;
+        }
+    }
+
+    private bool IsQuestAllCompleted(QuestData quest)
+    {
+        if (quest == null || quest.subTaskList == null || quest.subTaskList.Count == 0) return false;
+
+        foreach (var subTask in quest.subTaskList)
+        {
+            if (!subTask.isCompleted) return false;
+        }
+        return true;
     }
 
     public void RefreshKeyGuideIcons()
