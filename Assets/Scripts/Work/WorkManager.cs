@@ -31,7 +31,7 @@ public class WorkManager : MonoBehaviour
         AllWorkStations.AddRange(stations);
     }
 
-    public void AssignSpecificTask(FixerViewModel fixer, WorkStation targetStation, float workDuration)
+    public void AssignSpecificTask(FixerViewModel fixer, WorkStation targetStation, float baseWorkDuration)
     {
         if (targetStation.IsOccupied)
         {
@@ -44,13 +44,19 @@ public class WorkManager : MonoBehaviour
             CancelSpecificTask(fixer, fixer.TargetStation);
         }
 
-        ActiveManager.Instance.AssignFixerToTask(targetStation.TaskType, fixer.InstanceId);
+        float efficiency = fixer.GetWorkEfficiency(targetStation.StationWorkType);
+        if (efficiency <= 0f) efficiency = 100f;
+
+        float efficiencyMultiplier = efficiency / 100f;
+        float actualDuration = baseWorkDuration / efficiencyMultiplier;
+
+        ActiveManager.Instance.AssignFixerToTask(targetStation.TaskType, fixer.InstanceId, actualDuration);
 
         fixer.TargetStation = targetStation;
-        targetStation.AssignTaskToFixer(fixer);
+        targetStation.AssignTaskToFixer(fixer, actualDuration);
         targetStation.LockStation();
 
-        _pendingOrders[fixer] = new WorkOrder { Station = targetStation, Duration = workDuration };
+        _pendingOrders[fixer] = new WorkOrder { Station = targetStation, Duration = actualDuration };
 
         fixer.OnArrivedAtWorkStation -= OnFixerArrived;
         fixer.OnArrivedAtWorkStation += OnFixerArrived;
@@ -88,15 +94,13 @@ public class WorkManager : MonoBehaviour
             int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
             station.MarkWorkedCompleted(currentDay);
 
-            // [수정됨] 존재하지 않는 OnMiniGameResult 대신 픽서 전용 완료 처리 호출
-            // ActiveManager는 string 형식의 fixerId를 원하므로 DataId를 전달
             ActiveManager.Instance.OnFixerWorkCompleted(station.TaskType, fixer.DataId);
 
             Debug.Log($"[{fixer.gameObject.name}] {station.gameObject.name} 작업 완료! (1일 제한 적용)");
         }
         catch (OperationCanceledException)
         {
-            // 작업이 중간에 취소(Cancel)된 경우 예외 무시
+
         }
         finally
         {

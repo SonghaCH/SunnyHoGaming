@@ -347,7 +347,7 @@ public class ActiveManager : MonoBehaviour
     // 픽서 구간
 
     // 픽서에게 작업 배정 (해금 날짜 및 오늘 완료 여부 검사)
-    public void AssignFixerToTask(ActiveTaskType taskType, int fixerId)
+    public void AssignFixerToTask(ActiveTaskType taskType, int fixerId, float actualTimeTaken)
     {
         // 해금 날짜 조건 검사 (3/4일차 해금 파밍 등 차단)
         if (!IsTaskUnlocked(taskType))
@@ -363,21 +363,10 @@ public class ActiveManager : MonoBehaviour
             Debug.LogWarning($"오늘 이미 완료된 작업([{taskType}])에는 픽서를 배정할 수 없습니다.");
             return;
         }
-        
+
         if (!_assignmentDict.ContainsKey(taskType))
         {
             _assignmentDict[taskType] = new ActiveAssignment();
-        }
-
-        float totalTime = 5;
-        string activeDataId = GetActiveDataId(taskType);
-        if (GameDataManager.Instance != null)
-        {
-            ActiveData activeData = GameDataManager.Instance.GetActiveData(activeDataId);
-            if (activeData != null)
-            {
-                totalTime = activeData.TimeTaken;
-            }
         }
 
         ActiveAssignment assignment = _assignmentDict[taskType];
@@ -385,12 +374,13 @@ public class ActiveManager : MonoBehaviour
         assignment.FixerID = fixerId;
         assignment.IsWorking = true;
         assignment.CurrentWorkTime = 0f;
-        assignment.TotalTimeTaken = totalTime;
 
-        Debug.Log($"픽서({fixerId})가 [{taskType}] 작업장에 배정되었습니다. (소요 시간: {totalTime})");
+        assignment.TotalTimeTaken = actualTimeTaken;
+
+        Debug.Log($"픽서({fixerId})가 [{taskType}] 작업장에 배정되었습니다. (효율이 적용된 소요 시간: {actualTimeTaken}초)");
     }
 
-    
+
 
     public float GetFixerWorkProgressRatio(ActiveTaskType taskType)
     {

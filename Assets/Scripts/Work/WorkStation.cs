@@ -93,9 +93,9 @@ public abstract class WorkStation : MonoBehaviour
         return false;
     }
 
-    public void AssignTaskToFixer(FixerViewModel fixerViewModel)
+    public void AssignTaskToFixer(FixerViewModel fixerViewModel, float workDuration)
     {
-        fixerViewModel.SetWorkTarget(this.transform.position, this.StationWorkType);
+        fixerViewModel.SetWorkTarget(this.transform.position, this.StationWorkType, workDuration);
         fixerViewModel.CurrentState = FixerState.MoveToTarget;
     }
 

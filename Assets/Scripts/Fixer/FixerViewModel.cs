@@ -189,12 +189,13 @@ public class FixerViewModel : MonoBehaviour
             default: return 1f;
         }
     }
-    public void SetWorkTarget(Vector3 targetPosition, WorkType taskType)
+    public void SetWorkTarget(Vector3 targetPosition, WorkType taskType, float workDuration)
     {
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
             _behaviorGraphAgent.BlackboardReference.SetVariableValue("WorkTargetPosition", targetPosition);
             _behaviorGraphAgent.BlackboardReference.SetVariableValue("CurrentTaskType", (int)taskType);
+            _behaviorGraphAgent.BlackboardReference.SetVariableValue("WorkDuration", workDuration);
         }
 
         CurrentState = FixerState.MoveToTarget;
