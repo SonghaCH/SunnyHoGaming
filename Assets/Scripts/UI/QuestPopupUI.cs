@@ -155,5 +155,14 @@ public class QuestPopupUI : UIBase
                 }
             }
         }
+
+        foreach (var tabSlot in _spawnedTabSlots)
+        {
+            if (tabSlot != null)
+            {
+                tabSlot.UpdateCompletionStatus();
+            }
+        }
     }
+
 }

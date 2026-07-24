@@ -6,6 +6,7 @@ public class QuestTabSlotUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI dayText;
     [SerializeField] private Button button;
+    [SerializeField] private GameObject completeMark;
 
     private QuestData _targetQuest;
     private QuestPopupUI _parentPopup;
@@ -18,7 +19,6 @@ public class QuestTabSlotUI : MonoBehaviour
 
         if (dayText != null)
         {
-            // 🌟 [수정] Title 대신 QuestName을 바인딩하여 "메인 퀘스트", "1일차 퀘스트" 등이 출력되도록 변경
             dayText.text = quest.QuestName;
         }
 
@@ -27,6 +27,32 @@ public class QuestTabSlotUI : MonoBehaviour
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(OnClickSlot);
         }
+
+        UpdateCompletionStatus();
+    }
+
+    public void UpdateCompletionStatus()
+    {
+        if (_targetQuest == null) return;
+
+        bool isAllCompleted = IsQuestAllCompleted(_targetQuest);
+
+        if (completeMark != null)
+        {
+            completeMark.SetActive(isAllCompleted);
+        }
+    }
+
+    private bool IsQuestAllCompleted(QuestData quest)
+    {
+        if (quest.subTaskList == null || quest.subTaskList.Count == 0) return false;
+
+        foreach (var subTask in quest.subTaskList)
+        {
+            if (!subTask.isCompleted) return false; 
+        }
+
+        return true; 
     }
 
     private void OnClickSlot()

@@ -98,6 +98,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void CloseAllPopups(UIType exceptUIType = UIType.GameStartUI)
+    {
+        List<UIType> openedPopups = new List<UIType>(_openedPopupStack);
+
+        foreach (var popupType in openedPopups)
+        {
+            // 예외로 남겨둘 팝업(예: 일시정지, 예외 지정 팝업 등)이 아니면 전부 닫음
+            if (popupType != exceptUIType && popupType != UIType.PausePopupUI)
+            {
+                CloseUI(UIRootType.PopupUI, popupType);
+            }
+        }
+    }
 
     private void RemovePopupFromStack(UIType uiType)
     {
@@ -118,6 +131,11 @@ public class UIManager : MonoBehaviour
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
     {
+        if (uiRootType == UIRootType.PopupUI && uiType != UIType.PausePopupUI)
+        {
+            CloseAllPopups(uiType);
+        }
+
         var openedUI = GetCreatedUI(uiRootType, uiType);
 
         bool isSetActiveOnOpen = (isInitialHide == false);
