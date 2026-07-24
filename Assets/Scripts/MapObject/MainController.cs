@@ -10,6 +10,7 @@ public class MainController : UIBase
     private Material[] _originalMaterials;
     private Material[] _outlineMaterials;
 
+
     private void Awake()
     {
         string FixerId = gameObject.name.Replace("(Clone)", "").Trim();
