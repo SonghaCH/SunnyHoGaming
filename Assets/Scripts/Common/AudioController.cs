@@ -8,6 +8,18 @@ public class AudioController : MonoBehaviour
 
     public static AudioController Instance { get; private set; }
 
+    public float BGMVolume
+    {
+        get { return _audioBGMSource.volume; }
+        set { _audioBGMSource.volume = value; }
+    }
+
+    public float SFXVolume
+    {
+        get { return _audioSFXSource.volume; }
+        set { _audioSFXSource.volume = value; }
+    }
+
     private CancellationTokenSource _bgmCts;
 
     private void Awake()
