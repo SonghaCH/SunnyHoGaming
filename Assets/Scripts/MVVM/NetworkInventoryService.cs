@@ -95,18 +95,13 @@ public class NetworkInventoryService
                 UseItemFunction(itemData.UseItemType);
             }
 
-            if (itemDataId == "Item_Note_01")
+            // 🌟 [수정] 소모성 아닌 아이템(노트, 폰, 지도) 사용 시 선택 상태를 깔끔히 해제 후 return
+            if (itemDataId == "Item_Note_01" || itemDataId == "Item_Phone_01" || itemDataId == "Item_Map_01")
             {
-                return true;
-            }
-
-            if (itemDataId == "Item_Phone_01")
-            {
-                return true;
-            }
-
-            if (itemDataId == "Item_Map_01")
-            {
+                if (invenVm.SelectedItem == itemSlotVm)
+                {
+                    invenVm.SelectItem(-1);
+                }
                 return true;
             }
 

@@ -48,6 +48,16 @@ public class UIManager : MonoBehaviour
 
     private void HandleInventoryInput()
     {
+        if (_openedPopupStack.Count > 0)
+        {
+            UIType topPopup = _openedPopupStack.Peek();
+
+            if (topPopup != UIType.InventoryPopupUI)
+            {
+                return; 
+            }
+        }
+
         if (_openedUIDic.Contains(UIType.InventoryPopupUI))
         {
             CloseUI(UIRootType.PopupUI, UIType.InventoryPopupUI);
@@ -60,7 +70,15 @@ public class UIManager : MonoBehaviour
 
     private void HandleQuestInput()
     {
-        ToggleUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+        if (_openedUIDic.Contains(UIType.QuestPopupUI))
+        {
+            CloseUI(UIRootType.PopupUI, UIType.QuestPopupUI);
+        }
+        else
+        {
+            CloseAllPopups(UIType.QuestPopupUI);
+            this.OpenQuestPopupUI();
+        }
     }
 
     private void HandleMapInput()
@@ -70,7 +88,16 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("[UIManager] 지도 아이템이 없어 지도 창을 열 수 없습니다.");
             return;
         }
-        ToggleUI(UIRootType.PopupUI, UIType.MapPopupUI);
+
+        if (_openedUIDic.Contains(UIType.MapPopupUI))
+        {
+            CloseUI(UIRootType.PopupUI, UIType.MapPopupUI);
+        }
+        else
+        {
+            CloseAllPopups(UIType.MapPopupUI);
+            this.OpenMapPopupUI();
+        }
     }
     private bool HasMapItem()
     {
@@ -110,15 +137,19 @@ public class UIManager : MonoBehaviour
         {
             UIType topPopup = _openedPopupStack.Peek();
 
-            CloseUI(UIRootType.PopupUI, topPopup);
-
-            if(topPopup == UIType.PausePopupUI)
+            if (topPopup == UIType.PausePopupUI)
             {
+                CloseUI(UIRootType.PopupUI, topPopup);
                 NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
+            }
+            else
+            {
+                CloseUI(UIRootType.PopupUI, topPopup);
             }
         }
         else
         {
+            CloseAllPopups();
             this.OpenPausePopupUI();
             NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
         }
@@ -130,11 +161,9 @@ public class UIManager : MonoBehaviour
 
         foreach (var popupType in openedPopups)
         {
-            // 예외로 남겨둘 팝업(예: 일시정지, 예외 지정 팝업 등)이 아니면 전부 닫음
-            if (popupType != exceptUIType && popupType != UIType.PausePopupUI)
-            {
-                CloseUI(UIRootType.PopupUI, popupType);
-            }
+            if (popupType == exceptUIType) continue;
+
+            CloseUI(UIRootType.PopupUI, popupType);
         }
     }
 
@@ -157,7 +186,7 @@ public class UIManager : MonoBehaviour
 
     public UIBase OpenUI(UIRootType uiRootType, UIType uiType, bool isInitialHide = false)
     {
-        if (uiRootType == UIRootType.PopupUI && uiType != UIType.PausePopupUI)
+        if (uiRootType == UIRootType.PopupUI)
         {
             CloseAllPopups(uiType);
         }
@@ -204,16 +233,19 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if(NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Playing)
+        if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Playing)
         {
             if (uiRootType == UIRootType.PopupUI)
             {
-                NetworkManager.Inst.PlayerService.SetCanMove(true);
+                if (_openedPopupStack.Count == 0)
+                {
+                    NetworkManager.Inst.PlayerService.SetCanMove(true);
+                }
             }
         }
     }
 
-    
+
     private Transform GetRootTransform(UIRootType uiRootType)
     {
         Transform root = null;

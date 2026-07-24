@@ -76,6 +76,7 @@ public class PlayerService
     {
         if (_movementViewModel != null)
         {
+            if (_movementViewModel.CanMove == canMove) return;
             _movementViewModel.CanMove = canMove;
 
             if (canMove)
