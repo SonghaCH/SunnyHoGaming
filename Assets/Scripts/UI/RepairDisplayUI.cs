@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RepairDisplayUI : MonoBehaviour
+public class RepairDisplayUI : UIBase
 {
     [System.Serializable]
     public struct GaugeUIGroup
@@ -49,7 +49,6 @@ public class RepairDisplayUI : MonoBehaviour
             ActiveManager.Instance.OnActiveDataChanged -= RefreshGauges;
         }
     }
-
 
     private void InitGroup(GaugeUIGroup group, string defaultName)
     {

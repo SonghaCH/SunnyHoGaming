@@ -96,6 +96,10 @@ public class ActiveManager : MonoBehaviour
         {
             HandleNewDay();
         }
+        else if (e.PropertyName == nameof(TimeViewModel.CurrentHour))
+        {
+            OnHourPassed();
+        }
     }
 
     private void InitializeData()
