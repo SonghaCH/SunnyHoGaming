@@ -65,7 +65,33 @@ public class UIManager : MonoBehaviour
 
     private void HandleMapInput()
     {
+        if (HasMapItem() == false)
+        {
+            Debug.LogWarning("[UIManager] 지도 아이템이 없어 지도 창을 열 수 없습니다.");
+            return;
+        }
         ToggleUI(UIRootType.PopupUI, UIType.MapPopupUI);
+    }
+    private bool HasMapItem()
+    {
+        if (NetworkManager.Inst == null || NetworkManager.Inst.InventoryService == null)
+            return false;
+
+        var inventoryVM = NetworkManager.Inst.InventoryService.GetLocalInventoryViewModel();
+        if (inventoryVM == null || inventoryVM.ItemList == null)
+            return false;
+
+        string targetItemId = "Item_Map_01";
+
+        foreach (var slotVm in inventoryVM.ItemList.Values)
+        {
+            if (slotVm != null && slotVm.ItemDataId == targetItemId && slotVm.ItemStackCount > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     public void ToggleUI(UIRootType rootType, UIType uiType)
     {
