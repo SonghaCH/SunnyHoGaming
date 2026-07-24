@@ -4,7 +4,6 @@ using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Fixer_Wandering", story: "[Self] wander within [Radius] at spped of [Speed]", category: "Action/Fixer", id: "fixer-wander-radius-action")]
@@ -13,6 +12,8 @@ public partial class Fixer_WanderAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Self;
     [SerializeReference] public BlackboardVariable<float> Radius;
     [SerializeReference] public BlackboardVariable<float> Speed;
+
+    [SerializeReference] public BlackboardVariable<float> MinWallDistance = new BlackboardVariable<float>(0.6f);
 
     private NavMeshAgent _navMeshAgent;
     private float _currentWanderTime;
@@ -27,18 +28,22 @@ public partial class Fixer_WanderAction : Action
 
         if (Self.Value.TryGetComponent(out FixerViewModel viewModel))
         {
-            viewModel.ChangeStateFromBrain(FixerState.Wandering, true);
+            viewModel.ChangeStateFromBrain(FixerState.Wandering);
         }
 
         if (Speed != null) _navMeshAgent.speed = Speed.Value;
 
-        Vector3 rawTargetPosition = Self.Value.transform.position + (Random.insideUnitSphere * Radius.Value);
-        if (NavMesh.SamplePosition(rawTargetPosition, out NavMeshHit hit, Radius.Value, NavMesh.AllAreas))
+        if (FixerNavmeshUtil.TryGetSafeRandomPoint(
+                Self.Value.transform.position,
+                Radius.Value,
+                MinWallDistance.Value,
+                out Vector3 safePoint))
         {
-            _navMeshAgent.SetDestination(hit.position);
+            _navMeshAgent.SetDestination(safePoint);
             _currentWanderTime = Time.time;
             return Status.Running;
         }
+
         return Status.Failure;
     }
 

@@ -11,6 +11,7 @@ public abstract class WorkStation : MonoBehaviour
     public float MaxGauge { get; protected set; }
     public float CurrentGauge { get; protected set; }
     public bool IsOccupied { get; private set; }
+    public float TaskProgress { get; private set; } = 0f;
 
     public float CurrentProgress
     {
@@ -93,9 +94,9 @@ public abstract class WorkStation : MonoBehaviour
         return false;
     }
 
-    public void AssignTaskToFixer(FixerViewModel fixerViewModel)
+    public void AssignTaskToFixer(FixerViewModel fixerViewModel, float workDuration)
     {
-        fixerViewModel.SetWorkTarget(this.transform.position, this.StationWorkType);
+        fixerViewModel.SetWorkTarget(this.transform.position, this.StationWorkType, workDuration);
         fixerViewModel.CurrentState = FixerState.MoveToTarget;
     }
 
@@ -112,6 +113,11 @@ public abstract class WorkStation : MonoBehaviour
     public bool IsWorkCompletedToday(int currentDay)
     {
         return _lastWorkedDay == currentDay || (MaxGauge > 0 && CurrentGauge >= MaxGauge);
+    }
+
+    public void SetTaskProgress(float progress)
+    {
+        TaskProgress = progress;
     }
 
     public void LockStation() { IsOccupied = true; }

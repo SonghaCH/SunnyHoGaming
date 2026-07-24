@@ -27,6 +27,7 @@ public class ActiveData : GameDataBase
     public string Name;
     public int UnlockDate;
     public float TimeTaken;
+    public string ItemId;
     public int ResourcesCost;
     public int TimeToConsume;
     public string TexturePath;

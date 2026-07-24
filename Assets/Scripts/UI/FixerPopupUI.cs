@@ -14,12 +14,28 @@ public class FixerPopupUI : UIBase
     [SerializeField] private UIButton Btn_Close;
     [SerializeField] private UIButton Btn_Order;
 
+    private bool _isTransitioning;
     private FixerViewModel _targetFixer;
 
     private void OnEnable()
     {
+        _isTransitioning = false;
         Btn_Close.BindOnClickButtonEvent(Onclick_Close);
         Btn_Order.BindOnClickButtonEvent(Onclick_Order);
+    }
+
+    private void OnDisable()
+    {
+        if (_targetFixer != null)
+        {
+            _targetFixer.FreezeMovement(false);
+
+            if (_isTransitioning == false)
+            {
+                var detector = _targetFixer.GetComponentInChildren<FixerPlayerDetector>();
+                detector?.RestoreControl();
+            }
+        }
     }
 
     public void SetFixerInfo(FixerViewModel fixerViewModel)
@@ -35,20 +51,12 @@ public class FixerPopupUI : UIBase
 
     private void Onclick_Close()
     {
-        if (_targetFixer != null)
-        {
-            _targetFixer.FreezeMovement(false);
-        }
-
         UIManager.Instance.CloseFixerPopupUI();
     }
 
     private void Onclick_Order()
     {
-        if (_targetFixer != null)
-        {
-            _targetFixer.FreezeMovement(false);
-        }
+        _isTransitioning = true;
         UIManager.Instance.CloseFixerPopupUI();
         UIManager.Instance.OpenWorkPopupUI(_targetFixer);
     }

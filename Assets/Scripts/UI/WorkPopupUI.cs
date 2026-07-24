@@ -30,6 +30,16 @@ public class WorkPopupUI : UIBase
         {
             WorkManager.Instance.OnWorkStateChanged -= RefreshWorkList;
         }
+
+        if (_currentSelectedFixer != null)
+        {
+            _currentSelectedFixer.FreezeMovement(false);
+
+            var detector = _currentSelectedFixer.GetComponentInChildren<FixerPlayerDetector>();
+            detector?.RestoreControl();
+
+            _currentSelectedFixer = null; 
+        }
     }
 
     public void SetFixerInfo(FixerViewModel fixer)
@@ -46,11 +56,6 @@ public class WorkPopupUI : UIBase
 
     public void ClosePopup()
     {
-        if (_currentSelectedFixer != null)
-        {
-            _currentSelectedFixer.FreezeMovement(false);
-        }
-
         UIManager.Instance.CloseWorkPopupUI();
     }
 

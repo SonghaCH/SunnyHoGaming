@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.UI; 
 
-public class WorkSlotUI : MonoBehaviour
+public class WorkSlotUI : UIBase
 {
     [Header("Buttons")]
     [SerializeField] private UIButton _btnSelectWork;
@@ -11,6 +12,10 @@ public class WorkSlotUI : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI _txtWorkName;
     [SerializeField] private TextMeshProUGUI _txtAssignedFixer;
+
+    [Header("Progress UI")]
+    [SerializeField] private GameObject _progressGroup;       
+    [SerializeField] private Slider _progressSlider;          
 
     private WorkStation _currentStation;
     private Action<WorkStation> _onSelectCallback;
@@ -39,7 +44,7 @@ public class WorkSlotUI : MonoBehaviour
             else
             {
                 _txtAssignedFixer.text = "";
-                _txtAssignedFixer.gameObject.SetActive(false); 
+                _txtAssignedFixer.gameObject.SetActive(false);
             }
         }
 
@@ -47,6 +52,16 @@ public class WorkSlotUI : MonoBehaviour
         if (_btnCancelWork != null) _btnCancelWork.BindOnClickButtonEvent(OnClickCancel);
 
         RefreshButtonState();
+    }
+
+    private void Update()
+    {
+        if (_isWorking && _currentStation != null)
+        {
+            float currentProgress = _currentStation.TaskProgress;
+
+            if (_progressSlider != null) _progressSlider.value = currentProgress;
+        }
     }
 
     private void OnClickSelect() { _onSelectCallback?.Invoke(_currentStation); }
@@ -58,11 +73,14 @@ public class WorkSlotUI : MonoBehaviour
         {
             if (_btnSelectWork != null) _btnSelectWork.gameObject.SetActive(false);
             if (_btnCancelWork != null) _btnCancelWork.gameObject.SetActive(false);
+            if (_progressGroup != null) _progressGroup.SetActive(false); // 완료 시 숨김
         }
         else
         {
             if (_btnSelectWork != null) _btnSelectWork.gameObject.SetActive(!_isWorking);
             if (_btnCancelWork != null) _btnCancelWork.gameObject.SetActive(_isWorking);
+
+            if (_progressGroup != null) _progressGroup.SetActive(_isWorking);
         }
     }
 }

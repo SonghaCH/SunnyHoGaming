@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(FixerViewModel))]
@@ -9,16 +9,18 @@ public class FixerInteractController : MonoBehaviour
 
     private FixerViewModel _viewModel;
     private ObjectData _data;
+    private FixerPlayerDetector _playerDetector;
 
     private float _lastInteractTime = 0f;
 
     private void Awake()
     {
         _viewModel = GetComponent<FixerViewModel>();
+        _playerDetector = GetComponentInChildren<FixerPlayerDetector>(); // 감지 콜라이더가 자식 오브젝트에 있는 경우까지 커버
 
         string fixerId = gameObject.name.Replace("(Clone)", "").Trim();
         _data = GameDataManager.Instance.GetObjectData(fixerId);
-        if ( _data == null )
+        if (_data == null)
         {
             Debug.LogError($"[FixerInteractControlle] 오브젝트가 할당되지 않았습니다.");
         }
@@ -69,6 +71,7 @@ public class FixerInteractController : MonoBehaviour
     {
         if (Time.time - _lastInteractTime < 0.2f) return;
         _lastInteractTime = Time.time;
+
         if (_viewModel.CurrentState == FixerState.Rampaging)
         {
             _viewModel.CurrentState = FixerState.Returning;
