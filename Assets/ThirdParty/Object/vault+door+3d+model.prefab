@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2397234237870490943}
   - component: {fileID: 477479002533802485}
   - component: {fileID: 6366387331824788125}
-  - component: {fileID: 785518655322002627}
   m_Layer: 0
   m_Name: vault+door+3d+model
   m_TagString: Untagged
@@ -111,21 +110,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.9296875, y: 3.9921875, z: 1.382813}
-  m_Center: {x: 0, y: 1.9960938, z: 0}
---- !u!114 &785518655322002627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134887571037327392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b90a8caf71283f240a39b7eda4584f4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FarmingStation
-  ActiveDataId: active_05
-  StationWorkType: 5
-  TaskType: 4
-  RewardItemId: Item_Resources_01
+  m_Size: {x: 3.9296875, y: 2.1246538, z: 1.382813}
+  m_Center: {x: 0, y: 2.9298606, z: 0}

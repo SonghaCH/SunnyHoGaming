@@ -11,6 +11,7 @@ public abstract class WorkStation : MonoBehaviour
     public float MaxGauge { get; protected set; }
     public float CurrentGauge { get; protected set; }
     public bool IsOccupied { get; private set; }
+    public float TaskProgress { get; private set; } = 0f;
 
     public float CurrentProgress
     {
@@ -112,6 +113,11 @@ public abstract class WorkStation : MonoBehaviour
     public bool IsWorkCompletedToday(int currentDay)
     {
         return _lastWorkedDay == currentDay || (MaxGauge > 0 && CurrentGauge >= MaxGauge);
+    }
+
+    public void SetTaskProgress(float progress)
+    {
+        TaskProgress = progress;
     }
 
     public void LockStation() { IsOccupied = true; }

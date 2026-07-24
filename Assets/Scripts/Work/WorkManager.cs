@@ -25,6 +25,27 @@ public class WorkManager : MonoBehaviour
         else Instance = this;
     }
 
+    private void Start()
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        {
+            var timeVM = NetworkManager.Inst.TimeService.GetViewModel();
+            timeVM.PropertyChanged += OnTimePropertyChanged;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        {
+            var timeVM = NetworkManager.Inst.TimeService.GetViewModel();
+            if (timeVM != null)
+            {
+                timeVM.PropertyChanged -= OnTimePropertyChanged;
+            }
+        }
+    }
+
     public void RegisterWorkStations(WorkStation[] stations)
     {
         AllWorkStations.Clear();
@@ -86,7 +107,18 @@ public class WorkManager : MonoBehaviour
             float repairPower = fixer.GetWorkEfficiency(station.StationWorkType);
             if (repairPower <= 0f) repairPower = 1f;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(workDuration), cancellationToken: cts.Token);
+            station.SetTaskProgress(0f);
+            float elapsed = 0f;
+
+            Debug.Log($"[{fixer.gameObject.name}] 도착 완료! 작업 시작 (총 소요 시간: {workDuration}초)");
+
+            while (elapsed < workDuration)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, cts.Token);
+                elapsed += Time.deltaTime;
+                station.SetTaskProgress(Mathf.Clamp01(elapsed / workDuration));
+            }
+            station.SetTaskProgress(1f);
 
             float totalWorkPower = repairPower * (workDuration / 1.5f);
             station.ApplyWork(totalWorkPower);
@@ -100,10 +132,11 @@ public class WorkManager : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-
         }
         finally
         {
+            station.SetTaskProgress(0f);
+
             ActiveManager.Instance.CancelFixerTask(station.TaskType);
             station.UnlockStation();
 
@@ -150,6 +183,16 @@ public class WorkManager : MonoBehaviour
                 CancelSpecificTask(fixer, station);
                 Debug.Log($"작업장({station.gameObject.name})의 픽서({fixerId}) 강제 작업 취소 및 복귀 처리 완료.");
             }
+        }
+    }
+
+    private async void OnTimePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
+        {
+            await UniTask.NextFrame();
+
+            OnWorkStateChanged?.Invoke();
         }
     }
 }
