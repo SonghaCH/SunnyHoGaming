@@ -33,11 +33,8 @@ public enum UIType
     PausePopupUI,
     QuestPopupUI,
     MapPopupUI,
-<<<<<<< HEAD
-    DoorPopupUI
-=======
+    DoorPopupUI,
     RepairDisplayUI
->>>>>>> dev_MJ_MiniGameV9
 
 }
 
@@ -365,15 +362,18 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.PopupUI, UIType.QuestPopupUI);
     }
 
-<<<<<<< HEAD
     public static void OpenDoorPopupUI(this UIManager uiManager)
     {
         var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.DoorPopupUI);
-=======
+    }
+    public static void CloseDoorPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.DoorPopupUI);
+    }
+
     public static void OpenRepairDisplayUI(this UIManager uiManager)
     {
         var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.RepairDisplayUI);
->>>>>>> dev_MJ_MiniGameV9
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
@@ -381,15 +381,9 @@ public static class UIManagerExtension
         }
     }
 
-<<<<<<< HEAD
-    public static void CloseDoorPopupUI(this UIManager uiManager)
-    {
-        uiManager.CloseUI(UIRootType.PopupUI, UIType.DoorPopupUI);
-=======
     public static void CloseRepairDisplayUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.RepairDisplayUI);
->>>>>>> dev_MJ_MiniGameV9
     }
 }
 
