@@ -48,5 +48,10 @@
     "Id": "bad_01",
     "Name": "침대",
     "PopupType": null
+  },
+  {
+    "Id": "System_Control_01",
+    "Name": "관제 시스템",
+    "PopupType": "RepairDisplayUI"
   }
 ]
