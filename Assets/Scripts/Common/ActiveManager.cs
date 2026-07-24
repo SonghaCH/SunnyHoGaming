@@ -414,7 +414,50 @@ public class ActiveManager : MonoBehaviour
         else
         {
 
-            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 ➔ 정산 팝업 호출됨");
+            Debug.Log($"픽서({fixerId}) [{taskType}] 업무 완료 ➔ 정산 및 아이템 지급 처리");
+
+            string dataId = GetActiveDataId(taskType);
+            if (GameDataManager.Instance != null)
+            {
+                ActiveData activeData = GameDataManager.Instance.GetActiveData(dataId);
+
+                if (activeData != null && !string.IsNullOrEmpty(activeData.ItemId))
+                {
+                    string[] possibleItems = activeData.ItemId.Split(',');
+
+                    List<ItemSlotViewModel> resultList = new List<ItemSlotViewModel>();
+
+                    if (taskType == ActiveTaskType.Farming)
+                    {
+                        foreach (string itemStr in possibleItems)
+                        {
+                            string selectedItem = itemStr.Trim();
+                            int rewardAmount = UnityEngine.Random.Range(100, 131); 
+
+                            NetworkManager.Inst.InventoryService?.AddItem(selectedItem, rewardAmount);
+
+                            resultList.Add(new ItemSlotViewModel { ItemDataId = selectedItem, ItemStackCount = rewardAmount });
+                        }
+                    }
+                    else if (taskType == ActiveTaskType.FoodSupply)
+                    {
+                        string selectedItem = possibleItems[0].Trim();
+                        int rewardAmount = 2;
+
+                        NetworkManager.Inst.InventoryService?.AddItem(selectedItem, rewardAmount);
+
+                        resultList.Add(new ItemSlotViewModel { ItemDataId = selectedItem, ItemStackCount = rewardAmount });
+                    }
+
+                    var popupUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.JobcompletedPopupUI) as JobcompletedPopupUI;
+                    if (popupUI != null)
+                    {
+                        string taskNameStr = taskType == ActiveTaskType.Farming ? "자원 파밍" : "음식 보급";
+
+                        popupUI.SetResultData(taskNameStr, resultList);
+                    }
+                }
+            }
         }
     }
 
