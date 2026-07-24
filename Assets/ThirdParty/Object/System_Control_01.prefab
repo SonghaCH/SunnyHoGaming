@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2431564730004775671}
   - component: {fileID: 6529615268171442280}
   - component: {fileID: 4213484267144752140}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: System_Control_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,8 @@ GameObject:
   - component: {fileID: 8808575897046298464}
   - component: {fileID: 1156933586474172306}
   - component: {fileID: 2029109645736833443}
-  m_Layer: 0
+  - component: {fileID: 2252014764956436659}
+  m_Layer: 7
   m_Name: System_Control_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,3 +183,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8616029, y: 0.57843035, z: 0.97882104}
   m_Center: {x: 0, y: 0, z: 0.48941052}
+--- !u!114 &2252014764956436659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7073474687484634698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
