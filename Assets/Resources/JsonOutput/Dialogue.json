@@ -67,76 +67,211 @@
   {
     "Id": "Dialogue_Day2_002",
     "Description": "그저 창고라고 생각했는데 ",
-    "NextId": null
+    "NextId": "Dialogue_Day2_003"
   },
   {
     "Id": "Dialogue_Day2_003",
-    "Description": null,
-    "NextId": null
+    "Description": "이런 공간들이 있을줄이야",
+    "NextId": "Dialogue_Day2_004"
   },
   {
     "Id": "Dialogue_Day2_004",
-    "Description": null,
+    "Description": "서둘러 해금방으로 가보자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day2_005",
+    "Description": "비밀번호? ",
+    "NextId": "Dialogue_Day2_006"
+  },
+  {
+    "Id": "Dialogue_Day2_006",
+    "Description": "분명 어디선가 단서가 있을 것이다",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day2_007",
+    "Description": "이 친구들이 기능 수리를 할 수 있다니",
+    "NextId": "Dialogue_Day2_008"
+  },
+  {
+    "Id": "Dialogue_Day2_008",
+    "Description": "생존에 더 도움이 되겠어",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day3_001",
-    "Description": "이녀석은 유용하게 쓸 수 있겠군",
+    "Description": "마침 수리할 수 있는 재료들도 부족했는데",
     "NextId": null
   },
   {
-    "Id": null,
-    "Description": null,
-    "NextId": null
+    "Id": "Dialogue_Day3_002",
+    "Description": "정말 다행이야. 새로운 재료 수급 루트가 생겼어",
+    "NextId": "Dialogue_Day3_002"
   },
   {
-    "Id": null,
-    "Description": null,
-    "NextId": null
-  },
-  {
-    "Id": null,
-    "Description": null,
+    "Id": "Dialogue_Day3_003",
+    "Description": "오늘도 효율적인 스케줄링을 해보자",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day4_001",
-    "Description": "앞으로 잘 부탁한다.",
-    "NextId": null
+    "Description": "식당 붕괴로 인해 밥은 못먹게 될줄 알았는데",
+    "NextId": "Dialogue_Day4_002"
   },
   {
-    "Id": null,
-    "Description": null,
-    "NextId": null
+    "Id": "Dialogue_Day4_002",
+    "Description": "한 시름 덜겠군",
+    "NextId": "Dialogue_Day4_003"
   },
   {
-    "Id": null,
-    "Description": null,
-    "NextId": null
+    "Id": "Dialogue_Day4_003",
+    "Description": "픽서 너가 없었다면 난 진작에 죽었을거야",
+    "NextId": "Dialogue_Day4_004"
   },
   {
-    "Id": null,
-    "Description": null,
+    "Id": "Dialogue_Day4_004",
+    "Description": "오늘도 함께 생존하자 얘들아",
     "NextId": null
   },
   {
     "Id": "Dialogue_Day5_001",
-    "Description": "Fixer? 이번엔 뭘 가져온거지?",
+    "Description": "위성 전화기를 찾아오다니",
     "NextId": "Dialogue_Day5_002"
   },
   {
     "Id": "Dialogue_Day5_002",
-    "Description": "이건... '위성전화기'?! 도대체 이걸 어디서 찾아온 거지?",
+    "Description": "덕분에 지구에 구조 요청을 할 수 있겠어",
     "NextId": "Dialogue_Day5_003"
   },
   {
     "Id": "Dialogue_Day5_003",
-    "Description": "당장 신호를 보내보자",
+    "Description": "그런데 뭔가를 입력해야 하는데",
     "NextId": "Dialogue_Day5_004"
   },
   {
     "Id": "Dialogue_Day5_004",
-    "Description": "치지직…치직…여기는..치지 지구본부..생존자 있습니까?",
+    "Description": "단서를 찾아보자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day5_005",
+    "Description": "…ㅇ..여..ㅇㅇ",
+    "NextId": "Dialogue_Day5_006"
+  },
+  {
+    "Id": "Dialogue_Day5_006",
+    "Description": "….ㅕ.. 기느 …",
+    "NextId": "Dialogue_Day5_007"
+  },
+  {
+    "Id": "Dialogue_Day5_007",
+    "Description": "??: 여기는 알파 알파 응답하라 써니호",
+    "NextId": "Dialogue_Day5_008"
+  },
+  {
+    "Id": "Dialogue_Day5_008",
+    "Description": "여기는 써니호 현재 긴급 상황이다",
+    "NextId": "Dialogue_Day5_009"
+  },
+  {
+    "Id": "Dialogue_Day5_009",
+    "Description": "??: 현황 보고 바랍니다",
+    "NextId": "Dialogue_Day5_010"
+  },
+  {
+    "Id": "Dialogue_Day5_010",
+    "Description": "네 현재 소행성 충돌로 인한",
+    "NextId": "Dialogue_Day5_011"
+  },
+  {
+    "Id": "Dialogue_Day5_011",
+    "Description": "저를 제외한 모든 인원이 사망하였고,",
+    "NextId": "Dialogue_Day5_012"
+  },
+  {
+    "Id": "Dialogue_Day5_012",
+    "Description": "현재 탐사선 또한 핵심 기능들의 손상으로",
+    "NextId": "Dialogue_Day5_013"
+  },
+  {
+    "Id": "Dialogue_Day5_013",
+    "Description": "위기에 처했습니다",
+    "NextId": "Dialogue_Day5_014"
+  },
+  {
+    "Id": "Dialogue_Day5_014",
+    "Description": "구조 요청 바랍니다",
+    "NextId": "Dialogue_Day5_015"
+  },
+  {
+    "Id": "Dialogue_Day5_015",
+    "Description": "??: 상황 접수 받았고, 구조대 보내겠습니다",
+    "NextId": "Dialogue_Day5_016"
+  },
+  {
+    "Id": "Dialogue_Day5_016",
+    "Description": "??: 그때까지 부디 생존하여 주십시오",
+    "NextId": "Dialogue_Day5_017"
+  },
+  {
+    "Id": "Dialogue_Day5_017",
+    "Description": "혹시 시간은 얼마나 걸릴까요?",
+    "NextId": "Dialogue_Day5_018"
+  },
+  {
+    "Id": "Dialogue_Day5_018",
+    "Description": "??: 30시간부터 최대 60시간까지 걸릴듯 합니다",
+    "NextId": "Dialogue_Day5_019"
+  },
+  {
+    "Id": "Dialogue_Day5_019",
+    "Description": "알겠습니다. 응답 감사합니다",
+    "NextId": "Dialogue_Day5_020"
+  },
+  {
+    "Id": "Dialogue_Day5_020",
+    "Description": "지구와 연락 할 수 있어 정말 다행이다",
+    "NextId": "Dialogue_Day5_021"
+  },
+  {
+    "Id": "Dialogue_Day5_021",
+    "Description": "조금만 기다리면 사랑하는 가족들을 볼 수 있다",
+    "NextId": "Dialogue_Day5_022"
+  },
+  {
+    "Id": "Dialogue_Day6_001",
+    "Description": "핵심 기능들이 전보다 더 손상이 심해졌어",
+    "NextId": "Dialogue_Day6_002"
+  },
+  {
+    "Id": "Dialogue_Day6_002",
+    "Description": "구조대가 오기전까진 버텨야해",
+    "NextId": "Dialogue_Day6_003"
+  },
+  {
+    "Id": "Dialogue_Day6_003",
+    "Description": "서둘러 수리하자",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day6_004",
+    "Description": "수리도의 수치가 너무 빠르게 떨어진다",
+    "NextId": "Dialogue_Day6_005"
+  },
+  {
+    "Id": "Dialogue_Day6_005",
+    "Description": "이대로는 안되겠어",
+    "NextId": null
+  },
+  {
+    "Id": "Dialogue_Day6_006",
+    "Description": "아… 아직은 안되는데",
+    "NextId": "Dialogue_Day6_007"
+  },
+  {
+    "Id": "Dialogue_Day6_007",
+    "Description": "여기까진가…가족들을 볼 수 없을거 같군",
     "NextId": null
   }
 ]

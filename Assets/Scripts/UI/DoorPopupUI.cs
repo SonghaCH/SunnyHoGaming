@@ -14,9 +14,10 @@ public class DoorPopupUI : UIBase
 
     private string _currentInput = "";
     private bool _isGameActive = false;
+    private string _targetDoorId;
 
-    public static event Action OnPasswordSuccess;
-
+    public static event Action<string> OnPasswordSuccess;
+    
     private void OnEnable()
     {
         Btn_Back.BindOnClickButtonEvent(OnClick_Back);
@@ -149,7 +150,7 @@ public class DoorPopupUI : UIBase
 
         UIManager.Instance.OpenSimplePopup("패스워드 입력 성공! 문 잠금 해제");
         Debug.Log("패스워드 일치! 미션 성공");
-        OnPasswordSuccess?.Invoke();
+        OnPasswordSuccess?.Invoke(_targetDoorId);
         UIManager.Instance.CloseDoorPopupUI();
     }
 
@@ -180,5 +181,10 @@ public class DoorPopupUI : UIBase
         UpdateDisplay();
 
         Debug.Log("문 패스워드 맞추기가 초기화되었습니다. (키보드로 입력하세요)");
+    }
+
+    public void SetTargetDoorId(string doorId)
+    {
+        _targetDoorId = doorId;
     }
 }

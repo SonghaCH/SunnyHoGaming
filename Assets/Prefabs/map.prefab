@@ -203475,6 +203475,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 2974266844607643035}
     m_Modifications:
     - target: {fileID: 963880495905720537, guid: 34300443486f64d6da09f6f748778306, type: 3}
+      propertyPath: m_Name
+      value: Door_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 963880495905720537, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
@@ -203528,7 +203532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7163562400027199414, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Name
-      value: Door_01
+      value: Door_03
       objectReference: {fileID: 0}
     - target: {fileID: 7163562400027199414, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
@@ -203541,6 +203545,10 @@ PrefabInstance:
     - target: {fileID: 8349677724922801807, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630183843028076512, guid: 34300443486f64d6da09f6f748778306, type: 3}
+      propertyPath: m_Name
+      value: Door_03
       objectReference: {fileID: 0}
     - target: {fileID: 8630183843028076512, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
@@ -206953,6 +206961,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 79337631090068797}
     m_Modifications:
     - target: {fileID: 963880495905720537, guid: 34300443486f64d6da09f6f748778306, type: 3}
+      propertyPath: m_Name
+      value: Door_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 963880495905720537, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
@@ -207006,7 +207018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7163562400027199414, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Name
-      value: Door_01
+      value: Door_02
       objectReference: {fileID: 0}
     - target: {fileID: 7163562400027199414, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
@@ -207019,6 +207031,10 @@ PrefabInstance:
     - target: {fileID: 8349677724922801807, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630183843028076512, guid: 34300443486f64d6da09f6f748778306, type: 3}
+      propertyPath: m_Name
+      value: Door_02
       objectReference: {fileID: 0}
     - target: {fileID: 8630183843028076512, guid: 34300443486f64d6da09f6f748778306, type: 3}
       propertyPath: m_Layer

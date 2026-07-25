@@ -58,5 +58,15 @@
     "Id": "Door_01",
     "Name": "문",
     "PopupType": "DoorPopupUI"
+  },
+  {
+    "Id": "Door_02",
+    "Name": "문",
+    "PopupType": "DoorPopupUI"
+  },
+  {
+    "Id": "Door_03",
+    "Name": "문",
+    "PopupType": "DoorPopupUI"
   }
 ]
