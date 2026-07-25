@@ -1,6 +1,7 @@
 ﻿public class GameStateService
 {
     private GameStateViewModel _viewModel;
+    private int _pauseStack = 0;
 
     public GameStateService()
     {
@@ -37,6 +38,11 @@
         if (_viewModel.CurrentGameState == GameState.Playing)
         {
             _viewModel.CurrentGameState = GameState.Paused;
+            _pauseStack++;
+        }
+        else if(_viewModel.CurrentGameState == GameState.Paused)
+        {
+            _pauseStack++;
         }
     }
 
@@ -44,7 +50,13 @@
     {
         if (_viewModel.CurrentGameState == GameState.Paused)
         {
-            _viewModel.CurrentGameState = GameState.Playing;
+            _pauseStack--;
+
+            if(_pauseStack < 1)
+            {
+                _viewModel.CurrentGameState = GameState.Playing;
+                _pauseStack = 0;
+            }
         }
     }
 

@@ -1,13 +1,12 @@
-﻿using System.ComponentModel;
-using TMPro;
+﻿
+using System.ComponentModel;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PlayerStatusUI : ViewBase
+public class SleepCamera : MonoBehaviour
 {
-    [SerializeField] private Slider Slider_Hunger;
-
+    [SerializeField] private GameObject _mainCamera;
     private PlayerStatusViewModel _statusViewModel;
+
 
     public void BindStatusViewModel(PlayerStatusViewModel viewModel)
     {
@@ -15,14 +14,18 @@ public class PlayerStatusUI : ViewBase
         _statusViewModel.PropertyChanged += OnPropertyChanged_View;
         _statusViewModel.InvokeOnceOnInit();
     }
+
     private void Start()
     {
+        _mainCamera.SetActive(true);
+        gameObject.SetActive(false);
+
         if (NetworkManager.Inst != null)
         {
             BindStatusViewModel(NetworkManager.Inst.PlayerService.GetStatusViewModel());
         }
     }
-    
+
     private void OnDestroy()
     {
         if (_statusViewModel != null)
@@ -33,17 +36,29 @@ public class PlayerStatusUI : ViewBase
 
     private void OnPropertyChanged_View(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(PlayerStatusViewModel.Hunger))
+        if (e.PropertyName == nameof(PlayerStatusViewModel.IsSleeping))
         {
-            UpdateHungerSlider();
+            if (_statusViewModel.IsSleeping)
+            {
+                ActiveSleepCamera();
+            }
+            else
+            {
+                ActiveMainCamera();
+            }
         }
     }
 
-    private void UpdateHungerSlider()
+    private void ActiveSleepCamera()
     {
-        if (Slider_Hunger != null)
-        {
-            Slider_Hunger.value = _statusViewModel.Hunger;
-        }
+        gameObject.SetActive(true);
+        _mainCamera.SetActive(false);
     }
+
+    private void ActiveMainCamera()
+    {
+        _mainCamera.SetActive(true);
+        gameObject.SetActive(false);
+    }
+
 }

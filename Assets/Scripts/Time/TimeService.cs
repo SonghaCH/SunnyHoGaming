@@ -1,7 +1,8 @@
 ﻿public class TimeService
 {
+    private const int _startHour = 8;
     private const int _minutesPerHour = 60;
-    private const int _minutesPerDay = 960;
+    private const int _minutesPerDay = (24 - _startHour) * _minutesPerHour;
 
     private float _secondsPerGameMinute;
     private float _timer = 0.0f;
@@ -30,8 +31,15 @@
             _totalGameMinutes += 1;
 
             _viewModel.CurrentMinute = _totalGameMinutes % _minutesPerHour;
-            _viewModel.CurrentHour = (_totalGameMinutes % _minutesPerDay +1) / _minutesPerHour + 8;
+            _viewModel.CurrentHour = (_totalGameMinutes % _minutesPerDay +1) / _minutesPerHour + _startHour;
             _viewModel.CurrentDay = (_totalGameMinutes / _minutesPerDay) + 1;
+        }
+    }
+    public void SkipToNextDay()
+    {
+        if (_viewModel != null)
+        {
+            _totalGameMinutes = _viewModel.CurrentDay * _minutesPerDay;
         }
     }
 }

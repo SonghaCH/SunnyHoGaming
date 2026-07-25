@@ -91,5 +91,20 @@ public class PlayerService
             }
         }
     }
+    public void Sleep()
+    {
+        if (_statusViewModel != null)
+        {
+            _statusViewModel.IsSleeping = true;
+        }
+    }
+
+    public void WakeUp()
+    {
+        if (_statusViewModel != null)
+        {
+            _statusViewModel.IsSleeping = false;
+        }
+    }
 }
 
