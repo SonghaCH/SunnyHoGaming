@@ -35,7 +35,8 @@ public enum UIType
     MapPopupUI,
     DoorPopupUI,
     RepairDisplayUI,
-    SettingPopupUI
+    SettingPopupUI,
+    VideoPlayerUI
 }
 
 public static class UIManagerExtension
@@ -400,6 +401,22 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.SettingPopupUI);
     }
+
+    public static void OpenVideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.VideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseVideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.VideoPlayerUI);
+    }
+    
 }
 
 

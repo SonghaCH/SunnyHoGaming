@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.ComponentModel;
-using UnityEngine.AI; 
+using UnityEngine.AI;
 
 public class WorldManager : MonoBehaviour
 {
@@ -16,6 +16,10 @@ public class WorldManager : MonoBehaviour
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
     private TimeViewModel _timeViewModel;
     private GameStateViewModel _gameStateViewModel;
+
+    // [추가] 생성된 맵 오브젝트 및 생성 중 상태 플래그 관리
+    private GameObject _currentMapInstance;
+    private bool _isInitializing = false;
 
     private Transform _mainRoomSpawnPoint;
     public Transform MainRoomTransform
@@ -48,14 +52,36 @@ public class WorldManager : MonoBehaviour
             if (NetworkManager.Inst.TimeService != null)
             {
                 _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
-                _timeViewModel.PropertyChanged += OnTimePropertyChanged;
+                if (_timeViewModel != null)
+                {
+                    _timeViewModel.PropertyChanged -= OnTimePropertyChanged; // 중복 방지
+                    _timeViewModel.PropertyChanged += OnTimePropertyChanged;
+                }
             }
 
             if (NetworkManager.Inst.GameStateService != null)
             {
                 _gameStateViewModel = NetworkManager.Inst.GameStateService.GetViewModel();
-                _gameStateViewModel.RequestingPlay += InitializeWorld;
+                if (_gameStateViewModel != null)
+                {
+                    _gameStateViewModel.RequestingPlay -= InitializeWorld; // 중복 방지
+                    _gameStateViewModel.RequestingPlay += InitializeWorld;
+                }
             }
+        }
+    }
+
+    // [추가] 메모리 누수 및 중복 호출 방지를 위해 OnDestroy에서 이벤트 해제
+    private void OnDestroy()
+    {
+        if (_timeViewModel != null)
+        {
+            _timeViewModel.PropertyChanged -= OnTimePropertyChanged;
+        }
+
+        if (_gameStateViewModel != null)
+        {
+            _gameStateViewModel.RequestingPlay -= InitializeWorld;
         }
     }
 
@@ -85,20 +111,31 @@ public class WorldManager : MonoBehaviour
 
     private async UniTaskVoid InitializeWorldAsync()
     {
-        await SpawnMapAsync();
+        // [추가] 이미 초기화 중이면 중복 실행 방지
+        if (_isInitializing) return;
+        _isInitializing = true;
 
-        int startDay = 1;
-        if (_timeViewModel != null)
+        try
         {
-            startDay = _timeViewModel.CurrentDay;
-        }
+            await SpawnMapAsync();
 
-        await StartNewDayAsync(startDay);
+            int startDay = 1;
+            if (_timeViewModel != null)
+            {
+                startDay = _timeViewModel.CurrentDay;
+            }
+
+            await StartNewDayAsync(startDay);
+        }
+        finally
+        {
+            _isInitializing = false;
+        }
     }
 
     private async UniTask SpawnMapAsync()
     {
-        if (string.IsNullOrWhiteSpace(_mapAddressableKey) == true)
+        if (string.IsNullOrWhiteSpace(_mapAddressableKey))
         {
             Debug.LogError("[WorldManager] 맵 어드레서블 키가 비어있습니다.");
             return;
@@ -110,15 +147,22 @@ public class WorldManager : MonoBehaviour
             return;
         }
 
-        GameObject spawnedMap = await ResourceManager.Instance.InstantiateAsync(_mapAddressableKey, Vector3.zero, Quaternion.identity);
+        // [추가] 이미 생성된 맵이 있다면 파괴/정리
+        if (_currentMapInstance != null)
+        {
+            Destroy(_currentMapInstance);
+            _currentMapInstance = null;
+        }
 
-        if (spawnedMap == null)
+        _currentMapInstance = await ResourceManager.Instance.InstantiateAsync(_mapAddressableKey, Vector3.zero, Quaternion.identity);
+
+        if (_currentMapInstance == null)
         {
             Debug.LogError($"[WorldManager] 어드레서블 키({_mapAddressableKey})로 맵 생성에 실패했습니다.");
             return;
         }
 
-        ExtractSpawnPoints(spawnedMap.transform);
+        ExtractSpawnPoints(_currentMapInstance.transform);
     }
 
     private void ExtractSpawnPoints(Transform mapRoot)

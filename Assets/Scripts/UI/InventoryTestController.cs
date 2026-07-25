@@ -51,5 +51,28 @@ public class InventoryTestController : MonoBehaviour
             Debug.Log("[Test] 픽서 부르미 획득 요청");
             NetworkManager.Inst.InventoryService.AddItem("Item_Map_01", 1);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            Debug.Log("[Test] '플라즈마 배터리 셀' 10개 획득 요청");
+
+            // 데이터 드리븐 ID "Item_Resources_01"로 아이템을 10개 추가합니다.
+            NetworkManager.Inst.InventoryService.AddItem("Item_Resources_02", 10);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            Debug.Log("[Test] '액체 질소 냉각제' 10개 획득 요청");
+
+            // 데이터 드리븐 ID "Item_Resources_01"로 아이템을 10개 추가합니다.
+            NetworkManager.Inst.InventoryService.AddItem("Item_Resources_03", 10);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            Debug.Log("[Test] '전선 뭉치' 10개 획득 요청");
+
+            NetworkManager.Inst.InventoryService.AddItem("Item_Resources_04", 10);
+        }
     }
 }

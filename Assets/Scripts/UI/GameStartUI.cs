@@ -21,8 +21,8 @@ public class GameStartUI : UIBase
     private void OnClick_Start()
     {
         UIManager.Instance.CloseGameStartUI();
+        UIManager.Instance.OpenVideoPlayerUI();
         UIManager.Instance.OpenMainUI();
-        NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPlay();
     }
 
     private void OnClick_Setting()
