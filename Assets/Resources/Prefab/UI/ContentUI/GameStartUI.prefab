@@ -51,8 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameStartUI
   Btn_Start: {fileID: 6659973921011719838}
-  Btn_Setting: {fileID: 0}
-  Btn_Exit: {fileID: 0}
+  Btn_Setting: {fileID: 8495181824571408268}
+  Btn_Exit: {fileID: 3037960036966540920}
   _skyboxCameraPrefab: {fileID: 2284874159264653325, guid: f9cc3cb3f1f438f42bd4d27a71c23d15, type: 3}
 --- !u!1 &1836015495487681749
 GameObject:
