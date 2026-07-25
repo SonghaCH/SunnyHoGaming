@@ -25,12 +25,12 @@ public class Door : MonoBehaviour
 
     private void OnEnable()
     {
-        DoorPopupUI.OnPasswordSuccess += OpenDoor;
+        DoorPopupUI.OnPasswordSuccess += HandlePasswordSuccess;
     }
 
     private void OnDisable()
     {
-        DoorPopupUI.OnPasswordSuccess -= OpenDoor;
+        DoorPopupUI.OnPasswordSuccess -= HandlePasswordSuccess;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,15 +61,23 @@ public class Door : MonoBehaviour
         }
     }
 
-    private void OpenDoor()
-    {
-        Debug.Log("[Door] OpenDoor() 호출됨!");
-        _isOpen = true;
-    }
-
     public bool Interact()
     {
         int currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
         return currentDay >= _unlockDay;
+    }
+
+    private void OpenDoor()
+    {
+        AudioManager.Instance.PlaySFX("Sound/Sound_Door");
+        Debug.Log("[Door] OpenDoor() 호출됨!");
+        _isOpen = true;
+    }
+    private void HandlePasswordSuccess(string doorId)
+    {
+        if (doorId == gameObject.name)
+        {
+            OpenDoor();
+        }
     }
 }

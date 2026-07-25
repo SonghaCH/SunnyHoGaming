@@ -48,7 +48,7 @@ public class AudioController : MonoBehaviour
 
     public void PlaySFX(string soundDataId)
     {
-        GameUtil.LoadAndPlayAudioClip(_audioSFXSource, soundDataId, cancellationToken: _bgmCts.Token).Forget();
+        GameUtil.LoadAndPlayAudioClip(_audioSFXSource, soundDataId).Forget();
     }
 
     public void StopBGM()

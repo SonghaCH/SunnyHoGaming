@@ -93,7 +93,11 @@ public class MainController : UIBase
                 return;
             }
         }
-        UIManager.Instance.OpenUI(UIRootType.PopupUI, popupType);
+        var uiBase = UIManager.Instance.OpenUI(UIRootType.PopupUI, popupType);
+        if (uiBase is DoorPopupUI doorPopup)
+        {
+            doorPopup.SetTargetDoorId(gameObject.name);
+        }
     }
 
     private bool TryGetTaskTypeFromUIType(UIType uiType, out ActiveTaskType taskType)
