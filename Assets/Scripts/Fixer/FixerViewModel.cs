@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
@@ -46,6 +47,27 @@ public class FixerViewModel : MonoBehaviour
         if (player != null)
         {
             SetPlayerToBlackboard(player);
+        }
+
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            var gameStateVM = NetworkManager.Inst.GameStateService.GetViewModel();
+            if (gameStateVM != null)
+            {
+                gameStateVM.PropertyChanged += OnGameStateChanged;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            var gameStateVM = NetworkManager.Inst.GameStateService.GetViewModel();
+            if (gameStateVM != null)
+            {
+                gameStateVM.PropertyChanged -= OnGameStateChanged;
+            }
         }
     }
 
@@ -163,13 +185,10 @@ public class FixerViewModel : MonoBehaviour
             _fixerModel.TempRepair = FixerData.TempRepair;
             _fixerModel.FarmingFood = FixerData.FarmingFood;
             _fixerModel.FarmingScrap = FixerData.FarmingScrap;
-
-
-            Debug.Log($"[FixerViewModel] {FixerData.Name} 초기화 완료 - 수리력 셋팅됨");
         }
         else
         {
-            Debug.LogError($"[FixerViewModel] ID가 {dataId}인 FixerData 마스터 데이터를 찾을 수 없습니다!");
+            Debug.LogError($"[FixerViewModel] ID가 {dataId}인 데이터를 찾을 수 없습니다!");
         }
 
         CurrentState = initialState;
@@ -213,7 +232,6 @@ public class FixerViewModel : MonoBehaviour
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
             _behaviorGraphAgent.BlackboardReference.SetVariableValue("MainRoomTransform", mainRoomTransform);
-            Debug.Log($"[{gameObject.name}] 메인 룸 좌표 블랙보드 등록 완료!");
         }
     }
 
@@ -222,7 +240,6 @@ public class FixerViewModel : MonoBehaviour
         if (_behaviorGraphAgent != null && _behaviorGraphAgent.BlackboardReference != null)
         {
             _behaviorGraphAgent.BlackboardReference.SetVariableValue("RoomArea", roomAreaCollider);
-            Debug.Log($"[{gameObject.name}] 룸 에리어 구역 블랙보드 등록 완료!");
         }
     }
 
@@ -246,26 +263,70 @@ public class FixerViewModel : MonoBehaviour
 
     public void FreezeMovement(bool freeze)
     {
-        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent))
+        if (TryGetComponent(out NavMeshAgent agent))
         {
+            TryGetComponent(out Animator animator);
+
+            TryGetComponent(out BehaviorGraphAgent behaviorAgent);
+
             if (freeze)
             {
+                if (behaviorAgent != null)
+                {
+                    behaviorAgent.enabled = false;
+                }
+
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+
                 if (_originalSpeed < 0)
                 {
                     _originalSpeed = agent.speed;
                 }
-
                 agent.speed = 0f;
-                agent.velocity = Vector3.zero;
 
-                GetComponent<Animator>().SetFloat("MoveSpeed", 0f);
+                if (animator != null)
+                {
+                    animator.speed = 0f;
+                }
             }
             else
             {
+                if (behaviorAgent != null)
+                {
+                    behaviorAgent.enabled = true;
+                }
+
+                agent.isStopped = false;
+
                 if (_originalSpeed >= 0)
                 {
                     agent.speed = _originalSpeed;
                     _originalSpeed = -1f;
+                }
+
+                if (animator != null)
+                {
+                    animator.speed = 1f;
+                }
+            }
+        }
+    }
+
+    private void OnGameStateChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GameStateViewModel.CurrentGameState))
+        {
+            var gameStateVM = sender as GameStateViewModel;
+            if (gameStateVM != null)
+            {
+                if (gameStateVM.CurrentGameState == GameState.Paused)
+                {
+                    FreezeMovement(true);
+                }
+                else if (gameStateVM.CurrentGameState == GameState.Playing)
+                {
+                    FreezeMovement(false);
                 }
             }
         }

@@ -156,7 +156,7 @@ public class NetworkManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("[SaveGame] 저장 시점에 픽서 컨테이너가 비어있습니다. 빈 데이터가 저장되는 것을 방지합니다.");
+                Debug.LogWarning("[SaveGame] 저장 시점에 픽서 컨테이너가 비어있습니다.");
             }
         }
 
@@ -249,7 +249,6 @@ public class NetworkManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetPath(), json);
-        Debug.Log($"저장 완료: {GetPath()}");
     }
 
     public PlayerModel RequstLoadSaveData()
@@ -259,12 +258,10 @@ public class NetworkManager : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             PlayerModel data = JsonUtility.FromJson<PlayerModel>(json);
-            Debug.Log("데이터를 불러왔습니다.");
             return data;
         }
         else
         {
-            Debug.LogWarning("세이브 파일이 없습니다. 새 데이터를 생성합니다.");
             var playerData = GetDefaultPlayerData();
             RequstSaveData(playerData);
             return playerData;
@@ -298,7 +295,6 @@ public class NetworkManager : MonoBehaviour
             }
 
             int today = TimeService.GetViewModel().CurrentDay;
-            Debug.Log($"[Auto Save] {today}일 차 아침 8시가 되었습니다. 픽서 스폰 완료 대기...");
 
             while (WorldManager.Instance == null || WorldManager.Instance.IsSpawnCompleted == false)
             {
