@@ -36,7 +36,12 @@ public enum UIType
     DoorPopupUI,
     RepairDisplayUI,
     SettingPopupUI,
-    VideoPlayerUI
+
+
+    OpeningVideoPlayerUI,
+    EndingVideoPlayerUI,
+
+    EndingDialogUI
 }
 
 public static class UIManagerExtension
@@ -343,7 +348,7 @@ public static class UIManagerExtension
         }
     }
 
-    public static void ClsoeMapPopupUI(this UIManager uiManager)
+    public static void CloseMapPopupUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.PopupUI, UIType.MapPopupUI);
     }
@@ -402,9 +407,9 @@ public static class UIManagerExtension
         uiManager.CloseUI(UIRootType.PopupUI, UIType.SettingPopupUI);
     }
 
-    public static void OpenVideoPlayerUI(this UIManager uiManager)
+    public static void OpenOpeningVideoPlayerUI(this UIManager uiManager)
     {
-        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.VideoPlayerUI);
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.OpeningVideoPlayerUI);
         if (uiBase == null)
         {
             Debug.LogWarning($"UI가 생성되지 않았습니다");
@@ -412,11 +417,42 @@ public static class UIManagerExtension
         }
     }
 
-    public static void CloseVideoPlayerUI(this UIManager uiManager)
+    public static void CloseOpeningVideoPlayerUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.VideoPlayerUI);
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.OpeningVideoPlayerUI);
     }
-    
+
+    public static void OpenEndingVideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.EndingVideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseEndingVideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingVideoPlayerUI);
+    }
+
+
+    public static void OpenEndingDialogUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+        if (uiBase == null)
+        {
+            
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseEndingDialogUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+    }
 }
 
 

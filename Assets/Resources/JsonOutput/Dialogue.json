@@ -265,13 +265,53 @@
     "NextId": null
   },
   {
-    "Id": "Dialogue_Day6_006",
-    "Description": "아… 아직은 안되는데",
-    "NextId": "Dialogue_Day6_007"
+    "Id": "Dialogue_Ending_001",
+    "Description": "그렇게 픽서들과 함께 구조되었고",
+    "NextId": "Dialogue_Ending_002"
   },
   {
-    "Id": "Dialogue_Day6_007",
-    "Description": "여기까진가…가족들을 볼 수 없을거 같군",
+    "Id": "Dialogue_Ending_002",
+    "Description": "안전하게 지구로 돌아올 수 있었다",
+    "NextId": "Dialogue_Ending_003"
+  },
+  {
+    "Id": "Dialogue_Ending_003",
+    "Description": "뒤늦게 우리의 탐사선을 모니터링하던 요원에 말에 의하면",
+    "NextId": "Dialogue_Ending_004"
+  },
+  {
+    "Id": "Dialogue_Ending_004",
+    "Description": "소행성 충돌이라고 단정했었던것은 ",
+    "NextId": "Dialogue_Ending_005"
+  },
+  {
+    "Id": "Dialogue_Ending_005",
+    "Description": "실제로 우리의 탐사선 근처에는 소행성의 행적이",
+    "NextId": "Dialogue_Ending_006"
+  },
+  {
+    "Id": "Dialogue_Ending_006",
+    "Description": "단 1도 발견되지 않았다고 보고했다",
+    "NextId": "Dialogue_Ending_007"
+  },
+  {
+    "Id": "Dialogue_Ending_007",
+    "Description": "그렇다는건 우리를 덮쳤던것은 ",
+    "NextId": "Dialogue_Ending_008"
+  },
+  {
+    "Id": "Dialogue_Ending_008",
+    "Description": "소행성이 아닌 결국엔 우리가 치우러 갔던 쓰레기 더미일 가능성이 높다",
+    "NextId": "Dialogue_Ending_009"
+  },
+  {
+    "Id": "Dialogue_Ending_009",
+    "Description": "자연은 언제나 그렇듯 우리에게 위험 신호를 준다",
+    "NextId": "Dialogue_Ending_010"
+  },
+  {
+    "Id": "Dialogue_Ending_010",
+    "Description": "언젠가는 부메랑처럼 모두 돌아오게 될것이다.",
     "NextId": null
   }
 ]

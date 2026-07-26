@@ -62,6 +62,7 @@ public class GameStartUI : UIBase
 
     private void OnClick_NewGame()
     {
+        AudioManager.Instance.StopBGM();
         if (NetworkManager.Inst != null)
         {
             NetworkManager.Inst.RequestNewGame(); 
@@ -73,6 +74,7 @@ public class GameStartUI : UIBase
  
     private void OnClick_LoadGame()
     {
+        AudioManager.Instance.StopBGM();
         if (NetworkManager.Inst != null)
         {
             NetworkManager.Inst.RequestLoadGame();
@@ -88,7 +90,7 @@ public class GameStartUI : UIBase
 
         if (playVideo)
         {
-            UIManager.Instance.OpenVideoPlayerUI();
+            UIManager.Instance.OpenOpeningVideoPlayerUI();
         }
         else
         {

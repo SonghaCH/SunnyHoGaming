@@ -15,7 +15,7 @@
     "UnlockDay": 2,
     "Title": "폭주한 픽서들을 진정시키시오",
     "Description": "획득한 아이템을 참고하여 픽서를 진정시키자!",
-    "SubTasks": "픽서 부르미 획득하기:Item:Item_Map_01|폭주한 픽서 진정시키기 (1):Task:FixerCalm_1|폭주한 픽서 진정시키기 (2):Task:FixerCalm_2|폭주한 픽서 진정시키기 (3):Task:FixerCalm_3"
+    "SubTasks": "픽서 부르미 획득하기:Item:Item_Map_01|폭주한 픽서 볼트 진정시키기:Task:FixerCalm_1|폭주한 픽서 픽스 진정시키기:Task:FixerCalm_2|폭주한 픽서 암스트숏 진정시키기:Task:FixerCalm_3"
   },
   {
     "Id": "Quest_Day3_001",
