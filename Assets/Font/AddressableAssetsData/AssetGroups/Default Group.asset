@@ -60,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 487cc50679317ed43bb5c911475a3706
+    m_Address: Sound/InGameBGM
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4ec748b17c72c2047ac16d6888c01c5c
     m_Address: Sound/Repair
     m_ReadOnly: 0

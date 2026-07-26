@@ -43,6 +43,7 @@ public class VideoPlayerUI : UIBase
 
         // 🌟 2. 비디오 UI 닫힘 (스킵/종료): 플레이어 이동 복구 & 마우스 커서 잠금
         SetPlayerCanMove(true);
+
     }
 
     private void Update()
@@ -125,6 +126,8 @@ public class VideoPlayerUI : UIBase
                 }
             }
         }
+
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
     }
 
     /// <summary>

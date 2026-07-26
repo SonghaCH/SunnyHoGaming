@@ -33,6 +33,7 @@ public class MainUI : UIBase
             QuestManager.Instance.OnQuestUpdated += RefreshQuestUI;
         }
 
+
         RefreshQuestUI();
         RefreshKeyGuideIcons();
     }
@@ -48,6 +49,8 @@ public class MainUI : UIBase
         {
             QuestManager.Instance.OnQuestUpdated -= RefreshQuestUI;
         }
+
+        AudioManager.Instance.StopBGM();
     }
 
     private void Update()

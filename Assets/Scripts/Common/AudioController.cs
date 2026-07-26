@@ -53,6 +53,12 @@ public class AudioController : MonoBehaviour
 
     public void StopBGM()
     {
+        if (_bgmCts != null)
+        {
+            _bgmCts.Cancel();
+            _bgmCts.Dispose();
+            _bgmCts = null;
+        }
         _audioBGMSource.Stop();
     }
 

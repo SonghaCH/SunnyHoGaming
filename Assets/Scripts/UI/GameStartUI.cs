@@ -47,8 +47,6 @@ public class GameStartUI : UIBase
         {
             Destroy(_skyboxCameraInstance);
         }
-
-        AudioManager.Instance.StopBGM();
     }
 
     private void ShowCursor()
@@ -59,6 +57,7 @@ public class GameStartUI : UIBase
 
     private void OnClick_Start()
     {
+        AudioManager.Instance.StopBGM();
         UIManager.Instance.CloseGameStartUI();
         UIManager.Instance.OpenVideoPlayerUI();
         UIManager.Instance.OpenMainUI();

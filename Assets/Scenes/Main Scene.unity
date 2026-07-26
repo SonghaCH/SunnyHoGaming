@@ -320,7 +320,8 @@ PrefabInstance:
       propertyPath: _audioSFXSource
       value: 
       objectReference: {fileID: 839678764}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8045098945907201911, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6126103962330888341, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
     m_AddedGameObjects: []
