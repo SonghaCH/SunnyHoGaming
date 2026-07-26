@@ -35,6 +35,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33271de20f9ff44cc9e6fa1cb2005d6f
+    m_Address: Sound/Sound_Door
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37df84c967ba51849b83ebcd57447529
     m_Address: Icons/OriginFixer_Icon
     m_ReadOnly: 0

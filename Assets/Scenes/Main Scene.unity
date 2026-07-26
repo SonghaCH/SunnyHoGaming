@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!82 &46812630 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2676878574218147557, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
+  m_PrefabInstance: {fileID: 1821238116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519004669
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +251,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!82 &839678764 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2135943818306549407, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
+  m_PrefabInstance: {fileID: 1821238116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1821238116
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -302,6 +312,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManagerContain
       objectReference: {fileID: 0}
+    - target: {fileID: 6586766714881730982, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
+      propertyPath: _audioBGMSource
+      value: 
+      objectReference: {fileID: 46812630}
+    - target: {fileID: 6586766714881730982, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
+      propertyPath: _audioSFXSource
+      value: 
+      objectReference: {fileID: 839678764}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6126103962330888341, guid: 03878eca8eac9eb428ecd873c22e40cb, type: 3}
