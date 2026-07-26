@@ -40,6 +40,7 @@ public class VideoPlayerUI : UIBase
         }
 
         SetPlayerCanMove(true);
+
     }
 
     private void Update()
@@ -111,6 +112,8 @@ public class VideoPlayerUI : UIBase
                 viewModel.OnRequestingResume();
             }
         }
+
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
     }
 
 

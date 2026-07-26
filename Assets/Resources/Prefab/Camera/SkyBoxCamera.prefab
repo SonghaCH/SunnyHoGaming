@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6200931672422840702}
   - component: {fileID: 4051782676718464482}
   - component: {fileID: 3990056625825118272}
+  - component: {fileID: -9005449534261721046}
   m_Layer: 0
   m_Name: SkyBoxCamera
   m_TagString: Untagged
@@ -128,3 +129,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!81 &-9005449534261721046
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2284874159264653325}
+  m_Enabled: 1

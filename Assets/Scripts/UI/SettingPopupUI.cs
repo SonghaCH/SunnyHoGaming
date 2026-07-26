@@ -21,8 +21,8 @@ public class SettingPopupUI : UIBase
     {
         _buttonBack.BindOnClickButtonEvent(OnClickBack);
 
-        //_sliderBGM.onValueChanged.AddListener(OnChangeBGM);
-        //_sliderSFX.onValueChanged.AddListener(OnChangeSFX);
+        _sliderBGM.onValueChanged.AddListener(OnChangeBGM);
+        _sliderSFX.onValueChanged.AddListener(OnChangeSFX);
 
         _dropdownResolution.onValueChanged.AddListener(OnChangeResolution);
 
@@ -33,8 +33,8 @@ public class SettingPopupUI : UIBase
     {
         _buttonBack.UnBindAllOnClickButtonEvent();
 
-        //_sliderBGM.onValueChanged.RemoveListener(OnChangeBGM);
-        //_sliderSFX.onValueChanged.RemoveListener(OnChangeSFX);
+        _sliderBGM.onValueChanged.RemoveListener(OnChangeBGM);
+        _sliderSFX.onValueChanged.RemoveListener(OnChangeSFX);
 
         _dropdownResolution.onValueChanged.RemoveListener(OnChangeResolution);
     }
@@ -44,15 +44,15 @@ public class SettingPopupUI : UIBase
         UIManager.Instance.CloseSettingPopupUI();
     }
 
-    //private void OnChangeBGM(float value)
-    //{
-    //    AudioController.Instance.BGMVolume = value;
-    //}
+    private void OnChangeBGM(float value)
+    {
+        AudioController.Instance.BGMVolume = value;
+    }
 
-    //private void OnChangeSFX(float value)
-    //{
-    //    AudioController.Instance.SFXVolume = value;
-    //}
+    private void OnChangeSFX(float value)
+    {
+        AudioController.Instance.SFXVolume = value;
+    }
 
     private void OnChangeResolution(int index)
     {

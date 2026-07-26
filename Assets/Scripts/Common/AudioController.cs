@@ -46,13 +46,19 @@ public class AudioController : MonoBehaviour
         GameUtil.LoadAndPlayAudioClip(_audioBGMSource, soundDataId, isLoop: true, cancellationToken: _bgmCts.Token).Forget();
     }
 
-    public void PlaySFX(string soundDataId)
+    public void PlaySFX(string soundDataId, bool isLoop = false)
     {
-        GameUtil.LoadAndPlayAudioClip(_audioSFXSource, soundDataId).Forget();
+        GameUtil.LoadAndPlayAudioClip(_audioSFXSource, soundDataId, isLoop: isLoop).Forget();
     }
 
     public void StopBGM()
     {
+        if (_bgmCts != null)
+        {
+            _bgmCts.Cancel();
+            _bgmCts.Dispose();
+            _bgmCts = null;
+        }
         _audioBGMSource.Stop();
     }
 
