@@ -14,11 +14,25 @@ public class GameStartUI : UIBase
 
     private void OnEnable()
     {
+        ShowCursor();
+        if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)
+        {
+            NetworkManager.Inst.PlayerService.SetCanMove(false);
+        }
+
         _skyboxCameraInstance = Instantiate(_skyboxCameraPrefab);
 
         Btn_Start.BindOnClickButtonEvent(OnClick_Start);
         Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
         Btn_Exit.BindOnClickButtonEvent(OnClick_Exit);
+    }
+
+    private void Update()
+    {
+        if (Cursor.lockState != CursorLockMode.None || !Cursor.visible)
+        {
+            ShowCursor();
+        }
     }
 
     private void OnDisable()
@@ -31,6 +45,12 @@ public class GameStartUI : UIBase
         {
             Destroy(_skyboxCameraInstance);
         }
+    }
+
+    private void ShowCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void OnClick_Start()

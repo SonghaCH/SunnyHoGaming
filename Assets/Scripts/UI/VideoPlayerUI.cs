@@ -10,6 +10,7 @@ public class VideoPlayerUI : UIBase
 
     private VideoPlayer videoPlayer;
     private float holdTimer = 0f;
+    private bool isFinished = false; // 스킵 연타 및 중복 종료 방지 플래그
 
     private void Awake()
     {
@@ -19,11 +20,15 @@ public class VideoPlayerUI : UIBase
     private void OnEnable()
     {
         holdTimer = 0f;
+        isFinished = false;
 
         if (videoPlayer != null)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
         }
+
+        // 🌟 1. 비디오 UI 켜짐: 플레이어 이동 중지 & 마우스 커서 표시
+        SetPlayerCanMove(false);
 
         // [순서 보장 핵심] 영상 UI 우선 활성화 -> 영상 준비/재생 시작 확인 -> 맵 백그라운드 로딩
         StartVideoSequenceAsync().Forget();
@@ -35,10 +40,15 @@ public class VideoPlayerUI : UIBase
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
         }
+
+        // 🌟 2. 비디오 UI 닫힘 (스킵/종료): 플레이어 이동 복구 & 마우스 커서 잠금
+        SetPlayerCanMove(true);
     }
 
     private void Update()
     {
+        if (isFinished) return;
+
         if (Input.GetKey(KeyCode.K))
         {
             holdTimer += Time.deltaTime;
@@ -67,25 +77,16 @@ public class VideoPlayerUI : UIBase
         // 2. 영상 렌더링이 시작될 때까지 1프레임 대기 (영상 UI가 화면 최상단에 완전히 뜨도록 보장)
         await UniTask.Yield(PlayerLoopTiming.Update);
 
-        // (선택 사항) VideoPlayer가 비디오를 준비(Prepare)할 때까지 완전히 대기하고 싶다면 아래 주석 해제
-        /*
-        if (videoPlayer != null)
-        {
-            if (!videoPlayer.isPrepared)
-            {
-                videoPlayer.Prepare();
-                await UniTask.WaitUntil(() => videoPlayer.isPrepared);
-            }
-            videoPlayer.Play();
-        }
-        */
-
-        // 3. 영상이 먼저 화면에 나오는 것이 보장된 후, 비로소 백그라운드 맵 생성을 요청
+        // 3. 영상 출력이 보장된 후, 백그라운드 맵 생성 및 게임 재생 요청
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             Debug.Log("[VideoPlayerUI] 영상 출력 보장 완료. 백그라운드 맵 생성을 시작합니다.");
             NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPlay();
         }
+
+        // 🌟 [핵심] OnRequestingPlay() 호출 시 게임 상태가 풀리며 CanMove가 true로 오버라이드되는 것을 차단!
+        // 비디오 재생 중임을 재보장하기 위해 플레이어 이동 제어를 다시 한 번 걸어줍니다.
+        SetPlayerCanMove(false);
     }
 
     private void OnVideoFinished(VideoPlayer vp)
@@ -95,6 +96,9 @@ public class VideoPlayerUI : UIBase
 
     private void FinishVideoAndStartGame()
     {
+        if (isFinished) return;
+        isFinished = true;
+
         // UIManager를 이용하거나 gameObject.SetActive(false)로 닫기
         if (UIManager.Instance != null)
         {
@@ -104,10 +108,6 @@ public class VideoPlayerUI : UIBase
         {
             gameObject.SetActive(false);
         }
-
-        // 커서 잠금 처리
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         // 게임 상태 복귀
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
@@ -124,6 +124,17 @@ public class VideoPlayerUI : UIBase
                     viewModel.OnRequestingPlay();
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// PlayerService를 참조하여 캐릭터의 이동/시점 제어를 토글하는 보조 함수
+    /// </summary>
+    private void SetPlayerCanMove(bool canMove)
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)
+        {
+            NetworkManager.Inst.PlayerService.SetCanMove(canMove);
         }
     }
 }
