@@ -3,26 +3,19 @@
 public class QuestIndicator : MonoBehaviour
 {
     [SerializeField] private RectTransform _indicatorRect;
-
-    [SerializeField] private Transform _questTarget;
-
-    [SerializeField] private Camera _mainCamera;
-
+    private Transform _questTarget;
+    private Camera _mainCamera;
     private float _edgePadding = 50.0f;
 
-    private void Awake()
+    public void SetTarget(Transform target, Camera cam)
     {
-        _mainCamera = Camera.main;
+        _questTarget = target;
+        _mainCamera = cam;
     }
 
     private void Update()
     {
-        if (_questTarget == null)
-        {
-            return;
-        }
-
-        if (_indicatorRect == null)
+        if (_questTarget == null || _indicatorRect == null || _mainCamera == null)
         {
             return;
         }
@@ -53,15 +46,8 @@ public class QuestIndicator : MonoBehaviour
         float absX = Mathf.Abs(targetPos.x);
         float absY = Mathf.Abs(targetPos.y);
 
-        if (absX < 0.001f)
-        {
-            absX = 0.001f;
-        }
-
-        if (absY < 0.001f)
-        {
-            absY = 0.001f;
-        }
+        if (absX < 0.001f) absX = 0.001f;
+        if (absY < 0.001f) absY = 0.001f;
 
         float ratioX = maxX / absX;
         float ratioY = maxY / absY;

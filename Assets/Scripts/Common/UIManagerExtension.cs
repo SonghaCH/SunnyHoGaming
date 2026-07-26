@@ -36,7 +36,8 @@ public enum UIType
     DoorPopupUI,
     RepairDisplayUI,
     SettingPopupUI,
-    VideoPlayerUI
+    VideoPlayerUI,
+    QuestMarker
 }
 
 public static class UIManagerExtension
@@ -416,7 +417,43 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.VideoPlayerUI);
     }
-    
+
+    public static void OpenQuestMarker(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.BackgroundUI, UIType.QuestMarker);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseQuestMarker(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.BackgroundUI, UIType.QuestMarker);
+    }
+    public static void AddQuestTargetMarker(this UIManager uiManager, Transform target)
+    {
+        var uiBase = uiManager.GetOpenedUI(UIRootType.BackgroundUI, UIType.QuestMarker);
+        if (uiBase == null)
+        {
+            uiBase = uiManager.OpenUI(UIRootType.BackgroundUI, UIType.QuestMarker);
+        }
+
+        if (uiBase is QuestMarkerUI questMarkerUI)
+        {
+            questMarkerUI.AddMarker(target);
+        }
+    }
+
+    public static void RemoveQuestTargetMarker(this UIManager uiManager, Transform target)
+    {
+        var uiBase = uiManager.GetOpenedUI(UIRootType.BackgroundUI, UIType.QuestMarker);
+        if (uiBase is QuestMarkerUI questMarkerUI)
+        {
+            questMarkerUI.RemoveMarker(target);
+        }
+    }
 }
 
 
