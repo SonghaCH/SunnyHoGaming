@@ -35,15 +35,14 @@
             _viewModel.CurrentDay = (_totalGameMinutes / _minutesPerDay) + 1;
         }
     }
-<<<<<<< HEAD
     public void SkipToNextDay()
     {
         if (_viewModel != null)
         {
             _totalGameMinutes = _viewModel.CurrentDay * _minutesPerDay;
         }
-=======
 
+    }
     public void SetTimeByDay(int targetDay)
     {
         _totalGameMinutes = (targetDay - 1) * _minutesPerDay;
@@ -53,6 +52,7 @@
         _viewModel.CurrentDay = targetDay;
         _viewModel.CurrentHour = 8;
         _viewModel.CurrentMinute = 0;
->>>>>>> origin/dev_Seonguk_NetWorkManager
     }
+
+
 }

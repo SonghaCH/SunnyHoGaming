@@ -53,15 +53,12 @@ public class GameStartUI : UIBase
         }
     }
 
-<<<<<<< HEAD
     private void ShowCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    private void OnClick_Start()
-=======
 
     private void OnClick_NewGame()
     {
@@ -86,7 +83,6 @@ public class GameStartUI : UIBase
 
 
     private void TransitionToMainGame(bool playVideo)
->>>>>>> origin/dev_Seonguk_NetWorkManager
     {
         UIManager.Instance.CloseGameStartUI();
 

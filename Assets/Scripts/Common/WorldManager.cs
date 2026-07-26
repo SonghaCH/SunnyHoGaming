@@ -21,7 +21,6 @@ public class WorldManager : MonoBehaviour
     private bool _isInitializing = false;
     private bool _isMapSpawning = false;
 
-    // 중복 스폰 방지를 위한 상태 관리 변수
     private HashSet<int> _spawnedDays = new HashSet<int>();
     private bool _isSpawningFixers = false;
 

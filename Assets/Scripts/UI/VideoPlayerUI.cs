@@ -27,10 +27,8 @@ public class VideoPlayerUI : UIBase
             videoPlayer.loopPointReached += OnVideoFinished;
         }
 
-        // 🌟 1. 비디오 UI 켜짐: 플레이어 이동 중지 & 마우스 커서 표시
         SetPlayerCanMove(false);
 
-        // [순서 보장 핵심] 영상 UI 우선 활성화 -> 영상 준비/재생 시작 확인 -> 맵 백그라운드 로딩
         StartVideoSequenceAsync().Forget();
     }
 
@@ -41,7 +39,6 @@ public class VideoPlayerUI : UIBase
             videoPlayer.loopPointReached -= OnVideoFinished;
         }
 
-        // 🌟 2. 비디오 UI 닫힘 (스킵/종료): 플레이어 이동 복구 & 마우스 커서 잠금
         SetPlayerCanMove(true);
     }
 
@@ -65,27 +62,22 @@ public class VideoPlayerUI : UIBase
         }
     }
 
-    // [핵심] 실행 순서를 보장하는 비동기 시퀀스
     private async UniTaskVoid StartVideoSequenceAsync()
     {
-        // 1. 우선 게임을 Pause 상태로 변경하여 커서/입력 정리
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPause();
         }
 
-        // 2. 영상 렌더링이 시작될 때까지 1프레임 대기 (영상 UI가 화면 최상단에 완전히 뜨도록 보장)
         await UniTask.Yield(PlayerLoopTiming.Update);
 
-        // 3. 영상 출력이 보장된 후, 백그라운드 맵 생성 및 게임 재생 요청
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             Debug.Log("[VideoPlayerUI] 영상 출력 보장 완료. 백그라운드 맵 생성을 시작합니다.");
             NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPlay();
         }
 
-        // 🌟 [핵심] OnRequestingPlay() 호출 시 게임 상태가 풀리며 CanMove가 true로 오버라이드되는 것을 차단!
-        // 비디오 재생 중임을 재보장하기 위해 플레이어 이동 제어를 다시 한 번 걸어줍니다.
+        
         SetPlayerCanMove(false);
     }
 
@@ -94,9 +86,6 @@ public class VideoPlayerUI : UIBase
         FinishVideoAndStartGame();
     }
 
-<<<<<<< HEAD
-=======
-    // [영상 시작 시] 퍼즈 상태 유지
     private void PauseGameAndStartMapPreload()
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
@@ -110,14 +99,12 @@ public class VideoPlayerUI : UIBase
         }
     }
 
-    // [영상 종료/스킵 시] UI 닫기 + 게임 Playing 상태로 전환
->>>>>>> origin/dev_Seonguk_NetWorkManager
+
     private void FinishVideoAndStartGame()
     {
         if (isFinished) return;
         isFinished = true;
 
-        // UIManager를 이용하거나 gameObject.SetActive(false)로 닫기
         if (UIManager.Instance != null)
         {
             UIManager.Instance.CloseVideoPlayerUI();
@@ -127,16 +114,12 @@ public class VideoPlayerUI : UIBase
             gameObject.SetActive(false);
         }
 
-        // 게임 상태 복귀
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-<<<<<<< HEAD
-=======
-                // 영상이 끝났으므로 멈춰둔 게임을 다시 재생(Play/Resume)합니다.
->>>>>>> origin/dev_Seonguk_NetWorkManager
+
                 if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
                 {
                     viewModel.OnRequestingResume();
@@ -149,9 +132,7 @@ public class VideoPlayerUI : UIBase
         }
     }
 
-    /// <summary>
-    /// PlayerService를 참조하여 캐릭터의 이동/시점 제어를 토글하는 보조 함수
-    /// </summary>
+   
     private void SetPlayerCanMove(bool canMove)
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)
