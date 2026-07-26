@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class WorldManager : MonoBehaviour
 {
     public static WorldManager Instance { get; private set; }
+    public bool IsSpawnCompleted { get; private set; } = true;
 
     [Header("맵 생성 세팅")]
     [SerializeField] private string _mapAddressableKey;
@@ -14,12 +15,14 @@ public class WorldManager : MonoBehaviour
     private float _gatherRadius = 2.5f;
 
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
+    private List<FixerSaveData> _pendingFixerSaveData = null;
     private TimeViewModel _timeViewModel;
     private GameStateViewModel _gameStateViewModel;
 
     private GameObject _currentMapInstance;
     private bool _isInitializing = false;
     private bool _isMapSpawning = false;
+    private bool _isLoadingGame = false;
 
     private HashSet<int> _spawnedDays = new HashSet<int>();
     private bool _isSpawningFixers = false;
@@ -95,6 +98,11 @@ public class WorldManager : MonoBehaviour
 
     private void OnTimePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
+        if (_mainRoomSpawnPoint == null)
+        {
+            return;
+        }
+
         if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
         {
             int newDay = _timeViewModel.CurrentDay;
@@ -132,7 +140,14 @@ public class WorldManager : MonoBehaviour
                 startDay = _timeViewModel.CurrentDay;
             }
 
-            await StartNewDayAsync(startDay);
+            if (!_isLoadingGame)
+            {
+                await StartNewDayAsync(startDay);
+            }
+            else
+            {
+                _isLoadingGame = false;
+            }
         }
         finally
         {
@@ -168,6 +183,12 @@ public class WorldManager : MonoBehaviour
             }
 
             ExtractSpawnPoints(_currentMapInstance.transform);
+
+            if (_pendingFixerSaveData != null)
+            {
+                await RestoreSavedFixersAsync(_pendingFixerSaveData);
+                _pendingFixerSaveData = null;
+            }
         }
         finally
         {
@@ -286,16 +307,44 @@ public class WorldManager : MonoBehaviour
         foreach (FixerSaveData savedData in savedFixers)
         {
             Vector3 targetPosition = savedData.lastPosition;
+            Transform targetSpawnPoint = null; 
 
             if (savedData.lastState != FixerState.Rampaging)
             {
                 if (_mainRoomSpawnPoint != null)
                 {
                     targetPosition = _mainRoomSpawnPoint.position;
+                    targetSpawnPoint = _mainRoomSpawnPoint;
+                }
+            }
+            else
+            {
+                float closestDistance = float.MaxValue;
+                foreach (var kvp in _fixerSpawnPoints)
+                {
+                    foreach (var spawnPoint in kvp.Value)
+                    {
+                        float dist = Vector3.Distance(targetPosition, spawnPoint.position);
+                        if (dist < closestDistance)
+                        {
+                            closestDistance = dist;
+                            targetSpawnPoint = spawnPoint;
+                        }
+                    }
                 }
             }
 
-            await GameObjectManager.Instance.SpawnFixerAsync(savedData.fixerDataId, targetPosition, savedData.lastState);
+            if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+            {
+                targetPosition = hit.position;
+            }
+
+            await GameObjectManager.Instance.SpawnFixerAsync(
+                savedData.fixerDataId,
+                targetPosition,
+                savedData.lastState,
+                targetSpawnPoint
+            );
         }
     }
 
@@ -342,5 +391,11 @@ public class WorldManager : MonoBehaviour
         }
 
         Debug.Log("[WorldManager] 정상 상태의 모든 픽서를 메인룸으로 집합시키고 작업을 취소했습니다.");
+    }
+
+    public void SetPendingFixerData(List<FixerSaveData> list)
+    {
+        _pendingFixerSaveData = list;
+        _isLoadingGame = true;
     }
 }

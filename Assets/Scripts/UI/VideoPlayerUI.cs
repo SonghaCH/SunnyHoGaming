@@ -64,39 +64,28 @@ public class VideoPlayerUI : UIBase
 
     private async UniTaskVoid StartVideoSequenceAsync()
     {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
-        {
-            NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPause();
-        }
-
         await UniTask.Yield(PlayerLoopTiming.Update);
 
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
-            Debug.Log("[VideoPlayerUI] 영상 출력 보장 완료. 백그라운드 맵 생성을 시작합니다.");
-            NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPlay();
+            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
+            if (viewModel != null)
+            {
+                Debug.Log("[VideoPlayerUI] 맵 생성을 트리거하고 바로 시간을 정지합니다.");
+
+                viewModel.OnRequestingPlay();
+                
+                viewModel.OnRequestingPause();
+            }
         }
 
-        
+
         SetPlayerCanMove(false);
     }
 
     private void OnVideoFinished(VideoPlayer vp)
     {
         FinishVideoAndStartGame();
-    }
-
-    private void PauseGameAndStartMapPreload()
-    {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
-        {
-            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
-            if (viewModel != null)
-            {
-                // 게임 상태를 Paused로 변경하여 영상이 나오는 동안 시간이 흐르거나 픽서가 스폰되지 않게 고정합니다.
-                viewModel.OnRequestingPause();
-            }
-        }
     }
 
 
@@ -119,20 +108,12 @@ public class VideoPlayerUI : UIBase
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-
-                if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
-                {
-                    viewModel.OnRequestingResume();
-                }
-                else
-                {
-                    viewModel.OnRequestingPlay();
-                }
+                viewModel.OnRequestingResume();
             }
         }
     }
 
-   
+
     private void SetPlayerCanMove(bool canMove)
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)
