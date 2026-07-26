@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Video;
 
 public class VideoPlayerUI : UIBase
@@ -24,8 +25,8 @@ public class VideoPlayerUI : UIBase
             videoPlayer.loopPointReached += OnVideoFinished;
         }
 
-        // 1. 영상 재생 시작 시 게임을 Pause 상태로 만들고 마우스 커서/시점 조작을 멈춥니다.
-        PauseGameAndStartMapPreload();
+        // [순서 보장 핵심] 영상 UI 우선 활성화 -> 영상 준비/재생 시작 확인 -> 맵 백그라운드 로딩
+        StartVideoSequenceAsync().Forget();
     }
 
     private void OnDisable()
@@ -38,7 +39,6 @@ public class VideoPlayerUI : UIBase
 
     private void Update()
     {
-        // K 키 입력 감지 (꾹 누르기)
         if (Input.GetKey(KeyCode.K))
         {
             holdTimer += Time.deltaTime;
@@ -55,40 +55,66 @@ public class VideoPlayerUI : UIBase
         }
     }
 
-    // 영상 재생 자연 종료 시 호출
+    // [핵심] 실행 순서를 보장하는 비동기 시퀀스
+    private async UniTaskVoid StartVideoSequenceAsync()
+    {
+        // 1. 우선 게임을 Pause 상태로 변경하여 커서/입력 정리
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPause();
+        }
+
+        // 2. 영상 렌더링이 시작될 때까지 1프레임 대기 (영상 UI가 화면 최상단에 완전히 뜨도록 보장)
+        await UniTask.Yield(PlayerLoopTiming.Update);
+
+        // (선택 사항) VideoPlayer가 비디오를 준비(Prepare)할 때까지 완전히 대기하고 싶다면 아래 주석 해제
+        /*
+        if (videoPlayer != null)
+        {
+            if (!videoPlayer.isPrepared)
+            {
+                videoPlayer.Prepare();
+                await UniTask.WaitUntil(() => videoPlayer.isPrepared);
+            }
+            videoPlayer.Play();
+        }
+        */
+
+        // 3. 영상이 먼저 화면에 나오는 것이 보장된 후, 비로소 백그라운드 맵 생성을 요청
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            Debug.Log("[VideoPlayerUI] 영상 출력 보장 완료. 백그라운드 맵 생성을 시작합니다.");
+            NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPlay();
+        }
+    }
+
     private void OnVideoFinished(VideoPlayer vp)
     {
         FinishVideoAndStartGame();
     }
 
-    // [영상 시작 시] 퍼즈 상태 전환 + 백그라운드 맵 미리 로딩
-    private void PauseGameAndStartMapPreload()
-    {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
-        {
-            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
-            if (viewModel != null)
-            {
-                // 게임 상태를 Paused로 변경 (카메라/커서 고정)
-                viewModel.OnRequestingPause();
-
-                // 동시에 백그라운드에서 맵 생성을 시작함
-                viewModel.OnRequestingPlay();
-            }
-        }
-    }
-
-    // [영상 종료/스킵 시] UI 닫기 + 게임 Playing 상태로 전환
     private void FinishVideoAndStartGame()
     {
-        gameObject.SetActive(false);
+        // UIManager를 이용하거나 gameObject.SetActive(false)로 닫기
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.CloseVideoPlayerUI();
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
 
+        // 커서 잠금 처리
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // 게임 상태 복귀
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-                // 영상이 끝났으므로 Resume 또는 Play 신호를 보내 상태를 Playing으로 변경
                 if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
                 {
                     viewModel.OnRequestingResume();

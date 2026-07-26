@@ -151,6 +151,11 @@ public class PasswordMiniGame : UIBase
         Debug.Log("비밀번호 일치! 미션 성공");
 
         QuestManager.Instance.CheckTaskProgress("SatellitePhone");
+        var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
+        if (uiBase is DialogueUI dialogueUi)
+        {
+            dialogueUi.StartDialogue("Dialogue_Day5_001");
+        }
 
         UIManager.Instance.ClosePasswordPopupUI();
     }

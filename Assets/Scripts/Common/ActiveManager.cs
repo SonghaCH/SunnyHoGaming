@@ -416,6 +416,11 @@ public class ActiveManager : MonoBehaviour
         // 오늘 완료 플래그 설정 (누가 하든 1회 완료)
         _miniGameClearedTodayDict[taskType] = true;
 
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.CheckTaskProgress(taskType.ToString());
+        }
+
         // 1~4번 수리 작업인 경우 수리 진척도 가산
         if (taskType <= ActiveTaskType.RouteControl)
         {
@@ -473,6 +478,7 @@ public class ActiveManager : MonoBehaviour
                 }
             }
         }
+        OnActiveDataChanged?.Invoke();
     }
 
 

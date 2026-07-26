@@ -10,6 +10,7 @@ public class MainController : UIBase
     private Material[] _originalMaterials;
     private Material[] _outlineMaterials;
 
+    private static bool _hasTriggeredDay6Dialogue = false;
 
     private void Awake()
     {
@@ -49,7 +50,7 @@ public class MainController : UIBase
             {
                 return;
             }
-            
+
             UserInputManager.instance.OnInteractionKey += Interact;
             SetOutline(true);
 
@@ -93,10 +94,34 @@ public class MainController : UIBase
                 return;
             }
         }
+
+        if (popupType == UIType.RepairDisplayUI)
+        {
+            CheckAndTriggerDay6Dialogue();
+        }
+
         var uiBase = UIManager.Instance.OpenUI(UIRootType.PopupUI, popupType);
         if (uiBase is DoorPopupUI doorPopup)
         {
             doorPopup.SetTargetDoorId(gameObject.name);
+        }
+    }
+    private void CheckAndTriggerDay6Dialogue()
+    {
+        if (_hasTriggeredDay6Dialogue) return;
+
+        var timeVm = NetworkManager.Inst?.TimeService?.GetViewModel();
+        if (timeVm == null) return;
+
+        if (timeVm.CurrentDay == 6)
+        {
+            _hasTriggeredDay6Dialogue = true; 
+
+            var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
+            if (uiBase is DialogueUI dialogueUi)
+            {
+                dialogueUi.StartDialogue("Dialogue_Day6_004");
+            }
         }
     }
 

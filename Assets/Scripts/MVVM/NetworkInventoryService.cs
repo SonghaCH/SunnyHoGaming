@@ -5,6 +5,12 @@ public class NetworkInventoryService
 {
     private InventoryViewModel _localPlayerInventoryViewModel;
 
+    private HashSet<string> _usedItemIds = new HashSet<string>();
+    public bool HasUsedItem(string itemId)
+    {
+        return _usedItemIds.Contains(itemId);
+    }
+
     public InventoryViewModel GetLocalInventoryViewModel()
     {
         if (_localPlayerInventoryViewModel == null)
@@ -27,13 +33,11 @@ public class NetworkInventoryService
         var invenVm = GetLocalInventoryViewModel();
         if (invenVm == null || invenVm.ItemList == null) return;
 
-        // 1. 테이블 데이터에서 해당 아이템의 최대 중첩 개수를 가져옵니다.
         var itemTableData = GameDataManager.Instance.GetItemData(itemId);
         int maxStack = (itemTableData != null) ? itemTableData.MaxStackCount : 999;
 
         int remainingCount = addCount;
 
-        // 2. 가방을 선 탐색하며 빈 공간이 남은(maxStack 미만) 동일 슬롯을 채워줍니다.
         foreach (var kvp in invenVm.ItemList)
         {
             var slotVm = kvp.Value;
@@ -51,7 +55,6 @@ public class NetworkInventoryService
             }
         }
 
-        // 3. 그래도 추가할 수량이 남았다면 새 고유 ID를 생성해 새 슬롯에 할당합니다.
         while (remainingCount > 0)
         {
             int newSlotCount = Mathf.Min(remainingCount, maxStack);
@@ -68,7 +71,6 @@ public class NetworkInventoryService
             remainingCount -= newSlotCount;
         }
 
-        // 4. 리스트 변경 사항을 이벤트를 통해 UI에 강제 갱신 유도합니다.
         invenVm.RefreshItemList();
 
         QuestManager.Instance.CheckItemProgress(itemId);
@@ -90,12 +92,15 @@ public class NetworkInventoryService
             var itemData = GameDataManager.Instance.GetItemData(itemDataId);
             if (itemData == null) return false;
 
+            _usedItemIds.Add(itemDataId);
+
             if (string.IsNullOrEmpty(itemData.UseItemType) == false)
             {
                 UseItemFunction(itemData.UseItemType);
             }
 
-            // 🌟 [수정] 소모성 아닌 아이템(노트, 폰, 지도) 사용 시 선택 상태를 깔끔히 해제 후 return
+            CheckAndTriggerDialogueByItem(itemDataId);
+
             if (itemDataId == "Item_Note_01" || itemDataId == "Item_Phone_01" || itemDataId == "Item_Map_01")
             {
                 if (invenVm.SelectedItem == itemSlotVm)
@@ -129,18 +134,25 @@ public class NetworkInventoryService
 
         return false;
     }
+    private void CheckAndTriggerDialogueByItem(string itemDataId)
+    {
+        var timeVm = NetworkManager.Inst?.TimeService?.GetViewModel();
+        if (timeVm == null) return;
 
+        int currentDay = timeVm.CurrentDay;
 
+        if (currentDay == 2 && itemDataId == "Item_Map_01")
+        {
+            var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
+            if (uiBase is DialogueUI dialogueUi)
+            {
+                dialogueUi.StartDialogue("Dialogue_Day2_002");
+            }
+        }
+    }
 
     private void UseItemFunction(string itemUseType)
-        //List<string> useItemParamList
     {
-        // 안전하게 체크
-        //if (useItemParamList == null || useItemParamList.Count == 0)
-        //{
-        //    return;
-        //}
-
         if (itemUseType == "OpenNotePopup")
         {
             UIManager.Instance.OpenHiddenNotePopupUI();
@@ -153,28 +165,21 @@ public class NetworkInventoryService
         {
             UIManager.Instance.OpenPasswordPopupUI();
         }
-
         else if (itemUseType == "OpenMapPopup")
         {
             UIManager.Instance.OpenMapPopupUI();
         }
-
-
     }
 
     private void RequestRemoveItem(long removeTargetUniqueId)
     {
-       
-            var invenVm = GetLocalInventoryViewModel();
-            invenVm.RemoveItemSlotViewModel(removeTargetUniqueId);
-            //NetworkManager.Inst.SaveLoadService.RequstSaveData();
-
+        var invenVm = GetLocalInventoryViewModel();
+        invenVm.RemoveItemSlotViewModel(removeTargetUniqueId);
     }
 
     public Dictionary<long, ItemSlotViewModel> GetPlayerItemList()
     {
         var invenVm = GetLocalInventoryViewModel();
-        // _playerModel이 Private이므로 외부에서 ItemList를 받아올 수 있게 Get함수를 사용한다
         return invenVm.ItemList;
     }
 }
