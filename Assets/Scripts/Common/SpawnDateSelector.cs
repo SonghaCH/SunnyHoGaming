@@ -5,7 +5,8 @@ public enum SpawnDay
     Day_2 = 2,
     Day_3 = 3,
     Day_4 = 4,
-    Day_5 = 5
+    Day_5 = 5,
+    Day_6 = 6
 }
 
 public class SpawnDateSelector : MonoBehaviour

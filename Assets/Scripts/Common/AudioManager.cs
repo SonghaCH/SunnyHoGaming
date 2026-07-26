@@ -19,9 +19,9 @@ public class AudioManager : MonoBehaviour
         AudioController.Instance.PlayBGM(soundDataId);
     }
 
-    public void PlaySFX(string soundDataId)
+    public void PlaySFX(string soundDataId, bool isLoop = false)
     {
-        AudioController.Instance.PlaySFX(soundDataId);
+        AudioController.Instance.PlaySFX(soundDataId, isLoop);
     }
 
     public void StopBGM()

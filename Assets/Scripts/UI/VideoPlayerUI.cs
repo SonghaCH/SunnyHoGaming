@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Video;
 
 public class VideoPlayerUI : UIBase
@@ -9,6 +10,7 @@ public class VideoPlayerUI : UIBase
 
     private VideoPlayer videoPlayer;
     private float holdTimer = 0f;
+    private bool isFinished = false; // 스킵 연타 및 중복 종료 방지 플래그
 
     private void Awake()
     {
@@ -18,14 +20,16 @@ public class VideoPlayerUI : UIBase
     private void OnEnable()
     {
         holdTimer = 0f;
+        isFinished = false;
 
         if (videoPlayer != null)
         {
             videoPlayer.loopPointReached += OnVideoFinished;
         }
 
-        // 1. 영상 재생 시작 시 게임을 Pause 상태로 만들고 마우스 커서/시점 조작을 멈춥니다.
-        PauseGameAndStartMapPreload();
+        SetPlayerCanMove(false);
+
+        StartVideoSequenceAsync().Forget();
     }
 
     private void OnDisable()
@@ -34,11 +38,15 @@ public class VideoPlayerUI : UIBase
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
         }
+
+        SetPlayerCanMove(true);
+
     }
 
     private void Update()
     {
-        // K 키 입력 감지 (꾹 누르기)
+        if (isFinished) return;
+
         if (Input.GetKey(KeyCode.K))
         {
             holdTimer += Time.deltaTime;
@@ -55,49 +63,65 @@ public class VideoPlayerUI : UIBase
         }
     }
 
-    // 영상 재생 자연 종료 시 호출
+    private async UniTaskVoid StartVideoSequenceAsync()
+    {
+        await UniTask.Yield(PlayerLoopTiming.Update);
+
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
+            if (viewModel != null)
+            {
+                Debug.Log("[VideoPlayerUI] 맵 생성을 트리거하고 바로 시간을 정지합니다.");
+
+                viewModel.OnRequestingPlay();
+                
+                viewModel.OnRequestingPause();
+            }
+        }
+
+
+        SetPlayerCanMove(false);
+    }
+
     private void OnVideoFinished(VideoPlayer vp)
     {
         FinishVideoAndStartGame();
     }
 
-    // [영상 시작 시] 퍼즈 상태 전환 + 백그라운드 맵 미리 로딩
-    private void PauseGameAndStartMapPreload()
-    {
-        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
-        {
-            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
-            if (viewModel != null)
-            {
-                // 게임 상태를 Paused로 변경 (카메라/커서 고정)
-                viewModel.OnRequestingPause();
 
-                // 동시에 백그라운드에서 맵 생성을 시작함
-                viewModel.OnRequestingPlay();
-            }
-        }
-    }
-
-    // [영상 종료/스킵 시] UI 닫기 + 게임 Playing 상태로 전환
     private void FinishVideoAndStartGame()
     {
-        gameObject.SetActive(false);
+        if (isFinished) return;
+        isFinished = true;
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.CloseVideoPlayerUI();
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
 
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-                // 영상이 끝났으므로 Resume 또는 Play 신호를 보내 상태를 Playing으로 변경
-                if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
-                {
-                    viewModel.OnRequestingResume();
-                }
-                else
-                {
-                    viewModel.OnRequestingPlay();
-                }
+                viewModel.OnRequestingResume();
             }
+        }
+
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
+    }
+
+
+    private void SetPlayerCanMove(bool canMove)
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)
+        {
+            NetworkManager.Inst.PlayerService.SetCanMove(canMove);
         }
     }
 }

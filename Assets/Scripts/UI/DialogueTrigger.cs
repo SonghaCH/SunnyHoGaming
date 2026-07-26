@@ -2,14 +2,13 @@
 
 public class DialogueTrigger : MonoBehaviour
 {
-    [SerializeField] private string targetDialogueId;
-    [SerializeField] private bool isOneTimeTrigger = true;
+    [SerializeField] protected string targetDialogueId;
+    [SerializeField] protected bool isOneTimeTrigger = true;
 
-    private bool _hasTriggered = false;
+    protected bool _hasTriggered = false;
 
     private void Awake()
     {
-        // 실수를 방지하기 위해 BoxCollider의 IsTrigger 설정을 강제로 켜줍니다.
         var boxCollider = GetComponent<BoxCollider>();
         if (boxCollider != null)
         {
@@ -17,33 +16,34 @@ public class DialogueTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (isOneTimeTrigger && _hasTriggered) return;
 
-        // (프로젝트 설정에서 레이어 충돌 매트릭스를 적용했다면 더 안전합니다!)
         if (other.CompareTag("Player"))
         {
-            _hasTriggered = true;
-
-            // 1. UIManager를 통해 DialogueUI를 가져오거나 새로 활성화합니다.
-            var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
-
-            if (uiBase is DialogueUI dialogueUi)
-            {
-                // 2. 인스펙터에 적어둔 ID를 넘겨서 비동기 타이핑 연출 시작!
-                dialogueUi.StartDialogue(targetDialogueId);
-            }
-
-            // 한 번만 쓰고 버릴 트리거라면 씬에서 바로 없애서 물리 연산 부하를 0으로 만듭니다.
-            if (isOneTimeTrigger)
-            {
-                Destroy(gameObject);
-            }
+            ExecuteDialogue();
         }
     }
 
-    private void OnDrawGizmos()
+    protected void ExecuteDialogue()
+    {
+        _hasTriggered = true;
+
+        var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
+
+        if (uiBase is DialogueUI dialogueUi)
+        {
+            dialogueUi.StartDialogue(targetDialogueId);
+        }
+
+        if (isOneTimeTrigger)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    protected void OnDrawGizmos()
     {
         BoxCollider box = GetComponent<BoxCollider>();
         if (box != null)

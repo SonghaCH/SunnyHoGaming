@@ -17,11 +17,15 @@ public class FixerPopupUI : UIBase
     private bool _isTransitioning;
     private FixerViewModel _targetFixer;
 
+    private static bool _hasTriggeredDay2Dialogue = false;
+
     private void OnEnable()
     {
         _isTransitioning = false;
         Btn_Close.BindOnClickButtonEvent(Onclick_Close);
         Btn_Order.BindOnClickButtonEvent(Onclick_Order);
+
+        CheckAndTriggerDay2Dialogue();
     }
 
     private void OnDisable()
@@ -34,6 +38,26 @@ public class FixerPopupUI : UIBase
             {
                 var detector = _targetFixer.GetComponentInChildren<FixerPlayerDetector>();
                 detector?.RestoreControl();
+            }
+        }
+    }
+
+   
+    private void CheckAndTriggerDay2Dialogue()
+    {
+        if (_hasTriggeredDay2Dialogue) return;
+
+        var timeVm = NetworkManager.Inst?.TimeService?.GetViewModel();
+        if (timeVm == null) return;
+
+        if (timeVm.CurrentDay == 2)
+        {
+            _hasTriggeredDay2Dialogue = true; 
+
+            var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
+            if (uiBase is DialogueUI dialogueUi)
+            {
+                dialogueUi.StartDialogue("Dialogue_Day2_007");
             }
         }
     }
@@ -79,7 +103,7 @@ public class FixerPopupUI : UIBase
             return;
         }
 
-        if (Text_FixerName != null) 
+        if (Text_FixerName != null)
         {
             Text_FixerName.text = fixerData.Name;
         }
@@ -97,5 +121,4 @@ public class FixerPopupUI : UIBase
             }
         }
     }
-
 }

@@ -54,9 +54,11 @@ public class FixerView : MonoBehaviour
                 break;
             case FixerState.Executing:
                 _animator.CrossFade("Fix", 0.1f);
+                AudioManager.Instance.PlaySFX("Sound/Repair", isLoop: true);
                 break;
             case FixerState.Returning:
                 _animator.Play("Run");
+                AudioManager.Instance.StopSFX();
                 break;
             case FixerState.Wandering:
                 _animator.CrossFade("Walk", 0.1f);

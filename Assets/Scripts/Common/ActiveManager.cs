@@ -353,6 +353,7 @@ public class ActiveManager : MonoBehaviour
             QuestManager.Instance.CheckTaskProgress(type.ToString());
         }
 
+        AudioManager.Instance.PlaySFX("Sound/Success");
         OnActiveDataChanged?.Invoke();
 
         Debug.Log($"[플레이어] {type} 미니게임 완수! 수리 진척도 +{miniGameSuccessRestoreValue}% (오늘 완료 처리됨)");
@@ -416,6 +417,13 @@ public class ActiveManager : MonoBehaviour
         // 오늘 완료 플래그 설정 (누가 하든 1회 완료)
         _miniGameClearedTodayDict[taskType] = true;
 
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.CheckTaskProgress(taskType.ToString());
+        }
+
+        AudioManager.Instance.PlaySFX("Sound/Success");
+
         // 1~4번 수리 작업인 경우 수리 진척도 가산
         if (taskType <= ActiveTaskType.RouteControl)
         {
@@ -473,6 +481,7 @@ public class ActiveManager : MonoBehaviour
                 }
             }
         }
+        OnActiveDataChanged?.Invoke();
     }
 
 
@@ -609,5 +618,18 @@ public class ActiveManager : MonoBehaviour
 
             Debug.Log($"[{taskType}] 작업장의 픽서 배정이 해제되었습니다.");
         }
+    }
+    public void ForceSetSystemProgress(ActiveTaskType type, float amount)
+    {
+        if (_systemProgressDict.ContainsKey(type))
+        {
+            _systemProgressDict[type] = Mathf.Clamp(amount, 0f, 100f);
+            OnActiveDataChanged?.Invoke();
+        }
+    }
+
+    public void RefreshAllActiveObjects()
+    {
+        OnActiveDataChanged?.Invoke();
     }
 }

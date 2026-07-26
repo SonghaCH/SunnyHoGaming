@@ -54,7 +54,6 @@ public class Door : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log($"OnTriggerExit 호출됨: {other.name}, tag: {other.tag}");
         if (other.CompareTag("Player") || other.CompareTag("Fixer"))
         {
             _isOpen = false;
@@ -70,7 +69,6 @@ public class Door : MonoBehaviour
     private void OpenDoor()
     {
         AudioManager.Instance.PlaySFX("Sound/Sound_Door");
-        Debug.Log("[Door] OpenDoor() 호출됨!");
         _isOpen = true;
     }
     private void HandlePasswordSuccess(string doorId)
