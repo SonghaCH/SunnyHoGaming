@@ -8,6 +8,7 @@ public class PlayerMovementViewModel : ViewModelBase
     private bool _canMove = true;
 
     private bool _isRunning = false;
+    private bool _isMoving = false;
     private float _runSpeedMultiplier = 1.5f;
 
     public void InvokeOnceOnInit()
@@ -79,6 +80,21 @@ public class PlayerMovementViewModel : ViewModelBase
             {
                 _isRunning = value;
                 OnPropertyChanged(nameof(IsRunning));
+            }
+        }
+    }
+    public bool IsMoving
+    {
+        get
+        {
+            return _isMoving;
+        }
+        set
+        {
+            if (_isMoving != value)
+            {
+                _isMoving = value;
+                OnPropertyChanged(nameof(IsMoving));
             }
         }
     }

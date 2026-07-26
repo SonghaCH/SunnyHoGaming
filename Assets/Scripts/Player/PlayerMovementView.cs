@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using UnityEngine;
+using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -10,6 +11,8 @@ public class PlayerMovementView : ViewBase
 
     private Rigidbody _rigidbody;
     private PlayerMovementViewModel _movementViewModel;
+    private PlayerStatusViewModel _statusViewModel;
+    private Transform _target;
 
     private float _xRotation = 0.0f;
     private float _inputX = 0.0f;
@@ -26,26 +29,37 @@ public class PlayerMovementView : ViewBase
         if (NetworkManager.Inst != null)
         {
             BindMovementViewModel(NetworkManager.Inst.PlayerService.GetMovementViewModel());
+            BindStatusViewModel(NetworkManager.Inst.PlayerService.GetStatusViewModel());
         }
     }
 
     public void BindMovementViewModel(PlayerMovementViewModel viewModel)
     {
         _movementViewModel = viewModel;
-        _movementViewModel.PropertyChanged += OnPropertyChanged_View;
         _movementViewModel.InvokeOnceOnInit();
+    }
+
+    public void BindStatusViewModel(PlayerStatusViewModel viewModel)
+    {
+        _statusViewModel = viewModel;
+        _statusViewModel.PropertyChanged += OnPropertyChanged_StatusView;
+        _statusViewModel.InvokeOnceOnInit();
     }
 
     private void OnDestroy()
     {
-        if (_movementViewModel != null)
+        if (_statusViewModel != null)
         {
-            _movementViewModel.PropertyChanged -= OnPropertyChanged_View;
+            _statusViewModel.PropertyChanged -= OnPropertyChanged_StatusView;
         }
     }
 
-    private void OnPropertyChanged_View(object sender, PropertyChangedEventArgs e)
+    private void OnPropertyChanged_StatusView(object sender, PropertyChangedEventArgs e)
     {
+        if(e.PropertyName == nameof(PlayerStatusViewModel.IsSleeping))
+        {
+            ChangePlayerPositionAndRotation();
+        }
     }
 
     private void Update()
@@ -64,6 +78,15 @@ public class PlayerMovementView : ViewBase
 
         _inputX = Input.GetAxisRaw("Horizontal");
         _inputZ = Input.GetAxisRaw("Vertical");
+
+        if (_inputX != 0.0f || _inputZ != 0.0f)
+        {
+            _movementViewModel.IsMoving = true;
+        }
+        else
+        {
+            _movementViewModel.IsMoving = false;
+        }
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -124,5 +147,15 @@ public class PlayerMovementView : ViewBase
 
         _cameraTransform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
         transform.Rotate(Vector3.up * lookX);
+    }
+
+    public void ChangePlayerPositionAndRotation()
+    {
+        transform.SetPositionAndRotation(_target.position, _target.rotation);
+    }
+
+    public void SetTarget(Transform target)
+    {
+        _target = target;
     }
 }

@@ -1,6 +1,7 @@
 ﻿public class PlayerStatusViewModel : ViewModelBase
 {
     private float _hunger = 100.0f;
+    private bool _isSleeping = false;
 
     public void InvokeOnceOnInit()
     {
@@ -19,6 +20,22 @@
             {
                 _hunger = value;
                 OnPropertyChanged(nameof(Hunger));
+            }
+        }
+    }
+
+    public bool IsSleeping
+    {
+        get
+        {
+            return _isSleeping;
+        }
+        set
+        {
+            if (_isSleeping != value)
+            {
+                _isSleeping = value;
+                OnPropertyChanged(nameof(IsSleeping));
             }
         }
     }
