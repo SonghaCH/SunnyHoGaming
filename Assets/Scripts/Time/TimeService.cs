@@ -34,4 +34,15 @@
             _viewModel.CurrentDay = (_totalGameMinutes / _minutesPerDay) + 1;
         }
     }
+
+    public void SetTimeByDay(int targetDay)
+    {
+        _totalGameMinutes = (targetDay - 1) * _minutesPerDay;
+
+        _timer = 0.0f;
+
+        _viewModel.CurrentDay = targetDay;
+        _viewModel.CurrentHour = 8;
+        _viewModel.CurrentMinute = 0;
+    }
 }

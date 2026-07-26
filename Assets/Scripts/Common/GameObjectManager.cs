@@ -102,4 +102,30 @@ public class GameObjectManager : MonoBehaviour
 
         ResourceManager.Instance.ReleaseInstance(fixer.gameObject);
     }
+
+    public async UniTask ClearAllFixersAsync()
+    {
+        FixerViewModel[] activeFixers = FindObjectsByType<FixerViewModel>(FindObjectsSortMode.None);
+
+        foreach (var fixer in activeFixers)
+        {
+            if (fixer != null && fixer.gameObject != null)
+            {
+                if (ResourceManager.Instance != null)
+                {
+                    ResourceManager.Instance.ReleaseInstance(fixer.gameObject);
+                }
+                else
+                {
+                    Destroy(fixer.gameObject);
+                }
+            }
+        }
+
+        _fixerObjectContainer.Clear();
+
+        await UniTask.Yield(PlayerLoopTiming.Update);
+
+        Debug.Log("[Fixer Clear] 맵에 있던 기존 픽서들을 모두 초기화하고 딕셔너리를 비웠습니다.");
+    }
 }

@@ -610,4 +610,17 @@ public class ActiveManager : MonoBehaviour
             Debug.Log($"[{taskType}] 작업장의 픽서 배정이 해제되었습니다.");
         }
     }
+    public void ForceSetSystemProgress(ActiveTaskType type, float amount)
+    {
+        if (_systemProgressDict.ContainsKey(type))
+        {
+            _systemProgressDict[type] = Mathf.Clamp(amount, 0f, 100f);
+            OnActiveDataChanged?.Invoke();
+        }
+    }
+
+    public void RefreshAllActiveObjects()
+    {
+        OnActiveDataChanged?.Invoke();
+    }
 }

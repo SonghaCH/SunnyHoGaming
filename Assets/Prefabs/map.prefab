@@ -7451,7 +7451,7 @@ GameObject:
   - component: {fileID: 7487437128251841534}
   m_Layer: 0
   m_Name: FixerSpawnPoint3
-  m_TagString: Untagged
+  m_TagString: RoomArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37656,7 +37656,7 @@ GameObject:
   - component: {fileID: 8139917343542003360}
   m_Layer: 0
   m_Name: FixerSpawnPoint1
-  m_TagString: Untagged
+  m_TagString: RoomArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -177228,7 +177228,7 @@ GameObject:
   - component: {fileID: 8051933505015602364}
   m_Layer: 0
   m_Name: FixerSpawnPoint2
-  m_TagString: Untagged
+  m_TagString: RoomArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -61,7 +61,7 @@ public class VideoPlayerUI : UIBase
         FinishVideoAndStartGame();
     }
 
-    // [영상 시작 시] 퍼즈 상태 전환 + 백그라운드 맵 미리 로딩
+    // [영상 시작 시] 퍼즈 상태 유지
     private void PauseGameAndStartMapPreload()
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
@@ -69,11 +69,8 @@ public class VideoPlayerUI : UIBase
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-                // 게임 상태를 Paused로 변경 (카메라/커서 고정)
+                // 게임 상태를 Paused로 변경하여 영상이 나오는 동안 시간이 흐르거나 픽서가 스폰되지 않게 고정합니다.
                 viewModel.OnRequestingPause();
-
-                // 동시에 백그라운드에서 맵 생성을 시작함
-                viewModel.OnRequestingPlay();
             }
         }
     }
@@ -88,7 +85,7 @@ public class VideoPlayerUI : UIBase
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
-                // 영상이 끝났으므로 Resume 또는 Play 신호를 보내 상태를 Playing으로 변경
+                // 영상이 끝났으므로 멈춰둔 게임을 다시 재생(Play/Resume)합니다.
                 if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
                 {
                     viewModel.OnRequestingResume();

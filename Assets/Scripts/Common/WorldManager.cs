@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class WorldManager : MonoBehaviour
 {
     public static WorldManager Instance { get; private set; }
+    public bool IsSpawnCompleted { get; private set; } = true;
 
     [Header("맵 생성 세팅")]
     [SerializeField] private string _mapAddressableKey;
@@ -14,12 +15,13 @@ public class WorldManager : MonoBehaviour
     private float _gatherRadius = 2.5f;
 
     private Dictionary<int, List<Transform>> _fixerSpawnPoints = new Dictionary<int, List<Transform>>();
+    private List<FixerSaveData> _pendingFixerSaveData = null;
     private TimeViewModel _timeViewModel;
     private GameStateViewModel _gameStateViewModel;
 
-    // [추가] 생성된 맵 오브젝트 및 생성 중 상태 플래그 관리
     private GameObject _currentMapInstance;
     private bool _isInitializing = false;
+    private bool _isLoadingGame = false;
 
     private Transform _mainRoomSpawnPoint;
     public Transform MainRoomTransform
@@ -54,7 +56,7 @@ public class WorldManager : MonoBehaviour
                 _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
                 if (_timeViewModel != null)
                 {
-                    _timeViewModel.PropertyChanged -= OnTimePropertyChanged; // 중복 방지
+                    _timeViewModel.PropertyChanged -= OnTimePropertyChanged; 
                     _timeViewModel.PropertyChanged += OnTimePropertyChanged;
                 }
             }
@@ -64,14 +66,13 @@ public class WorldManager : MonoBehaviour
                 _gameStateViewModel = NetworkManager.Inst.GameStateService.GetViewModel();
                 if (_gameStateViewModel != null)
                 {
-                    _gameStateViewModel.RequestingPlay -= InitializeWorld; // 중복 방지
+                    _gameStateViewModel.RequestingPlay -= InitializeWorld; 
                     _gameStateViewModel.RequestingPlay += InitializeWorld;
                 }
             }
         }
     }
 
-    // [추가] 메모리 누수 및 중복 호출 방지를 위해 OnDestroy에서 이벤트 해제
     private void OnDestroy()
     {
         if (_timeViewModel != null)
@@ -87,6 +88,11 @@ public class WorldManager : MonoBehaviour
 
     private void OnTimePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
+        if (_mainRoomSpawnPoint == null)
+        {
+            return;
+        }
+
         if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
         {
             int newDay = _timeViewModel.CurrentDay;
@@ -111,7 +117,6 @@ public class WorldManager : MonoBehaviour
 
     private async UniTaskVoid InitializeWorldAsync()
     {
-        // [추가] 이미 초기화 중이면 중복 실행 방지
         if (_isInitializing) return;
         _isInitializing = true;
 
@@ -124,8 +129,15 @@ public class WorldManager : MonoBehaviour
             {
                 startDay = _timeViewModel.CurrentDay;
             }
-
-            await StartNewDayAsync(startDay);
+           
+            if (!_isLoadingGame)
+            {
+                await StartNewDayAsync(startDay);
+            }
+            else
+            {
+                _isLoadingGame = false; 
+            }
         }
         finally
         {
@@ -135,34 +147,30 @@ public class WorldManager : MonoBehaviour
 
     private async UniTask SpawnMapAsync()
     {
-        if (string.IsNullOrWhiteSpace(_mapAddressableKey))
-        {
-            Debug.LogError("[WorldManager] 맵 어드레서블 키가 비어있습니다.");
-            return;
-        }
+        if (string.IsNullOrWhiteSpace(_mapAddressableKey)) { return; }
+        if (ResourceManager.Instance == null) { return; }
 
-        if (ResourceManager.Instance == null)
-        {
-            Debug.LogError("[WorldManager] ResourceManager가 아직 준비되지 않았습니다. 맵 생성을 진행할 수 없습니다.");
-            return;
-        }
-
-        // [추가] 이미 생성된 맵이 있다면 파괴/정리
         if (_currentMapInstance != null)
         {
             Destroy(_currentMapInstance);
             _currentMapInstance = null;
         }
 
+        _mainRoomSpawnPoint = null;
+        _roomAreaCollider = null;
+        _fixerSpawnPoints.Clear();
+
         _currentMapInstance = await ResourceManager.Instance.InstantiateAsync(_mapAddressableKey, Vector3.zero, Quaternion.identity);
 
-        if (_currentMapInstance == null)
-        {
-            Debug.LogError($"[WorldManager] 어드레서블 키({_mapAddressableKey})로 맵 생성에 실패했습니다.");
-            return;
-        }
+        if (_currentMapInstance == null) { return; }
 
         ExtractSpawnPoints(_currentMapInstance.transform);
+
+        if (_pendingFixerSaveData != null)
+        {
+            await RestoreSavedFixersAsync(_pendingFixerSaveData);
+            _pendingFixerSaveData = null;
+        }
     }
 
     private void ExtractSpawnPoints(Transform mapRoot)
@@ -199,41 +207,50 @@ public class WorldManager : MonoBehaviour
 
     public async UniTask StartNewDayAsync(int currentDay)
     {
-        if (_fixerSpawnPoints.ContainsKey(currentDay) == false || _fixerSpawnPoints[currentDay].Count == 0)
-        {
-            Debug.Log($"[WorldManager] {currentDay}일 차 스폰 포인트가 맵에 없습니다. 스폰을 건너뜁니다.");
-            return;
-        }
+        IsSpawnCompleted = false;
 
-        List<Transform> todaySpawnPoints = _fixerSpawnPoints[currentDay];
-        List<string> todayFixerIds = new List<string>();
-
-        if (GameDataManager.Instance.FixerDataList != null)
+        try
         {
-            foreach (var fixer in GameDataManager.Instance.FixerDataList.Values)
+            if (_fixerSpawnPoints.ContainsKey(currentDay) == false || _fixerSpawnPoints[currentDay].Count == 0)
             {
-                if (fixer.UnlockDate == currentDay)
+                Debug.Log($"[WorldManager] {currentDay}일 차 스폰 포인트가 맵에 없습니다. 스폰을 건너뜁니다.");
+                return;
+            }
+
+            List<Transform> todaySpawnPoints = _fixerSpawnPoints[currentDay];
+            List<string> todayFixerIds = new List<string>();
+
+            if (GameDataManager.Instance.FixerDataList != null)
+            {
+                foreach (var fixer in GameDataManager.Instance.FixerDataList.Values)
                 {
-                    todayFixerIds.Add(fixer.Id.ToString());
+                    if (fixer.UnlockDate == currentDay)
+                    {
+                        todayFixerIds.Add(fixer.Id.ToString());
+                    }
                 }
             }
+
+            if (todayFixerIds.Count == 0)
+            {
+                return;
+            }
+
+            int spawnIndex = 0;
+
+            foreach (string fixerId in todayFixerIds)
+            {
+                Transform targetSpawnPoint = todaySpawnPoints[spawnIndex % todaySpawnPoints.Count];
+                Vector3 spawnPos = targetSpawnPoint.position;
+
+                await GameObjectManager.Instance.SpawnFixerAsync(fixerId, spawnPos, FixerState.Rampaging, targetSpawnPoint);
+
+                spawnIndex++;
+            }
         }
-
-        if (todayFixerIds.Count == 0)
+        finally
         {
-            return;
-        }
-
-        int spawnIndex = 0;
-
-        foreach (string fixerId in todayFixerIds)
-        {
-            Transform targetSpawnPoint = todaySpawnPoints[spawnIndex % todaySpawnPoints.Count];
-            Vector3 spawnPos = targetSpawnPoint.position;
-
-            await GameObjectManager.Instance.SpawnFixerAsync(fixerId, spawnPos, FixerState.Rampaging, targetSpawnPoint);
-
-            spawnIndex++;
+            IsSpawnCompleted = true;
         }
     }
 
@@ -241,19 +258,61 @@ public class WorldManager : MonoBehaviour
     {
         if (savedFixers == null) return;
 
-        foreach (FixerSaveData savedData in savedFixers)
-        {
-            Vector3 targetPosition = savedData.lastPosition;
+        IsSpawnCompleted = false;
 
-            if (savedData.lastState != FixerState.Rampaging)
+        try
+        {
+            if (_mainRoomSpawnPoint == null && _currentMapInstance != null)
             {
-                if (_mainRoomSpawnPoint != null)
-                {
-                    targetPosition = _mainRoomSpawnPoint.position;
-                }
+                ExtractSpawnPoints(_currentMapInstance.transform);
             }
 
-            await GameObjectManager.Instance.SpawnFixerAsync(savedData.fixerDataId, targetPosition, savedData.lastState);
+            foreach (FixerSaveData savedData in savedFixers)
+            {
+                Vector3 targetPosition = savedData.lastPosition;
+                Transform targetSpawnPoint = null;
+
+                if (savedData.lastState != FixerState.Rampaging)
+                {
+                    if (_mainRoomSpawnPoint != null)
+                    {
+                        targetPosition = _mainRoomSpawnPoint.position;
+                        targetSpawnPoint = _mainRoomSpawnPoint;
+                    }
+                }
+                else
+                {
+                    float closestDistance = float.MaxValue;
+                    foreach (var kvp in _fixerSpawnPoints)
+                    {
+                        foreach (var spawnPoint in kvp.Value)
+                        {
+                            float dist = Vector3.Distance(targetPosition, spawnPoint.position);
+                            if (dist < closestDistance)
+                            {
+                                closestDistance = dist;
+                                targetSpawnPoint = spawnPoint;
+                            }
+                        }
+                    }
+                }
+
+                if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+                {
+                    targetPosition = hit.position;
+                }
+
+                var fixerInstance = await GameObjectManager.Instance.SpawnFixerAsync(
+                    savedData.fixerDataId,
+                    targetPosition,
+                    savedData.lastState,
+                    targetSpawnPoint
+                );
+            }
+        }
+        finally
+        {
+            IsSpawnCompleted = true;
         }
     }
 
@@ -300,5 +359,11 @@ public class WorldManager : MonoBehaviour
         }
 
         Debug.Log("[WorldManager] 정상 상태의 모든 픽서를 메인룸으로 집합시키고 작업을 취소했습니다.");
+    }
+
+    public void SetPendingFixerData(List<FixerSaveData> list) 
+    {
+        _pendingFixerSaveData = list;
+        _isLoadingGame = true;
     }
 }
