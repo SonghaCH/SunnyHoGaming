@@ -353,6 +353,7 @@ public class ActiveManager : MonoBehaviour
             QuestManager.Instance.CheckTaskProgress(type.ToString());
         }
 
+        AudioManager.Instance.PlaySFX("Sound/Success");
         OnActiveDataChanged?.Invoke();
 
         Debug.Log($"[플레이어] {type} 미니게임 완수! 수리 진척도 +{miniGameSuccessRestoreValue}% (오늘 완료 처리됨)");
@@ -420,6 +421,8 @@ public class ActiveManager : MonoBehaviour
         {
             QuestManager.Instance.CheckTaskProgress(taskType.ToString());
         }
+
+        AudioManager.Instance.PlaySFX("Sound/Success");
 
         // 1~4번 수리 작업인 경우 수리 진척도 가산
         if (taskType <= ActiveTaskType.RouteControl)

@@ -30,8 +30,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 161cd25fc162ac1429297a3b6ce0164a
+    m_Address: Sound/KeyPad
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 204118c0ece9fd14ca3b1851215b67d9
     m_Address: Prefabs/map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31d7cbf32db6deb48a66f5328d353e06
+    m_Address: Sound/TitleBGM
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -50,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ec748b17c72c2047ac16d6888c01c5c
+    m_Address: Sound/Repair
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 670954ecf44fc8a4b9d2e34a3b05aa2c
     m_Address: Sprite/Image_RedFixer
     m_ReadOnly: 0
@@ -60,6 +75,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8565cf93c838c0746a19e7a538e101e4
+    m_Address: Sound/Failed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91120df9d941e674b84dd482d32fd20e
     m_Address: Fixer_03
     m_ReadOnly: 0
@@ -67,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bb5f0857c4b41e44da110bdb5a4cc0d3
     m_Address: Icons/EXFixer_Icon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c183d3f2976b38f40a2fe22b1c50577d
+    m_Address: Sound/Success
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

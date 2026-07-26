@@ -64,7 +64,9 @@ public class PasswordMiniGame : UIBase
         if (_currentInput.Length >= maxPasswordLength)
         {
             return;
-        } 
+        }
+
+        AudioManager.Instance.PlaySFX("Sound/KeyPad");
 
         _currentInput += number;
         UpdateDisplay();
@@ -167,6 +169,8 @@ public class PasswordMiniGame : UIBase
             passwordDisplayText.color = Color.red;
             passwordDisplayText.text = "주파수 불일치";
         }
+
+        AudioManager.Instance.PlaySFX("Sound/Failed");
 
         Debug.Log("비밀번호 불일치! 다시 시도하세요.");
         StartCoroutine(ResetAfterDelay(1f));

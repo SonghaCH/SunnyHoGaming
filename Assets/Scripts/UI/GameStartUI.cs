@@ -25,6 +25,8 @@ public class GameStartUI : UIBase
         Btn_Start.BindOnClickButtonEvent(OnClick_Start);
         Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
         Btn_Exit.BindOnClickButtonEvent(OnClick_Exit);
+
+        AudioManager.Instance.PlayBGM("Sound/TitleBGM");
     }
 
     private void Update()
@@ -45,6 +47,8 @@ public class GameStartUI : UIBase
         {
             Destroy(_skyboxCameraInstance);
         }
+
+        AudioManager.Instance.StopBGM();
     }
 
     private void ShowCursor()
