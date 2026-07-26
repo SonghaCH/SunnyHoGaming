@@ -94,6 +94,24 @@ public class VideoPlayerUI : UIBase
         FinishVideoAndStartGame();
     }
 
+<<<<<<< HEAD
+=======
+    // [영상 시작 시] 퍼즈 상태 유지
+    private void PauseGameAndStartMapPreload()
+    {
+        if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+        {
+            var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
+            if (viewModel != null)
+            {
+                // 게임 상태를 Paused로 변경하여 영상이 나오는 동안 시간이 흐르거나 픽서가 스폰되지 않게 고정합니다.
+                viewModel.OnRequestingPause();
+            }
+        }
+    }
+
+    // [영상 종료/스킵 시] UI 닫기 + 게임 Playing 상태로 전환
+>>>>>>> origin/dev_Seonguk_NetWorkManager
     private void FinishVideoAndStartGame()
     {
         if (isFinished) return;
@@ -115,6 +133,10 @@ public class VideoPlayerUI : UIBase
             var viewModel = NetworkManager.Inst.GameStateService.GetViewModel();
             if (viewModel != null)
             {
+<<<<<<< HEAD
+=======
+                // 영상이 끝났으므로 멈춰둔 게임을 다시 재생(Play/Resume)합니다.
+>>>>>>> origin/dev_Seonguk_NetWorkManager
                 if (NetworkManager.Inst.GameStateService.GetCurrentState() == GameState.Paused)
                 {
                     viewModel.OnRequestingResume();

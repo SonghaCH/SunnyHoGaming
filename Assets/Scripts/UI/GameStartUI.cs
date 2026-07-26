@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class GameStartUI : UIBase
 {
-    [SerializeField] private UIButton Btn_Start;
+    [Header("Buttons")]
+    [SerializeField] private UIButton Btn_NewGame; 
+    [SerializeField] private UIButton Btn_LoadGame; 
     [SerializeField] private UIButton Btn_Setting;
     [SerializeField] private UIButton Btn_Exit;
+
+    [Header("Camera")]
     [SerializeField] private GameObject _skyboxCameraPrefab;
 
     private GameObject _skyboxCameraInstance;
@@ -22,9 +26,10 @@ public class GameStartUI : UIBase
 
         _skyboxCameraInstance = Instantiate(_skyboxCameraPrefab);
 
-        Btn_Start.BindOnClickButtonEvent(OnClick_Start);
-        Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
-        Btn_Exit.BindOnClickButtonEvent(OnClick_Exit);
+        if (Btn_NewGame != null) Btn_NewGame.BindOnClickButtonEvent(OnClick_NewGame);
+        if (Btn_LoadGame != null) Btn_LoadGame.BindOnClickButtonEvent(OnClick_LoadGame);
+        if (Btn_Setting != null) Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
+        if (Btn_Exit != null) Btn_Exit.BindOnClickButtonEvent(OnClick_Exit);
     }
 
     private void Update()
@@ -37,9 +42,10 @@ public class GameStartUI : UIBase
 
     private void OnDisable()
     {
-        Btn_Start.UnBindAllOnClickButtonEvent();
-        Btn_Setting.UnBindAllOnClickButtonEvent();
-        Btn_Exit.UnBindAllOnClickButtonEvent();
+        if (Btn_NewGame != null) Btn_NewGame.UnBindAllOnClickButtonEvent();
+        if (Btn_LoadGame != null) Btn_LoadGame.UnBindAllOnClickButtonEvent();
+        if (Btn_Setting != null) Btn_Setting.UnBindAllOnClickButtonEvent();
+        if (Btn_Exit != null) Btn_Exit.UnBindAllOnClickButtonEvent();
 
         if (_skyboxCameraInstance != null)
         {
@@ -47,6 +53,7 @@ public class GameStartUI : UIBase
         }
     }
 
+<<<<<<< HEAD
     private void ShowCursor()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -54,9 +61,47 @@ public class GameStartUI : UIBase
     }
 
     private void OnClick_Start()
+=======
+
+    private void OnClick_NewGame()
+    {
+        if (NetworkManager.Inst != null)
+        {
+            NetworkManager.Inst.RequestNewGame(); 
+        }
+
+        TransitionToMainGame(true);
+    }
+
+ 
+    private void OnClick_LoadGame()
+    {
+        if (NetworkManager.Inst != null)
+        {
+            NetworkManager.Inst.RequestLoadGame();
+        }
+
+        TransitionToMainGame(false);
+    }
+
+
+    private void TransitionToMainGame(bool playVideo)
+>>>>>>> origin/dev_Seonguk_NetWorkManager
     {
         UIManager.Instance.CloseGameStartUI();
-        UIManager.Instance.OpenVideoPlayerUI();
+
+        if (playVideo)
+        {
+            UIManager.Instance.OpenVideoPlayerUI();
+        }
+        else
+        {
+            if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
+            {
+                NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPlay();
+            }
+        }
+
         UIManager.Instance.OpenMainUI();
     }
 

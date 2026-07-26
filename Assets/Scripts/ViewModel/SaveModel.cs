@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [Serializable]
 public class PlayerModel
 {
-    public List<ItemModel> ItemList = new List<ItemModel>();
-}
+    public int CurrentDay;
+    public float Hunger;
 
+    public List<ItemModel> ItemList = new List<ItemModel>();
+
+    public List<FixerSaveData> FixerList = new List<FixerSaveData>();
+
+    public List<ActiveProgressData> ActiveProgressList = new List<ActiveProgressData>();
+}
 
 [Serializable]
 public class ItemModel
@@ -25,4 +30,11 @@ public class FixerSaveData
     public string fixerDataId;
     public Vector3 lastPosition;
     public FixerState lastState;
+}
+
+[Serializable]
+public class ActiveProgressData
+{
+    public ActiveTaskType TaskType;
+    public float Progress;
 }
