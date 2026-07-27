@@ -13,14 +13,14 @@ public class ElecMiniGame : UIBase
     public TextMeshProUGUI voltageLeftText;     
 
     [Header("Game Settings")]
-    public float rotationSpeed = 400f;      // 회전 속도
+    public float rotationSpeed = 300f;      // 회전 속도
     public float successZoneCenterAngle = 115f;
 
     [Header("Difficulty Settings")]
     public float maxSuccessRange = 35f;     // 게임 시작 시 최대 세이프존 범위
-    public float minSuccessRange = 15f;     // 게이지가 가득 찰 때의 최소 세이프존 범위
+    public float minSuccessRange = 20f;     // 게이지가 가득 찰 때의 최소 세이프존 범위
 
-    public float progressPerSuccess = 0.1f; // 성공 시 채워질 양 (0~1)
+    public float progressPerSuccess = 0.3f; // 성공 시 채워질 양 (0~1)
     public float progressPerFail = 0.15f;    // 실패 시 채워질 양 (0~1)
 
     [Header("Game Over Settings")]

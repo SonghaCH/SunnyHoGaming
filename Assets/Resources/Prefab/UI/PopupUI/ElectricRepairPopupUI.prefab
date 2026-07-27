@@ -1142,11 +1142,11 @@ MonoBehaviour:
   failCountText: {fileID: 7878063134988205390}
   voltageRightText: {fileID: 3318924951039141145}
   voltageLeftText: {fileID: 2171694212721691797}
-  rotationSpeed: 400
+  rotationSpeed: 300
   successZoneCenterAngle: 115
   maxSuccessRange: 35
-  minSuccessRange: 15
-  progressPerSuccess: 0.1
+  minSuccessRange: 20
+  progressPerSuccess: 0.3
   progressPerFail: 0.15
   maxFails: 10
   startRightVoltage: 210
