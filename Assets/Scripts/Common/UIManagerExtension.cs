@@ -38,10 +38,18 @@ public enum UIType
     SettingPopupUI,
     GameOverPopupUI,
 
-    QuestMarker,
-    OpeningVideoPlayerUI,
-    EndingVideoPlayerUI,
 
+
+
+    OpeningVideoPlayerUI,
+    Day1VideoPlayerUI,
+    Day2VideoPlayerUI,
+    Day3VideoPlayerUI,
+    Day4VideoPlayerUI,
+
+
+    EndingVideoPlayerUI,
+    EndingDialogUI
     EndingDialogUI,
 
     HintNotePopupUI
@@ -424,6 +432,68 @@ public static class UIManagerExtension
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.OpeningVideoPlayerUI);
     }
+    public static void OpenDay1VideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.Day1VideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseDay1VideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.Day1VideoPlayerUI);
+    }
+    public static void OpenDay2VideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.Day2VideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseDay2VideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.Day2VideoPlayerUI);
+    }
+
+    public static void OpenDay3VideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.Day3VideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+    public static void CloseDay3VideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.Day3VideoPlayerUI);
+    }
+
+    public static void OpenDay4VideoPlayerUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.Day4VideoPlayerUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseDay4VideoPlayerUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.Day4VideoPlayerUI);
+    }
+
+
+
+
+
 
     public static void OpenEndingVideoPlayerUI(this UIManager uiManager)
     {
@@ -449,43 +519,6 @@ public static class UIManagerExtension
             
             Debug.LogWarning($"UI가 생성되지 않았습니다");
             return;
-        }
-    }
-
-    public static void OpenQuestMarker(this UIManager uiManager)
-    {
-        var uiBase = uiManager.OpenUI(UIRootType.BackgroundUI, UIType.QuestMarker);
-        if (uiBase == null)
-        {
-            Debug.LogWarning($"UI가 생성되지 않았습니다");
-            return;
-        }
-    }
-
-    public static void CloseQuestMarker(this UIManager uiManager)
-    {
-        uiManager.CloseUI(UIRootType.BackgroundUI, UIType.QuestMarker);
-    }
-    public static void AddQuestTargetMarker(this UIManager uiManager, Transform target)
-    {
-        var uiBase = uiManager.GetOpenedUI(UIRootType.BackgroundUI, UIType.QuestMarker);
-        if (uiBase == null)
-        {
-            uiBase = uiManager.OpenUI(UIRootType.BackgroundUI, UIType.QuestMarker);
-        }
-
-        if (uiBase is QuestMarkerUI questMarkerUI)
-        {
-            questMarkerUI.AddMarker(target);
-        }
-    }
-
-    public static void RemoveQuestTargetMarker(this UIManager uiManager, Transform target)
-    {
-        var uiBase = uiManager.GetOpenedUI(UIRootType.BackgroundUI, UIType.QuestMarker);
-        if (uiBase is QuestMarkerUI questMarkerUI)
-        {
-            questMarkerUI.RemoveMarker(target);
         }
     }
 
