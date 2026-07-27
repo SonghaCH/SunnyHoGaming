@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class RepairStation : WorkStation
 {
@@ -38,6 +40,7 @@ public class RepairStation : WorkStation
             }
         }
     }
+
     private void Update()
     {
         if (MaxGauge > 0 && CurrentGauge > 0)
