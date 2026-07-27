@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework.Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NetworkInventoryService
@@ -96,7 +97,7 @@ public class NetworkInventoryService
 
             if (string.IsNullOrEmpty(itemData.UseItemType) == false)
             {
-                UseItemFunction(itemData.UseItemType);
+                UseItemFunction(itemData);
             }
 
             CheckAndTriggerDialogueByItem(itemDataId);
@@ -151,15 +152,17 @@ public class NetworkInventoryService
         }
     }
 
-    private void UseItemFunction(string itemUseType)
+    private void UseItemFunction(ItemData itemData)
     {
+        string itemUseType = itemData.UseItemType;
+
         if (itemUseType == "OpenNotePopup")
         {
             UIManager.Instance.OpenHiddenNotePopupUI();
         }
         else if (itemUseType == "Reduce Hunger")
         {
-
+            NetworkManager.Inst.PlayerService.FillHunger(itemData.ApplyFigure);
         }
         else if (itemUseType == "OpenPhonePopup")
         {
