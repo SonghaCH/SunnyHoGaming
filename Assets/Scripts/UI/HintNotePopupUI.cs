@@ -12,7 +12,7 @@ public class HintNotePopupUI : UIBase
 
     private void OnClick_Close()
     {
-        UIManager.Instance.CloseHiddenNotePopupUI();
+        UIManager.Instance.CloseHintNotePopupUI();
     }
 
 }
