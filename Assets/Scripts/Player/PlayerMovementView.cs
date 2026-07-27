@@ -135,6 +135,9 @@ public class PlayerMovementView : ViewBase
         Vector3 targetPosition = currentPosition + (moveDirection * finalSpeed * Time.fixedDeltaTime);
 
         _rigidbody.MovePosition(targetPosition);
+
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     private void Look(float mouseX, float mouseY)

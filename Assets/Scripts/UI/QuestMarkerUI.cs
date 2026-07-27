@@ -4,7 +4,7 @@ using UnityEngine;
 public class QuestMarkerUI : UIBase
 {
     [Header("Settings")]
-    [SerializeField] private QuestIndicator markerPrefab; 
+    [SerializeField] private GameObject markerPrefab; 
     [SerializeField] private Transform markerContainer;   
 
     private Dictionary<Transform, QuestIndicator> activeMarkers = new Dictionary<Transform, QuestIndicator>();
@@ -22,7 +22,7 @@ public class QuestMarkerUI : UIBase
 
         if (activeMarkers.ContainsKey(target)) return;
 
-        QuestIndicator newMarker = Instantiate(markerPrefab, markerContainer);
+        QuestIndicator newMarker = Instantiate(markerPrefab, markerContainer).GetComponent<QuestIndicator>();
         newMarker.SetTarget(target, _mainCamera);
 
         activeMarkers.Add(target, newMarker);

@@ -8,6 +8,8 @@ public class Bed : MonoBehaviour
     [SerializeField] private Transform _sleepTransform;
     [SerializeField] private Transform _wakeUpTransform;
 
+    private Light _mainLight;
+
     private GameObject _player;
 
     private int _sleepTime = 9;
@@ -28,6 +30,8 @@ public class Bed : MonoBehaviour
 
             _outLineRenderer.sharedMaterials = _originalMaterials;
         }
+
+        _mainLight = RenderSettings.sun;
     }
 
     private void SetOutline(bool isOn)
@@ -82,6 +86,8 @@ public class Bed : MonoBehaviour
         {
             NetworkManager.Inst.PlayerService.WakeUp();
             NetworkManager.Inst.TimeService.SkipToNextDay();
+
+            _mainLight.color = Color.white;
         }
         else
         {
@@ -96,6 +102,7 @@ public class Bed : MonoBehaviour
             }
 
             _player.GetComponent<PlayerMovementView>().SetTarget(_wakeUpTransform);
+            _mainLight.color = Color.black;
         }
     }
 }
