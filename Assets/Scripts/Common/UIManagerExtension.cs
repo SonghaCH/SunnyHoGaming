@@ -37,7 +37,7 @@ public enum UIType
     RepairDisplayUI,
     SettingPopupUI,
 
-
+    QuestMarker,
     OpeningVideoPlayerUI,
     EndingVideoPlayerUI,
 
