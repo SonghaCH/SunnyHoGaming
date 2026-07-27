@@ -42,6 +42,7 @@ public class SettingPopupUI : UIBase
     private void OnClickBack()
     {
         UIManager.Instance.CloseSettingPopupUI();
+        UIManager.Instance.OpenPausePopupUI();
     }
 
     private void OnChangeBGM(float value)
