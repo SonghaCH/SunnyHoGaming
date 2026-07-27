@@ -22,26 +22,35 @@
     "Type": "DayQuest",
     "QuestName": "3일차 퀘스트",
     "UnlockDay": 3,
-    "Title": "픽서를 통해 식량을 획득하십시오",
-    "Description": "픽서에게 식량 수급을 지시하자!",
-    "SubTasks": "픽서에게 식당에서 음식 픽업 업무 시키기:FoodSupply"
+    "Title": "픽서를 통해 재료를 수급하시오",
+    "Description": "픽서에게 수리 재료를 수급을 지시하자!",
+    "SubTasks": "픽서에게 재료 수급 업무 시키기:Farming"
   },
   {
     "Id": "Quest_Day4_001",
     "Type": "DayQuest",
     "QuestName": "4일차 퀘스트",
     "UnlockDay": 4,
-    "Title": "지구에 구조 요청하시오",
-    "Description": "픽서가 가지고온 위성전화로 지구와 통신하자!",
-    "SubTasks": "위성전화를 작동시켜 올바른 번호를 입력하자:Task:SatellitePhone"
+    "Title": "픽서를 통해 식량을 획득하십시오",
+    "Description": "픽서에게 식량 수급을 지시하자!",
+    "SubTasks": "픽서에게 식당에서 음식 픽업 업무 시키기:FoodSupply"
   },
   {
     "Id": "Quest_Day5_001",
     "Type": "DayQuest",
     "QuestName": "5일차 퀘스트",
     "UnlockDay": 5,
+    "Title": "지구에 구조 요청하시오",
+    "Description": "픽서가 가지고온 위성전화로 지구와 통신하자!",
+    "SubTasks": "위성전화를 작동시켜 올바른 번호를 입력하자:Task:SatellitePhone"
+  },
+  {
+    "Id": "Quest_Day6_001",
+    "Type": "DayQuest",
+    "QuestName": "6일차 퀘스트",
+    "UnlockDay": 6,
     "Title": "최선을 다해 생존하시오",
-    "Description": "픽서와 함께 힘을 합쳐 기능을 수리 하자!",
-    "SubTasks": "산소 공급 장치 수리:OxygenSupply|전력 공급 장치 수리:PowerSupply|온도 제어 장치 수리:TemperatureControl|항로 제어 장치 수리:RouteControl"
+    "Description": "심각한 손상이 생긴 온도 제어 장치로 가보자!",
+    "SubTasks": "온도 제어 장치를 직접 수리하기"
   }
 ]
