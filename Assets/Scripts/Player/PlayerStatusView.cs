@@ -61,10 +61,12 @@ public class PlayerStatusView : ViewBase
     private void Sleep()
     {
         NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
+        _statusViewModel.IsSleeping = true;
     }
 
     private void WakeUp()
     {
         NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
+        _statusViewModel.IsSleeping = false;
     }
 }

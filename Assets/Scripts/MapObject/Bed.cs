@@ -85,13 +85,13 @@ public class Bed : MonoBehaviour
         if (NetworkManager.Inst.PlayerService.GetStatusViewModel().IsSleeping)
         {
             NetworkManager.Inst.PlayerService.WakeUp();
-            NetworkManager.Inst.TimeService.SkipToNextDay();
 
             _mainLight.color = Color.white;
         }
         else
         {
             NetworkManager.Inst.PlayerService.Sleep();
+            NetworkManager.Inst.TimeService.SkipToNextDay();
             UIManager.Instance.CloseFPopupUI();
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);
