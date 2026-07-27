@@ -22,6 +22,7 @@ public class DayVideoPlayerUI : UIBase
         }
 
         SetPlayerCanMove(false);
+        AudioManager.Instance.StopBGM();
 
         StartVideoSequenceAsync().Forget();
     }
@@ -49,6 +50,8 @@ public class DayVideoPlayerUI : UIBase
     private void OnVideoFinished(VideoPlayer vp)
     {
         FinishVideoAndReturnToGame();
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
+
     }
 
     private void FinishVideoAndReturnToGame()

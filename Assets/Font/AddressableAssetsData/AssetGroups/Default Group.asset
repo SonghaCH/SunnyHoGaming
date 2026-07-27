@@ -35,8 +35,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1790471eefb331a408036b0b06ad5ef7
+    m_Address: Assets/ThirdParty/Sound/RadioStatic2.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 204118c0ece9fd14ca3b1851215b67d9
     m_Address: Prefabs/map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2936ab94b1a625349b61b3b55e0b8a47
+    m_Address: Assets/ThirdParty/Sound/popup_down.wav
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -60,6 +70,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43192865797a20c4e9d9713e732d3885
+    m_Address: Sound/WalkPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 449678d419318d84ea29b0e00b31dfa3
+    m_Address: Sound/WalkFixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 487cc50679317ed43bb5c911475a3706
     m_Address: Sound/InGameBGM
     m_ReadOnly: 0
@@ -67,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4ec748b17c72c2047ac16d6888c01c5c
     m_Address: Sound/Repair
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57c58f3133b93b9428258079ab4aef60
+    m_Address: Assets/ThirdParty/Sound/RadioStatic.mp3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -90,8 +115,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8db67ac299d6fdf46b21059cf522e79e
+    m_Address: Assets/ThirdParty/Sound/alarm.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91120df9d941e674b84dd482d32fd20e
     m_Address: Fixer_03
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a18fd52017aa883469023de4e8e5ea20
+    m_Address: Assets/ThirdParty/Sound/popup_up.wav
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

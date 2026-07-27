@@ -17,6 +17,7 @@ public class EndingVideoPlayerUI : UIBase
         isFinished = false;
 
         SetPlayerCanMove(false);
+        AudioManager.Instance.StopBGM();
 
         if (videoPlayer != null)
         {
@@ -56,6 +57,8 @@ public class EndingVideoPlayerUI : UIBase
     private void OnVideoFinished(VideoPlayer vp)
     {
         FinishEndingVideoAndOpenDialog();
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
+
     }
 
     private void FinishEndingVideoAndOpenDialog()
@@ -73,6 +76,7 @@ public class EndingVideoPlayerUI : UIBase
         }
         else
         {
+            UIManager.Instance.OpenEndingDialogUI();
             gameObject.SetActive(false);
         }
 

@@ -16,6 +16,7 @@ public class FailVideoPlayerUI : UIBase
         {
             _videoPlayer.loopPointReached += OnVideoFinished;
         }
+        AudioManager.Instance.StopBGM();
     }
 
     private void OnDisable()

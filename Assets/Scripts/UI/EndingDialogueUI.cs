@@ -35,7 +35,6 @@ public class EndingDialogUI : UIBase
     {
         CancelActiveDialogue();
 
-        // 메모리 해제
         if (_cachedTypingClip != null)
         {
             Addressables.Release(_cachedTypingClip);

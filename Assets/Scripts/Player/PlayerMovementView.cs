@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using UnityEngine;
-using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
