@@ -24,11 +24,7 @@ public class RepairStation : WorkStation
         if (_timeViewModel == null && NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
         {
             _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
-            if (_timeViewModel != null)
-            {
-                _timeViewModel.PropertyChanged -= OnPropertyChanged;
-                _timeViewModel.PropertyChanged += OnPropertyChanged;
-            }
+            _timeViewModel.PropertyChanged += OnPropertyChanged;
         }
     }
 
