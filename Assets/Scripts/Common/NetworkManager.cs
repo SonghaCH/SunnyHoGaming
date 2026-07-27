@@ -1,9 +1,18 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
+using UnityEngine.Video;
+
+
+public enum GameOverReason
+{
+    None,
+    NoSleep,      
+    QuestFailed  
+}
 
 public class NetworkManager : MonoBehaviour
 {
@@ -289,12 +298,27 @@ public class NetworkManager : MonoBehaviour
 
             await UniTask.NextFrame();
 
+            int currentDay = TimeService.GetViewModel().CurrentDay;
+
+            if (CheckGameClear(currentDay))
+            {
+                await SetGameClear();
+                return; 
+            }
+
+            int failedDay = currentDay - 1;
+            GameOverReason reason = CheckGameOver(failedDay);
+
+            if (reason != GameOverReason.None)
+            {
+                await SetGameOver(failedDay, reason); 
+                return;
+            }
+
             if (QuestManager.Instance != null)
             {
                 QuestManager.Instance.ResetDailyQuests();
             }
-
-            int today = TimeService.GetViewModel().CurrentDay;
 
             while (WorldManager.Instance == null || WorldManager.Instance.IsSpawnCompleted == false)
             {
@@ -304,6 +328,131 @@ public class NetworkManager : MonoBehaviour
             await UniTask.Yield();
 
             RequestSaveGame();
+        }
+    }
+
+    private bool CheckGameClear(int currentDay)
+    {
+        int clearDay = 7;
+        return currentDay >= clearDay;
+    }
+
+    private GameOverReason CheckGameOver(int failedDay)
+    {
+        if (QuestManager.Instance != null)
+        {
+            foreach (var quest in QuestManager.Instance.activeQuests)
+            {
+                if (quest.UnlockDay <= failedDay && (quest.Type == "Main" || quest.Type == "Daily"))
+                {
+                    foreach (var subTask in quest.subTaskList)
+                    {
+                        if (subTask.isCompleted == false)
+                        {
+                            return GameOverReason.QuestFailed;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (PlayerService != null && PlayerService.GetStatusViewModel() != null)
+        {
+            if (PlayerService.GetStatusViewModel().IsSleeping == false)
+            {
+                return GameOverReason.NoSleep;
+            }
+        }
+
+        return GameOverReason.None;
+    }
+
+    private async UniTask SetGameClear()
+    {
+        if (GameStateService != null)
+        {
+            GameStateService.GetViewModel().OnRequestingPause();
+        }
+        UIManager.Instance.CloseAllPopups();
+
+        UIManager.Instance.OpenEndingVideoPlayerUI();
+
+        UIBase endingUI = UIManager.Instance.GetOpenedUI(UIRootType.VeryFrontUI, UIType.EndingVideoPlayerUI);
+
+        if (endingUI != null)
+        {
+            VideoPlayer vp = endingUI.GetComponentInChildren<VideoPlayer>();
+
+            if (vp != null)
+            {
+                vp.Prepare();
+                await UniTask.WaitUntil(() => vp.isPrepared);
+
+                vp.Play();
+                await UniTask.WaitUntil(() => vp.isPlaying == false);
+            }
+            else
+            {
+                Debug.LogWarning("[SetGameClear] EndingVideoPlayerUI에 VideoPlayer 컴포넌트가 없습니다!");
+            }
+        }
+
+        UIManager.Instance.CloseEndingVideoPlayerUI();
+
+        PlayerModel defaultData = GetDefaultPlayerData();
+        RequstSaveData(defaultData);
+
+        if (GameStateService != null)
+        {
+            GameStateService.GetViewModel().OnRequestingTitle();
+        }
+    }
+
+    private async UniTask SetGameOver(int failedDay, GameOverReason reason)
+    {
+        if (GameStateService != null)
+        {
+            GameStateService.GetViewModel().OnRequestingPause();
+        }
+        UIManager.Instance.CloseAllPopups(); 
+
+        if (reason == GameOverReason.QuestFailed)
+        {
+
+            // UIBase cutsceneUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.PassOutVideoUI);
+            // VideoPlayer vp = cutsceneUI.GetComponentInChildren<VideoPlayer>();
+
+            VideoPlayer vp = GetComponent<VideoPlayer>(); //영상 추가해주시고 지워주시면 됩니다.
+            if (vp != null)
+            {
+                vp.Prepare();
+                await UniTask.WaitUntil(() => vp.isPrepared);
+
+                vp.Play();
+
+                await UniTask.WaitUntil(() => vp.isPlaying == false);
+            }
+        }
+        else if (reason == GameOverReason.NoSleep)
+        {
+            // UIBase cutsceneUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.PassOutVideoUI);
+            // VideoPlayer vp = cutsceneUI.GetComponentInChildren<VideoPlayer>();
+
+            VideoPlayer vp = GetComponent<VideoPlayer>(); //영상 추가해주시고 지워주시면 됩니다.
+            if (vp != null)
+            {
+                vp.Prepare();
+                await UniTask.WaitUntil(() => vp.isPrepared);
+
+                vp.Play();
+
+                await UniTask.WaitUntil(() => vp.isPlaying == false);
+            }
+        }
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OpenGameOverPopupUI();
         }
     }
 }
