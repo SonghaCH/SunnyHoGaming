@@ -41,7 +41,9 @@ public enum UIType
     OpeningVideoPlayerUI,
     EndingVideoPlayerUI,
 
-    EndingDialogUI
+    EndingDialogUI,
+
+    HintNotePopupUI
 }
 
 public static class UIManagerExtension
@@ -489,6 +491,21 @@ public static class UIManagerExtension
     public static void CloseEndingDialogUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+    }
+
+    public static void OpenHintNotePopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.PopupUI, UIType.HintNotePopupUI);
+        if (uiBase == null)
+        {
+            Debug.LogWarning($"UI가 생성되지 않았습니다");
+            return;
+        }
+    }
+
+    public static void CloseHintNotePopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.PopupUI, UIType.HintNotePopupUI);
     }
 }
 
