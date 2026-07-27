@@ -131,6 +131,7 @@ public class UIManager : MonoBehaviour
             OpenUI(rootType, uiType);
         }
     }
+
     private void HandleEscapeInput()
     {
         if (_openedPopupStack.Count > 0)
@@ -138,6 +139,11 @@ public class UIManager : MonoBehaviour
             UIType topPopup = _openedPopupStack.Peek();
 
             if (topPopup == UIType.PausePopupUI)
+            {
+                CloseUI(UIRootType.PopupUI, topPopup);
+                NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
+            }
+            if (topPopup == UIType.SettingPopupUI)
             {
                 CloseUI(UIRootType.PopupUI, topPopup);
                 NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingResume();
@@ -152,6 +158,7 @@ public class UIManager : MonoBehaviour
             CloseAllPopups();
             this.OpenPausePopupUI();
             NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPause();
+
         }
     }
 
