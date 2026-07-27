@@ -30,6 +30,8 @@ public class GameStartUI : UIBase
         if (Btn_LoadGame != null) Btn_LoadGame.BindOnClickButtonEvent(OnClick_LoadGame);
         if (Btn_Setting != null) Btn_Setting.BindOnClickButtonEvent(OnClick_Setting);
         if (Btn_Exit != null) Btn_Exit.BindOnClickButtonEvent(OnClick_Exit);
+
+        AudioManager.Instance.PlayBGM("Sound/TitleBGM");
     }
 
     private void Update()
@@ -51,6 +53,8 @@ public class GameStartUI : UIBase
         {
             Destroy(_skyboxCameraInstance);
         }
+
+        AudioManager.Instance.StopBGM();
     }
 
     private void ShowCursor()
@@ -74,13 +78,13 @@ public class GameStartUI : UIBase
  
     private void OnClick_LoadGame()
     {
-        AudioManager.Instance.StopBGM();
         if (NetworkManager.Inst != null)
         {
             NetworkManager.Inst.RequestLoadGame();
         }
 
         TransitionToMainGame(false);
+        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
     }
 
 
