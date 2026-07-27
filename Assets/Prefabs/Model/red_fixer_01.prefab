@@ -499,6 +499,7 @@ GameObject:
   - component: {fileID: 6932393917782861838}
   - component: {fileID: -1049772222400647551}
   - component: {fileID: -67875712909173122}
+  - component: {fileID: -1923692630028229107}
   m_Layer: 0
   m_Name: red_fixer_01
   m_TagString: Fixer
@@ -629,6 +630,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4999dcfa54a22f4fa671967183829fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FixerView
+  _repairSoundPath: Sound/Repair
+  _minDistance: 1
+  _maxDistance: 20
 --- !u!114 &2750603195089818149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,6 +755,23 @@ MonoBehaviour:
   playerTag: Player
   rotationSpeed: 5
   reactableStates: 04000000000000000300000005000000
+--- !u!114 &-1923692630028229107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649365569034178510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b920f8a0d2dbef4ebc4413c7b968515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixerFootstepView
+  _footstepSoundPath: Sound/WalkFixer
+  _stepInterval: 0.5
+  _moveThreshold: 0.1
+  _minDistance: 0.5
+  _maxDistance: 20
 --- !u!1 &2668540167969723034
 GameObject:
   m_ObjectHideFlags: 0
