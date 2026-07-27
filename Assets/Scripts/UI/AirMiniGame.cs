@@ -15,7 +15,7 @@ public class AirMiniGame : UIBase
     public float currentGauge = 0f;        // 현재 게이지
     public float maxGauge = 100f;          // 목표치
     public float decatRate = 4f;           // 초당 감소량 (decayRate의 오타 수정 가능성 고려, 변수명은 유지)
-    public float inputGain = 1f;           // 입력 1회당 증가량
+    public float inputGain = 10f;           // 입력 1회당 증가량
     public bool isFinished = false;
 
     private ActiveTaskType _taskType = ActiveTaskType.OxygenSupply;

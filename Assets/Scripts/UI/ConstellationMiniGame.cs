@@ -79,7 +79,7 @@ public class ConstellationMiniGame : UIBase
             gridData[r] = sb.ToString();
 
             redIndicesPerLine[r] = new List<int>();
-            int redCount = Random.Range(1, 4);
+            int redCount = Random.Range(1, 2);
             while (redIndicesPerLine[r].Count < redCount)
             {
                 int randIndex = Random.Range(0, colsPerRow);

@@ -19,7 +19,7 @@ public class TemperatureMiniGame : UIBase
     [SerializeField] private float keyImpactForce = 3f;     
 
     [Header("Clear Settings")]
-    [SerializeField] private float requiredHoldTime = 5f; 
+    [SerializeField] private float requiredHoldTime = 3f; 
 
     [Header("Game Over Settings")]
     [SerializeField] private float maxOutsideTime = 3f;
