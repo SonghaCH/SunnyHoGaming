@@ -40,6 +40,10 @@
         if (_viewModel != null)
         {
             _totalGameMinutes = _viewModel.CurrentDay * _minutesPerDay;
+
+            _viewModel.CurrentMinute = _totalGameMinutes % _minutesPerHour;
+            _viewModel.CurrentHour = (_totalGameMinutes % _minutesPerDay + 1) / _minutesPerHour + _startHour;
+            _viewModel.CurrentDay = (_totalGameMinutes / _minutesPerDay) + 1;
         }
 
     }
