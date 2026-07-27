@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &229838412370787169
+--- !u!1 &2702784042634075010
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2318378036458980355}
-  - component: {fileID: 8207203460284135422}
-  - component: {fileID: 412940965729109942}
-  - component: {fileID: 614706241877544632}
+  - component: {fileID: 3000357606352128917}
+  - component: {fileID: 1858497901839645966}
   m_Layer: 0
   m_Name: QuestMarker
   m_TagString: Untagged
@@ -19,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2318378036458980355
+--- !u!224 &3000357606352128917
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229838412370787169}
+  m_GameObject: {fileID: 2702784042634075010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -38,56 +36,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8207203460284135422
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229838412370787169}
-  m_CullTransparentMesh: 1
---- !u!114 &412940965729109942
+--- !u!114 &1858497901839645966
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229838412370787169}
+  m_GameObject: {fileID: 2702784042634075010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: db62e54619bd6244da89cadf3c036717, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: -593974375, guid: f9b1e895af47cde49b074140beb63f1a, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &614706241877544632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229838412370787169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2182cda4e2b7e94cabe5b86c1d99484, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestIndicator
-  _indicatorRect: {fileID: 2318378036458980355}
-  _questTarget: {fileID: 0}
-  _mainCamera: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::QuestMarkerUI
+  markerPrefab: {fileID: 229838412370787169, guid: 4602e1841dc2abb499f91f726f416fee, type: 3}
+  markerContainer: {fileID: 3000357606352128917}
