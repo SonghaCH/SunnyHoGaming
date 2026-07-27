@@ -36,6 +36,7 @@ public enum UIType
     DoorPopupUI,
     RepairDisplayUI,
     SettingPopupUI,
+    GameOverPopupUI,
 
     QuestMarker,
     OpeningVideoPlayerUI,
@@ -489,6 +490,20 @@ public static class UIManagerExtension
     public static void CloseEndingDialogUI(this UIManager uiManager)
     {
         uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+    }
+
+    public static void OpenGameOverPopupUI(this UIManager uiManager)
+    {
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.GameOverPopupUI);
+        if (uiBase == null)
+        {
+            return;
+        }
+    }
+
+    public static void CloseGameOverPopupUI(this UIManager uiManager)
+    {
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.GameOverPopupUI);
     }
 }
 
