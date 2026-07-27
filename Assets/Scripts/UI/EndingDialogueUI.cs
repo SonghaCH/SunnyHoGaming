@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class EndingDialogUI : UIBase
 {
@@ -14,11 +15,18 @@ public class EndingDialogUI : UIBase
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float waitTimePerDialogue = 2.0f;
 
+    [Header("Audio Settings")]
+    [Tooltip("타이핑 시 재생될 SFX Sound Data ID (Addressables Key)")]
+    [SerializeField] private string typingSfxAddressKey = "Sound/TypingKey";
+
     private CancellationTokenSource _cts;
+    private AudioClip _cachedTypingClip;
 
     private void OnEnable()
     {
         ShowCursor();
+
+        PreloadTypingSfxAsync().Forget();
 
         StartDialogue(_startDialogueId);
     }
@@ -26,9 +34,30 @@ public class EndingDialogUI : UIBase
     private void OnDisable()
     {
         CancelActiveDialogue();
+
+        // 메모리 해제
+        if (_cachedTypingClip != null)
+        {
+            Addressables.Release(_cachedTypingClip);
+            _cachedTypingClip = null;
+        }
     }
 
-   
+    
+    private async UniTaskVoid PreloadTypingSfxAsync()
+    {
+        if (string.IsNullOrEmpty(typingSfxAddressKey) || _cachedTypingClip != null) return;
+
+        try
+        {
+            _cachedTypingClip = await Addressables.LoadAssetAsync<AudioClip>(typingSfxAddressKey).ToUniTask();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[EndingDialogUI] 어드레서블 사운드 로드 실패 ({typingSfxAddressKey}): {ex.Message}");
+        }
+    }
+
     public void StartDialogue(string startDialogueId)
     {
         CancelActiveDialogue();
@@ -68,6 +97,16 @@ public class EndingDialogUI : UIBase
         for (int i = 0; i <= fullText.Length; i++)
         {
             Text_Description.text = fullText.Substring(0, i);
+
+            if (i > 0 && !string.IsNullOrEmpty(typingSfxAddressKey))
+            {
+                char lastChar = fullText[i - 1];
+                if (!char.IsWhiteSpace(lastChar))
+                {
+                    AudioManager.Instance?.PlaySFX(typingSfxAddressKey);
+                }
+            }
+
             await UniTask.Delay(System.TimeSpan.FromSeconds(typingSpeed), cancellationToken: token);
         }
     }

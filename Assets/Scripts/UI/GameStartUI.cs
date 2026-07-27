@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,7 +74,7 @@ public class GameStartUI : UIBase
             NetworkManager.Inst.RequestNewGame(); 
         }
 
-        TransitionToMainGame(true);
+        TransitionToMainGame(true).Forget();
     }
 
  
@@ -83,14 +85,15 @@ public class GameStartUI : UIBase
             NetworkManager.Inst.RequestLoadGame();
         }
 
-        TransitionToMainGame(false);
+        TransitionToMainGame(false).Forget();
         AudioManager.Instance.PlayBGM("Sound/InGameBGM");
     }
 
 
-    private void TransitionToMainGame(bool playVideo)
+    private async UniTaskVoid TransitionToMainGame(bool playVideo)
     {
         UIManager.Instance.CloseGameStartUI();
+       
 
         if (playVideo)
         {
@@ -103,7 +106,9 @@ public class GameStartUI : UIBase
                 NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingPlay();
             }
         }
-
+        UIManager.Instance.OpenFixerPopupUI();
+        await UniTask.Yield(PlayerLoopTiming.Update);
+        UIManager.Instance.CloseFixerPopupUI();
         UIManager.Instance.OpenMainUI();
     }
 

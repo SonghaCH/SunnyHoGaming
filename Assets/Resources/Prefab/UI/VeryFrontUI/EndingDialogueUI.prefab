@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ef9da2f1c360348a5143ea6e20cb59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndingDialogUI
+  _startDialogueId: Dialogue_Ending_001
   Text_Description: {fileID: 8364377534051325169}
   typingSpeed: 0.05
   waitTimePerDialogue: 2

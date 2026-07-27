@@ -4,8 +4,6 @@ using UnityEngine.Video;
 
 public class EndingVideoPlayerUI : UIBase
 {
-    
-
     private VideoPlayer videoPlayer;
     private bool isFinished = false;
 
@@ -18,12 +16,15 @@ public class EndingVideoPlayerUI : UIBase
     {
         isFinished = false;
 
+        SetPlayerCanMove(false);
+
         if (videoPlayer != null)
         {
+            videoPlayer.loopPointReached -= OnVideoFinished;
             videoPlayer.loopPointReached += OnVideoFinished;
-        }
 
-        SetPlayerCanMove(false);
+            videoPlayer.Play();
+        }
 
         StartEndingVideoSequenceAsync().Forget();
     }
@@ -33,12 +34,11 @@ public class EndingVideoPlayerUI : UIBase
         if (videoPlayer != null)
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
+            if (videoPlayer.isPlaying)
+            {
+                videoPlayer.Stop();
+            }
         }
-    }
-
-    private void Update()
-    {
-        if (isFinished) return;
     }
 
     private async UniTaskVoid StartEndingVideoSequenceAsync()
@@ -58,7 +58,6 @@ public class EndingVideoPlayerUI : UIBase
         FinishEndingVideoAndOpenDialog();
     }
 
-    
     private void FinishEndingVideoAndOpenDialog()
     {
         if (isFinished) return;
@@ -68,7 +67,6 @@ public class EndingVideoPlayerUI : UIBase
         {
             UIManager.Instance.CloseMainUI();
             UIManager.Instance.CloseAllPopups();
-
             UIManager.Instance.CloseEndingVideoPlayerUI();
 
             UIManager.Instance.OpenEndingDialogUI();
@@ -82,7 +80,6 @@ public class EndingVideoPlayerUI : UIBase
         Cursor.visible = true;
     }
 
-    
     private void SetPlayerCanMove(bool canMove)
     {
         if (NetworkManager.Inst != null && NetworkManager.Inst.PlayerService != null)

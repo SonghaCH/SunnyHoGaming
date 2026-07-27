@@ -156,7 +156,7 @@ public class PasswordMiniGame : UIBase
         var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
         if (uiBase is DialogueUI dialogueUi)
         {
-            dialogueUi.StartDialogue("Dialogue_Day5_001");
+            dialogueUi.StartDialogue("Dialogue_Day5_005");
         }
 
         UIManager.Instance.ClosePasswordPopupUI();

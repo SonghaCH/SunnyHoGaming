@@ -93,7 +93,7 @@ public class NetworkManager : MonoBehaviour
     private void InitNetworkService()
     {
         InventoryService = new NetworkInventoryService();
-        TimeService = new TimeService(0.01f);
+        TimeService = new TimeService(0.1f);
         PlayerService = new PlayerService();
         GameStateService = new GameStateService();
     }
