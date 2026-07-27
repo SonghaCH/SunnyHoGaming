@@ -996,7 +996,7 @@ MonoBehaviour:
   - {fileID: 7510312467131975166}
   highlightBar: {fileID: 6992830200043836088}
   timerSlider: {fileID: 7447095129932607591}
-  limitTime: 10
+  limitTime: 15
 --- !u!1 &3487624266791123378
 GameObject:
   m_ObjectHideFlags: 0

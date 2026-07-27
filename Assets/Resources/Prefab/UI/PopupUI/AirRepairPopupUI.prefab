@@ -1670,7 +1670,7 @@ MonoBehaviour:
   m_text: "\uBC84\uD2BC\uC744 \uB20C\uB7EC \uC0B0\uC18C\uB97C \uACF5\uAE09\uD574\uBCF4\uC790!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d2e2ee07ea245e14890ed9fd0136932f, type: 2}
-  m_sharedMaterial: {fileID: -6259198842334571627, guid: d2e2ee07ea245e14890ed9fd0136932f, type: 2}
+  m_sharedMaterial: {fileID: 5693746805140815364, guid: d2e2ee07ea245e14890ed9fd0136932f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1875,7 +1875,7 @@ MonoBehaviour:
   currentGauge: 0
   maxGauge: 100
   decatRate: 4
-  inputGain: 1
+  inputGain: 10
   isFinished: 0
 --- !u!95 &1525628275555119520
 Animator:

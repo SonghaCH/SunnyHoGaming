@@ -1299,7 +1299,7 @@ MonoBehaviour:
   maxSafetyTemp: 60
   naturalDriftSpeed: 15
   keyImpactForce: 3
-  requiredHoldTime: 5
+  requiredHoldTime: 3
   maxOutsideTime: 3
 --- !u!1 &6514044298979603056
 GameObject:
