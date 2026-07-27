@@ -21,6 +21,14 @@ public class RepairStation : WorkStation
         BindTimeViewModel();
     }
 
+    private void OnDisable()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.RemoveQuestTargetMarker(transform);
+        }
+    }
+
     private void BindTimeViewModel()
     {
         if (_timeViewModel == null && NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)

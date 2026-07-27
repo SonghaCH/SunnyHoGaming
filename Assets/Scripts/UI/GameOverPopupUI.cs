@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using UnityEngine;
 
 public class GameOverPopupUI : UIBase
 {
@@ -12,15 +13,29 @@ public class GameOverPopupUI : UIBase
         }
     }
 
-    private void OnClick_ReturnToTitle()
+    private async void OnClick_ReturnToTitle()
     {
         UIManager.Instance.CloseGameOverPopupUI();
 
         UIManager.Instance.CloseAllPopups();
 
+        if(GameObjectManager.Instance != null)
+        {
+            await GameObjectManager.Instance.ClearAllFixersAsync();
+        }
+
+        if (WorldManager.Instance != null)
+        {
+            WorldManager.Instance.ClearMap();
+        }
+
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingTitle();
+            
+            UIManager.Instance.ShowStartupUIOnGameStart();
+            
+            UIManager.Instance.CloseAllUI();
         }
         else
         {
