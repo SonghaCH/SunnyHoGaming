@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 7056702692623643374}
   - component: {fileID: 5637880895026884990}
   m_Layer: 5
-  m_Name: Popup_GameOver
+  m_Name: GameOverPopupUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

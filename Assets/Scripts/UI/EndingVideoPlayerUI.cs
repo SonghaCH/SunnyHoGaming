@@ -7,7 +7,6 @@ public class EndingVideoPlayerUI : UIBase
     
 
     private VideoPlayer videoPlayer;
-    private float holdTimer = 0f;
     private bool isFinished = false;
 
     private void Awake()
@@ -17,7 +16,6 @@ public class EndingVideoPlayerUI : UIBase
 
     private void OnEnable()
     {
-        holdTimer = 0f;
         isFinished = false;
 
         if (videoPlayer != null)
@@ -25,10 +23,8 @@ public class EndingVideoPlayerUI : UIBase
             videoPlayer.loopPointReached += OnVideoFinished;
         }
 
-        // 🌟 1. 엔딩 영상 시작 시 플레이어 이동 및 시점 제어 차단
         SetPlayerCanMove(false);
 
-        // 🌟 2. 백그라운드 게임 루프 일시정지 및 플레이어 차단 재보장
         StartEndingVideoSequenceAsync().Forget();
     }
 

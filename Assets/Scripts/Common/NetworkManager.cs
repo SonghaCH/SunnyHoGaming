@@ -93,7 +93,7 @@ public class NetworkManager : MonoBehaviour
     private void InitNetworkService()
     {
         InventoryService = new NetworkInventoryService();
-        TimeService = new TimeService(0.05f);
+        TimeService = new TimeService(0.01f);
         PlayerService = new PlayerService();
         GameStateService = new GameStateService();
     }
@@ -311,7 +311,7 @@ public class NetworkManager : MonoBehaviour
 
             if (reason != GameOverReason.None)
             {
-                await SetGameOver(failedDay, reason); 
+                SetGameOver(failedDay, reason); 
                 return;
             }
 
@@ -408,7 +408,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    private async UniTask SetGameOver(int failedDay, GameOverReason reason)
+    private void SetGameOver(int failedDay, GameOverReason reason)
     {
         if (GameStateService != null)
         {
@@ -418,36 +418,15 @@ public class NetworkManager : MonoBehaviour
 
         if (reason == GameOverReason.QuestFailed)
         {
+            UIManager.Instance.OpenFailVideoPlayerUI();
 
-            // UIBase cutsceneUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.PassOutVideoUI);
-            // VideoPlayer vp = cutsceneUI.GetComponentInChildren<VideoPlayer>();
-
-            VideoPlayer vp = GetComponent<VideoPlayer>(); //영상 추가해주시고 지워주시면 됩니다.
-            if (vp != null)
-            {
-                vp.Prepare();
-                await UniTask.WaitUntil(() => vp.isPrepared);
-
-                vp.Play();
-
-                await UniTask.WaitUntil(() => vp.isPlaying == false);
-            }
+            
         }
         else if (reason == GameOverReason.NoSleep)
         {
-            // UIBase cutsceneUI = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.PassOutVideoUI);
-            // VideoPlayer vp = cutsceneUI.GetComponentInChildren<VideoPlayer>();
+            UIManager.Instance.OpenSleepFailVideoPlayerUI();
 
-            VideoPlayer vp = GetComponent<VideoPlayer>(); //영상 추가해주시고 지워주시면 됩니다.
-            if (vp != null)
-            {
-                vp.Prepare();
-                await UniTask.WaitUntil(() => vp.isPrepared);
-
-                vp.Play();
-
-                await UniTask.WaitUntil(() => vp.isPlaying == false);
-            }
+            
         }
 
         if (UIManager.Instance != null)
