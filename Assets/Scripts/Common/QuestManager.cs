@@ -83,7 +83,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    
+
     public void CheckTaskProgress(string taskKey)
     {
         bool isUpdated = false;
@@ -92,13 +92,15 @@ public class QuestManager : MonoBehaviour
         {
             foreach (var subTask in quest.subTaskList)
             {
-                if (subTask.targetType == SubTaskTargetType.Task && subTask.targetKey == taskKey)
+                if (subTask.targetType == SubTaskTargetType.Task && (subTask.targetKey == taskKey || subTask.targetKey.StartsWith(taskKey + "_")))
                 {
                     if (!subTask.isCompleted)
                     {
                         subTask.isCompleted = true;
                         isUpdated = true;
-                        Debug.Log($"[QuestManager] 서브태스크 완료! ({quest.Title} -> {subTask.subTaskText})");
+                        
+                        UpdateQuestUI();
+                        return;
                     }
                 }
             }
@@ -109,6 +111,7 @@ public class QuestManager : MonoBehaviour
             UpdateQuestUI();
         }
     }
+
     public void ResetDailyQuests()
     {
         if (activeQuests == null) return;
