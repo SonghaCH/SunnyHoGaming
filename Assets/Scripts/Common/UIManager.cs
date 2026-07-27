@@ -174,6 +174,26 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void CloseAllUI(UIType exceptUIType = UIType.GameStartUI)
+    {
+        foreach (UIType uiType in System.Enum.GetValues(typeof(UIType)))
+        {
+            if (uiType == exceptUIType) continue;
+
+            
+            CloseUI(UIRootType.PopupUI, uiType);
+            CloseUI(UIRootType.MainUI, uiType);
+            CloseUI(UIRootType.ContentUI, uiType);
+
+            CloseUI(UIRootType.VeryFrontUI, uiType);
+        }
+
+        if (_openedPopupStack != null)
+        {
+            _openedPopupStack.Clear();
+        }
+    }
+
     private void RemovePopupFromStack(UIType uiType)
     {
         if (_openedPopupStack.Contains(uiType))

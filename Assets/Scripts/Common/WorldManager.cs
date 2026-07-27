@@ -398,4 +398,24 @@ public class WorldManager : MonoBehaviour
         _pendingFixerSaveData = list;
         _isLoadingGame = true;
     }
+
+    public void ClearMap()
+    {
+        if (_currentMapInstance != null)
+        {
+            if (ResourceManager.Instance != null)
+            {
+                ResourceManager.Instance.ReleaseInstance(_currentMapInstance);
+            }
+            else
+            {
+                Destroy(_currentMapInstance);
+            }
+            _currentMapInstance = null;
+        }
+
+        _spawnedDays.Clear();
+        _fixerSpawnPoints.Clear();
+        _mainRoomSpawnPoint = null;
+    }
 }

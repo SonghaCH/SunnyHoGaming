@@ -14,9 +14,27 @@ public enum GameOverReason
     QuestFailed  
 }
 
+[Serializable]
+public struct ItemReward
+{
+    [Header("RewardItem Setting")]
+    public string rewardItemId;    
+    public int rewardAmount;       
+}
+
+[Serializable]
+public struct DailyEventData
+{
+    [Header("이날 지급할 아이템 목록")]
+    public ItemReward[] rewards;
+}
+
+
 public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager Inst { get; set; }
+
+    [SerializeField] private DailyEventData[] dailyEventDataList;
 
     public NetworkInventoryService InventoryService { get; private set; }
     public PlayerService PlayerService { get; private set; }
@@ -24,6 +42,7 @@ public class NetworkManager : MonoBehaviour
     public TimeService TimeService { get; private set; }
 
     private bool _isLoading = false;
+
 
     private void Awake()
     {
@@ -233,6 +252,11 @@ public class NetworkManager : MonoBehaviour
         finally
         {
             _isLoading = false;
+
+            if (TimeService != null && TimeService.GetViewModel() != null)
+            {
+                ProcessDailyStartEvent(TimeService.GetViewModel().CurrentDay).Forget();
+            }
         }
     }
 
@@ -302,8 +326,8 @@ public class NetworkManager : MonoBehaviour
 
             if (CheckGameClear(currentDay))
             {
-                await SetGameClear();
-                return; 
+                SetGameClear(); 
+                return;
             }
 
             int failedDay = currentDay - 1;
@@ -311,7 +335,7 @@ public class NetworkManager : MonoBehaviour
 
             if (reason != GameOverReason.None)
             {
-                SetGameOver(failedDay, reason); 
+                await SetGameOver(failedDay, reason); 
                 return;
             }
 
@@ -328,6 +352,8 @@ public class NetworkManager : MonoBehaviour
             await UniTask.Yield();
 
             RequestSaveGame();
+
+            ProcessDailyStartEvent(currentDay).Forget();
         }
     }
 
@@ -367,7 +393,7 @@ public class NetworkManager : MonoBehaviour
         return GameOverReason.None;
     }
 
-    private async UniTask SetGameClear()
+    private void SetGameClear()
     {
         if (GameStateService != null)
         {
@@ -376,62 +402,110 @@ public class NetworkManager : MonoBehaviour
         UIManager.Instance.CloseAllPopups();
 
         UIManager.Instance.OpenEndingVideoPlayerUI();
-
-        UIBase endingUI = UIManager.Instance.GetOpenedUI(UIRootType.VeryFrontUI, UIType.EndingVideoPlayerUI);
-
-        if (endingUI != null)
-        {
-            VideoPlayer vp = endingUI.GetComponentInChildren<VideoPlayer>();
-
-            if (vp != null)
-            {
-                vp.Prepare();
-                await UniTask.WaitUntil(() => vp.isPrepared);
-
-                vp.Play();
-                await UniTask.WaitUntil(() => vp.isPlaying == false);
-            }
-            else
-            {
-                Debug.LogWarning("[SetGameClear] EndingVideoPlayerUI에 VideoPlayer 컴포넌트가 없습니다!");
-            }
-        }
-
-        UIManager.Instance.CloseEndingVideoPlayerUI();
-
-        PlayerModel defaultData = GetDefaultPlayerData();
-        RequstSaveData(defaultData);
-
-        if (GameStateService != null)
-        {
-            GameStateService.GetViewModel().OnRequestingTitle();
-        }
     }
 
-    private void SetGameOver(int failedDay, GameOverReason reason)
+    private async UniTask SetGameOver(int failedDay, GameOverReason reason)
     {
         if (GameStateService != null)
         {
             GameStateService.GetViewModel().OnRequestingPause();
         }
-        UIManager.Instance.CloseAllPopups(); 
+        UIManager.Instance.CloseAllPopups();
+
+        UIBase videoUI = null;
 
         if (reason == GameOverReason.QuestFailed)
         {
             UIManager.Instance.OpenFailVideoPlayerUI();
 
-            
+            videoUI = UIManager.Instance.GetOpenedUI(UIRootType.VeryFrontUI, UIType.FailVideoPlayerUI);
         }
         else if (reason == GameOverReason.NoSleep)
         {
             UIManager.Instance.OpenSleepFailVideoPlayerUI();
 
-            
+            videoUI = UIManager.Instance.GetOpenedUI(UIRootType.VeryFrontUI, UIType.SleepFailVideoPlayerUI);
         }
+
+        if (videoUI != null)
+        {
+            while (videoUI.gameObject.activeSelf == true)
+            {
+                await UniTask.Yield(); 
+            }
+        }
+
+        UIManager.Instance.CloseAllPopups();
 
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OpenGameOverPopupUI();
+        }
+    }
+
+    public async UniTaskVoid ProcessDailyStartEvent(int currentDay)
+    {
+        int index = currentDay - 1;
+        bool hasReceivedItem = false; 
+
+        
+        if (dailyEventDataList != null && index >= 0 && index < dailyEventDataList.Length)
+        {
+            DailyEventData dailyData = dailyEventDataList[index];
+
+            if (dailyData.rewards != null && dailyData.rewards.Length > 0)
+            {
+                foreach (var reward in dailyData.rewards)
+                {
+                    if (!string.IsNullOrEmpty(reward.rewardItemId) && reward.rewardAmount > 0)
+                    {
+                        if (this.InventoryService != null)
+                        {
+                            this.InventoryService.AddItem(reward.rewardItemId, reward.rewardAmount);
+
+                            hasReceivedItem = true;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (currentDay >= 2)
+        {
+            switch (currentDay)
+            {
+                case 2: 
+                    UIManager.Instance.OpenDay1VideoPlayerUI(); 
+                    break;
+                case 3: 
+                    UIManager.Instance.OpenDay2VideoPlayerUI();
+                    break;
+                case 4: 
+                    UIManager.Instance.OpenDay3VideoPlayerUI(); 
+                    break;
+                case 5: 
+                    UIManager.Instance.OpenDay4VideoPlayerUI(); 
+                    break;
+                default: 
+                    Debug.Log($"[ProcessDailyStartEvent] {currentDay}일차 컷신 영상 없음."); 
+                    break;
+            }
+        }
+
+
+        if (hasReceivedItem)
+        {
+            await UniTask.DelayFrame(5);
+
+            if (GameStateService.GetCurrentState() == GameState.Paused)
+            {
+                await UniTask.WaitUntil(() => GameStateService.GetCurrentState() == GameState.Playing);
+
+                await UniTask.Delay(System.TimeSpan.FromSeconds(0.5));
+            }
+
+            UIManager.Instance.OpenSimplePopup("아이템이 지급되었습니다.");
         }
     }
 }
