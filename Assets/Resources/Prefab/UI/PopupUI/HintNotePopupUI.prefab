@@ -375,8 +375,8 @@ MonoBehaviour:
     \uAC01 \uD53D\uC11C\uC758 \uD504\uB85C\uD544 \uD56D\uBAA9\uC5D0\uC11C \uD655\uC778
     \uAC00\uB2A5.\n\n\n0727"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bcac2079c655a9f468c3df08f5d60d59, type: 2}
-  m_sharedMaterial: {fileID: -6161925620271682740, guid: bcac2079c655a9f468c3df08f5d60d59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3f8031501db2d2d40902dfdf901114af, type: 2}
+  m_sharedMaterial: {fileID: 2694629142910063402, guid: 3f8031501db2d2d40902dfdf901114af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

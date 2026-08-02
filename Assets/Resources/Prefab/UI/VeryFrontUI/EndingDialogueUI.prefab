@@ -68,8 +68,8 @@ MonoBehaviour:
   m_text: "\uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9
     \uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9 \uC790\uB9C9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d2e2ee07ea245e14890ed9fd0136932f, type: 2}
-  m_sharedMaterial: {fileID: 5693746805140815364, guid: d2e2ee07ea245e14890ed9fd0136932f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
+  m_sharedMaterial: {fileID: 8927189569903537701, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -267,3 +267,4 @@ MonoBehaviour:
   Text_Description: {fileID: 8364377534051325169}
   typingSpeed: 0.05
   waitTimePerDialogue: 2
+  typingSfxAddressKey: Sound/Typing

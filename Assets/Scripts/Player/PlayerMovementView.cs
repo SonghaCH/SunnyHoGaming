@@ -3,7 +3,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
-
 public class PlayerMovementView : ViewBase
 {
     [SerializeField] private Transform _cameraTransform;
@@ -11,7 +10,7 @@ public class PlayerMovementView : ViewBase
     private Rigidbody _rigidbody;
     private PlayerMovementViewModel _movementViewModel;
     private PlayerStatusViewModel _statusViewModel;
-    private Transform _target;
+    private Transform _target; // 👈 변수명이 _target 입니다.
 
     private float _xRotation = 0.0f;
     private float _inputX = 0.0f;
@@ -55,7 +54,7 @@ public class PlayerMovementView : ViewBase
 
     private void OnPropertyChanged_StatusView(object sender, PropertyChangedEventArgs e)
     {
-        if(e.PropertyName == nameof(PlayerStatusViewModel.IsSleeping))
+        if (e.PropertyName == nameof(PlayerStatusViewModel.IsSleeping))
         {
             ChangePlayerPositionAndRotation();
         }
@@ -151,9 +150,25 @@ public class PlayerMovementView : ViewBase
         transform.Rotate(Vector3.up * lookX);
     }
 
-    public void ChangePlayerPositionAndRotation()
+    private void ChangePlayerPositionAndRotation()
     {
-        transform.SetPositionAndRotation(_target.position, _target.rotation);
+        // 🌟 1. _target 변수가 null인 경우 안전하게 return (NullReferenceException 방지)
+        if (_target == null)
+        {
+            return;
+        }
+
+        // 🌟 2. Rigidbody 물리 이동 처리
+        if (_rigidbody != null)
+        {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.position = _target.position;
+            _rigidbody.rotation = _target.rotation;
+        }
+
+        transform.position = _target.position;
+        transform.rotation = _target.rotation;
     }
 
     public void SetTarget(Transform target)

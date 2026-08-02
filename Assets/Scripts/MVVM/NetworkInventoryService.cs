@@ -158,7 +158,7 @@ public class NetworkInventoryService
 
         if (itemUseType == "OpenNotePopup")
         {
-            UIManager.Instance.OpenHiddenNotePopupUI();
+            UIManager.Instance.OpenHintNotePopupUI();
         }
         else if (itemUseType == "Reduce Hunger")
         {

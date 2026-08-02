@@ -32,6 +32,15 @@ public class MainController : UIBase
         }
     }
 
+    private void OnDisable()
+    {
+        // 🌟 씬 이동 / 비활성화 시 상호작용키 구독 해제 (이벤트 누수 방지)
+        if (UserInputManager.instance != null)
+        {
+            UserInputManager.instance.OnInteractionKey -= Interact;
+        }
+    }
+
     private void SetOutline(bool isOn)
     {
         if (_outLineRenderer == null)
@@ -45,17 +54,23 @@ public class MainController : UIBase
     {
         if (other.CompareTag("Player"))
         {
+            // 🌟 문(Door)이 존재하고 아직 잠겨있는 상태라면 상호작용 키 등록 자체를 차단
             var door = GetComponent<Door>();
             if (door != null && !door.Interact())
             {
                 return;
             }
 
-            UserInputManager.instance.OnInteractionKey += Interact;
+            if (UserInputManager.instance != null)
+            {
+                UserInputManager.instance.OnInteractionKey -= Interact;
+                UserInputManager.instance.OnInteractionKey += Interact;
+            }
+
             SetOutline(true);
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);
-            if (uiBase is FPopupUI fPopupUI)
+            if (uiBase is FPopupUI fPopupUI && _data != null)
             {
                 fPopupUI.SetInteractName(_data.Name);
             }
@@ -66,11 +81,15 @@ public class MainController : UIBase
     {
         if (other.CompareTag("Player"))
         {
-            UserInputManager.instance.OnInteractionKey -= Interact;
+            if (UserInputManager.instance != null)
+            {
+                UserInputManager.instance.OnInteractionKey -= Interact;
+            }
+
             SetOutline(false);
             UIManager.Instance.CloseFPopupUI();
 
-            if (!Enum.TryParse(_data.PopupType, out UIType popupUI))
+            if (_data != null && !Enum.TryParse(_data.PopupType, out UIType popupUI))
             {
                 Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
                 return;
@@ -80,6 +99,8 @@ public class MainController : UIBase
 
     private void Interact()
     {
+        if (_data == null) return;
+
         if (!Enum.TryParse(_data.PopupType, out UIType popupType))
         {
             Debug.LogError($"[MainController] '{gameObject.name}'의 PopupType '{_data.PopupType}'이 UIType에 없습니다.");
@@ -106,6 +127,7 @@ public class MainController : UIBase
             doorPopup.SetTargetDoorId(gameObject.name);
         }
     }
+
     private void CheckAndTriggerDay6Dialogue()
     {
         if (_hasTriggeredDay6Dialogue) return;
@@ -115,7 +137,7 @@ public class MainController : UIBase
 
         if (timeVm.CurrentDay == 6)
         {
-            _hasTriggeredDay6Dialogue = true; 
+            _hasTriggeredDay6Dialogue = true;
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
             if (uiBase is DialogueUI dialogueUi)

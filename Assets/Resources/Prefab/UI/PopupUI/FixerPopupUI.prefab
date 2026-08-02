@@ -402,10 +402,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fixer
+  m_text: "\uBCFC\uD2B8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
+  m_sharedMaterial: {fileID: 8927189569903537701, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -824,14 +824,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HI HI HI HI HI HI HI HI HI HI HIHI HI HI HI HI HI HI HI HI HI HIHI HI
-    HI HI HI HI HI HI HI HI HI HI HI HI HI HI HI HIHI HI HI HI HI HI HI HI HI HI
-    HIHI HI HI HI HI HI HI HI HI HI HIHI HI HI HI HI HI HI HI HI HI HIHI HI HI HI
-    HI HI HI HI HI HI HIHI HI HI HI HI HI HI HI HI HI HIHI HI HI HI HI HI HI HI HI
-    HI '
+  m_text: "\uBA38\uC2DC\uAE30 \uC800\uC2DC\uAE30 \uBB50 \uC774\uB7F0\uBA74 \uC6A9\uB3C4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
+  m_sharedMaterial: {fileID: 8927189569903537701, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

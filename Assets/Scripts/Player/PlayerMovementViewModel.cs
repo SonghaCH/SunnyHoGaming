@@ -119,4 +119,6 @@ public class PlayerMovementViewModel : ViewModelBase
     {
         CurrentSpeed = _baseSpeed * decreaseRate;
     }
+
+
 }

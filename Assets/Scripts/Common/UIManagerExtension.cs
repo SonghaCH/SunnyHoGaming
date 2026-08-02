@@ -48,7 +48,7 @@ public enum UIType
     FailVideoPlayerUI,
     SleepFailVideoPlayerUI,
     EndingVideoPlayerUI,
-    EndingDialogUI,
+    EndingDialogueUI,
 
 }
 
@@ -508,9 +508,9 @@ public static class UIManagerExtension
     }
 
 
-    public static void OpenEndingDialogUI(this UIManager uiManager)
+    public static void OpenEndingDialogueUI(this UIManager uiManager)
     {
-        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+        var uiBase = uiManager.OpenUI(UIRootType.VeryFrontUI, UIType.EndingDialogueUI);
         if (uiBase == null)
         {
             
@@ -519,9 +519,9 @@ public static class UIManagerExtension
         }
     }
 
-    public static void CloseEndingDialogUI(this UIManager uiManager)
+    public static void CloseEndingDialogueUI(this UIManager uiManager)
     {
-        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingDialogUI);
+        uiManager.CloseUI(UIRootType.VeryFrontUI, UIType.EndingDialogueUI);
     }
 
     public static void OpenGameOverPopupUI(this UIManager uiManager)

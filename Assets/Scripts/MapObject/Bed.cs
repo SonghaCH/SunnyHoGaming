@@ -31,6 +31,14 @@ public class Bed : MonoBehaviour
         _mainLight = RenderSettings.sun;
     }
 
+    private void OnDisable()
+    {
+        if (UserInputManager.instance != null)
+        {
+            UserInputManager.instance.OnInteractionKey -= Interact;
+        }
+    }
+
     private void SetOutline(bool isOn)
     {
         if (_outLineRenderer == null)
@@ -81,50 +89,41 @@ public class Bed : MonoBehaviour
     {
         if (NetworkManager.Inst.PlayerService.GetStatusViewModel().IsSleeping)
         {
-            // [일어난다] 눌렀을 때
-            NetworkManager.Inst.PlayerService.WakeUp();
-
-            if (_mainLight != null)
-            {
-                _mainLight.color = Color.white;
-            }
-
+            // [일어난다]
             if (_player != null)
             {
-                _player.GetComponent<PlayerMovementView>().SetTarget(_wakeUpTransform);
+                _player.GetComponent<PlayerMovementView>()?.SetTarget(_wakeUpTransform);
             }
+
+            NetworkManager.Inst.PlayerService.WakeUp();
+
+            if (_mainLight != null) _mainLight.color = Color.white;
 
             UIManager.Instance.CloseFPopupUI();
         }
         else
         {
-            // [잠에 든다] 눌렀을 때
-            // 1. 수면 상태 전환
-            NetworkManager.Inst.PlayerService.Sleep();
+            // [잠에 든다]
+            // 🌟 1. SetTarget을 Sleep()보다 무조건 먼저 실행!
+            if (_player != null)
+            {
+                _player.GetComponent<PlayerMovementView>()?.SetTarget(_sleepTransform);
+            }
 
-            // 2. 날짜 넘기기 (TimeService 기존 메서드 사용)
+            // 2. 수면 상태 전환 및 시간 변경
+            NetworkManager.Inst.PlayerService.Sleep();
             NetworkManager.Inst.TimeService.SkipToNextDay();
 
-            // 3. UI 처리
+            // 3. UI 및 조명 처리
             UIManager.Instance.CloseFPopupUI();
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);
-
             if (uiBase is FPopupUI fPopupUI)
             {
                 fPopupUI.SetInteractName("일어난다");
             }
 
-            // 4. 위치 이동 및 조명 처리
-            if (_player != null)
-            {
-                _player.GetComponent<PlayerMovementView>().SetTarget(_sleepTransform);
-            }
-
-            if (_mainLight != null)
-            {
-                _mainLight.color = Color.black;
-            }
+            if (_mainLight != null) _mainLight.color = Color.black;
         }
     }
 }

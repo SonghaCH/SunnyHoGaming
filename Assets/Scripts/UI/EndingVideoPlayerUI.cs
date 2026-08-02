@@ -17,14 +17,16 @@ public class EndingVideoPlayerUI : UIBase
         isFinished = false;
 
         SetPlayerCanMove(false);
-        AudioManager.Instance.StopBGM();
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM();
+        }
 
         if (videoPlayer != null)
         {
             videoPlayer.loopPointReached -= OnVideoFinished;
             videoPlayer.loopPointReached += OnVideoFinished;
-
-            videoPlayer.Play();
         }
 
         StartEndingVideoSequenceAsync().Forget();
@@ -49,16 +51,24 @@ public class EndingVideoPlayerUI : UIBase
             NetworkManager.Inst.GameStateService.GetViewModel()?.OnRequestingPause();
         }
 
-        await UniTask.Yield(PlayerLoopTiming.Update);
-
         SetPlayerCanMove(false);
+
+        if (videoPlayer != null)
+        {
+            if (!videoPlayer.isPrepared)
+            {
+                videoPlayer.Prepare();
+                await UniTask.WaitUntil(() => videoPlayer.isPrepared, cancellationToken: this.GetCancellationTokenOnDestroy());
+            }
+
+            videoPlayer.Play();
+        }
     }
 
     private void OnVideoFinished(VideoPlayer vp)
     {
+        // 🌟 다이얼로그 전용 연출을 위해 BGM 재개 로직을 제거했습니다.
         FinishEndingVideoAndOpenDialog();
-        AudioManager.Instance.PlayBGM("Sound/InGameBGM");
-
     }
 
     private void FinishEndingVideoAndOpenDialog()
@@ -72,11 +82,17 @@ public class EndingVideoPlayerUI : UIBase
             UIManager.Instance.CloseAllPopups();
             UIManager.Instance.CloseEndingVideoPlayerUI();
 
-            UIManager.Instance.OpenEndingDialogUI();
+            try
+            {
+                UIManager.Instance.OpenEndingDialogueUI();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[EndingVideo] EndingDialogUI 오픈 실패: {ex.Message}");
+            }
         }
         else
         {
-            UIManager.Instance.OpenEndingDialogUI();
             gameObject.SetActive(false);
         }
 

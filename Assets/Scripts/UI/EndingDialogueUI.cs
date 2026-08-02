@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -26,6 +27,16 @@ public class EndingDialogUI : UIBase
     {
         ShowCursor();
 
+        // 🌟 엔딩 대화 시작 시 BGM 완전히 끄기 (타이핑 SFX만 들리도록)
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.StopBGM();
+        }
+        else if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM();
+        }
+
         PreloadTypingSfxAsync().Forget();
 
         StartDialogue(_startDialogueId);
@@ -42,7 +53,6 @@ public class EndingDialogUI : UIBase
         }
     }
 
-    
     private async UniTaskVoid PreloadTypingSfxAsync()
     {
         if (string.IsNullOrEmpty(typingSfxAddressKey) || _cachedTypingClip != null) return;
@@ -85,12 +95,18 @@ public class EndingDialogUI : UIBase
             currentId = data.NextId;
         }
 
-        Text_Description.text = string.Empty;
+        if (Text_Description != null)
+        {
+            Text_Description.text = string.Empty;
+        }
+
         FinishEndingDialog();
     }
 
     private async UniTask PlayTypingEffect(string fullText, CancellationToken token)
     {
+        if (Text_Description == null) return;
+
         Text_Description.text = string.Empty;
 
         for (int i = 0; i <= fullText.Length; i++)
@@ -102,7 +118,14 @@ public class EndingDialogUI : UIBase
                 char lastChar = fullText[i - 1];
                 if (!char.IsWhiteSpace(lastChar))
                 {
-                    AudioManager.Instance?.PlaySFX(typingSfxAddressKey);
+                    if (AudioManager.Instance != null)
+                    {
+                        AudioManager.Instance.PlaySFX(typingSfxAddressKey);
+                    }
+                    else if (AudioController.Instance != null)
+                    {
+                        AudioController.Instance.PlaySFX(typingSfxAddressKey);
+                    }
                 }
             }
 
@@ -124,7 +147,7 @@ public class EndingDialogUI : UIBase
     {
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.CloseUI(UIRootType.ContentUI, UIType.EndingDialogUI);
+            UIManager.Instance.CloseUI(UIRootType.ContentUI, UIType.EndingDialogueUI);
             UIManager.Instance.OpenGameStartUI();
         }
         else

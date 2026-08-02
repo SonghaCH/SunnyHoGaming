@@ -89,6 +89,7 @@ MonoBehaviour:
   Text_Description: {fileID: 6775309865143822074}
   typingSpeed: 0.05
   waitTimePerDialogue: 1
+  typingSfxAddressKey: Sound/Typing
 --- !u!1 &8466133236446763747
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,10 +156,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uC774\uAC83\uC740 \uC790\uB9C9\uC785\uB2C8\uB2E4. \uC774\uAC83\uC740
-    \uC790\uB9C9\uC785\uB2C8\uB2E4. \uC774\uAC83\uC740 \uC790\uB9C9\uC785\uB2C8\uB2E4"
+    \uC790\uB9C9\uC785\uB2C8\uB2E4. \uC774\uAC83\uC740 \uC790\uB9C9\uC785\uB2C8\uB2E4
+    \uC790\uB9C9\uD3F0\uD2B8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bcac2079c655a9f468c3df08f5d60d59, type: 2}
-  m_sharedMaterial: {fileID: -6161925620271682740, guid: bcac2079c655a9f468c3df08f5d60d59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
+  m_sharedMaterial: {fileID: 8927189569903537701, guid: b2d964456a3409d4192e45559961e5a8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
