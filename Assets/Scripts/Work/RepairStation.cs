@@ -13,7 +13,7 @@ public class RepairStation : WorkStation
         MaxGauge = 100f;
         CurrentGauge = 100f;
 
-        if(UIManager.Instance != null)
+        if (UIManager.Instance != null)
         {
             UIManager.Instance.AddQuestTargetMarker(transform);
         }
@@ -27,6 +27,13 @@ public class RepairStation : WorkStation
         {
             UIManager.Instance.RemoveQuestTargetMarker(transform);
         }
+
+        UnbindTimeViewModel();
+    }
+
+    private void OnDestroy()
+    {
+        UnbindTimeViewModel();
     }
 
     private void BindTimeViewModel()
@@ -34,12 +41,27 @@ public class RepairStation : WorkStation
         if (_timeViewModel == null && NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
         {
             _timeViewModel = NetworkManager.Inst.TimeService.GetViewModel();
-            _timeViewModel.PropertyChanged += OnPropertyChanged;
+            if (_timeViewModel != null)
+            {
+                _timeViewModel.PropertyChanged -= OnPropertyChanged;
+                _timeViewModel.PropertyChanged += OnPropertyChanged;
+            }
+        }
+    }
+
+    private void UnbindTimeViewModel()
+    {
+        if (_timeViewModel != null)
+        {
+            _timeViewModel.PropertyChanged -= OnPropertyChanged;
+            _timeViewModel = null;
         }
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
+        if (this == null || gameObject == null) return;
+
         if (e.PropertyName == nameof(TimeViewModel.CurrentDay))
         {
             if (UIManager.Instance != null)

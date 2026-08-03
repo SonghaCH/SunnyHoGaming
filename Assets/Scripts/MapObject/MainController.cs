@@ -34,7 +34,6 @@ public class MainController : UIBase
 
     private void OnDisable()
     {
-        // 🌟 씬 이동 / 비활성화 시 상호작용키 구독 해제 (이벤트 누수 방지)
         if (UserInputManager.instance != null)
         {
             UserInputManager.instance.OnInteractionKey -= Interact;
@@ -54,7 +53,6 @@ public class MainController : UIBase
     {
         if (other.CompareTag("Player"))
         {
-            // 🌟 문(Door)이 존재하고 아직 잠겨있는 상태라면 상호작용 키 등록 자체를 차단
             var door = GetComponent<Door>();
             if (door != null && !door.Interact())
             {

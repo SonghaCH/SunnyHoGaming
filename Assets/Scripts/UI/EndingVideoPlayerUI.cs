@@ -67,7 +67,6 @@ public class EndingVideoPlayerUI : UIBase
 
     private void OnVideoFinished(VideoPlayer vp)
     {
-        // 🌟 다이얼로그 전용 연출을 위해 BGM 재개 로직을 제거했습니다.
         FinishEndingVideoAndOpenDialog();
     }
 

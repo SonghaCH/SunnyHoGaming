@@ -11,25 +11,21 @@ public class CheatManager : MonoBehaviour
     {
         if (!_enableCheat) return;
 
-        // 🌟 Shift + 1 번 키 또는 F1 키: 하루 넘기기
         if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1)) || Input.GetKeyDown(KeyCode.F1))
         {
             Cheat_ForcePassDay();
         }
 
-        // 🌟 Shift + 2 번 키 또는 F2 키: 퀘스트 전체 완료
         if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha2)) || Input.GetKeyDown(KeyCode.F2))
         {
             Cheat_CompleteAllQuests();
         }
 
-        // 🌟 Shift + 3 번 키 또는 F3 키: 액티브 시스템 100%
         if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha3)) || Input.GetKeyDown(KeyCode.F3))
         {
             Cheat_MaxOutAllActiveSystems();
         }
 
-        // 🌟 Shift + 4 번 키 또는 F4 키: 6일차 이동
         if ((Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha4)) || Input.GetKeyDown(KeyCode.F4))
         {
             Cheat_WarpToDay6();
@@ -75,29 +71,38 @@ public class CheatManager : MonoBehaviour
             UIManager.Instance.CloseFPopupUI();
         }
     }
-
     private void Cheat_CompleteAllQuests()
     {
         if (QuestManager.Instance == null) return;
+
+        int currentDay = 1;
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
+        {
+            currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+        }
 
         if (QuestManager.Instance.activeQuests != null)
         {
             for (int i = 0; i < QuestManager.Instance.activeQuests.Count; i++)
             {
                 var quest = QuestManager.Instance.activeQuests[i];
-                if (quest.subTaskList != null)
+
+                if (quest.UnlockDay <= currentDay)
                 {
-                    for (int j = 0; j < quest.subTaskList.Count; j++)
+                    if (quest.subTaskList != null)
                     {
-                        var subTask = quest.subTaskList[j];
-                        subTask.isCompleted = true;
-                        quest.subTaskList[j] = subTask;
+                        for (int j = 0; j < quest.subTaskList.Count; j++)
+                        {
+                            var subTask = quest.subTaskList[j];
+                            subTask.isCompleted = true;
+                            quest.subTaskList[j] = subTask; 
+                        }
                     }
                 }
             }
         }
 
-        Debug.Log("[Cheat 2] 모든 퀘스트 완료 처리!");
+        Debug.Log($"[Cheat 2] {currentDay}일차 당일 퀘스트 완료 처리!");
     }
 
     private void Cheat_MaxOutAllActiveSystems()

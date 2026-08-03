@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -8,9 +10,10 @@ public class PlayerMovementView : ViewBase
     [SerializeField] private Transform _cameraTransform;
 
     private Rigidbody _rigidbody;
+    private CapsuleCollider _capsuleCollider;
     private PlayerMovementViewModel _movementViewModel;
     private PlayerStatusViewModel _statusViewModel;
-    private Transform _target; // 👈 변수명이 _target 입니다.
+    private Transform _target;
 
     private float _xRotation = 0.0f;
     private float _inputX = 0.0f;
@@ -19,7 +22,12 @@ public class PlayerMovementView : ViewBase
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.freezeRotation = true;
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+
+        if (_rigidbody != null)
+        {
+            _rigidbody.freezeRotation = true;
+        }
     }
 
     private void Start()
@@ -133,10 +141,9 @@ public class PlayerMovementView : ViewBase
         Vector3 targetPosition = currentPosition + (moveDirection * finalSpeed * Time.fixedDeltaTime);
 
         _rigidbody.MovePosition(targetPosition);
-
-        _rigidbody.linearVelocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
     }
+
+
 
     private void Look(float mouseX, float mouseY)
     {
@@ -152,23 +159,36 @@ public class PlayerMovementView : ViewBase
 
     private void ChangePlayerPositionAndRotation()
     {
-        // 🌟 1. _target 변수가 null인 경우 안전하게 return (NullReferenceException 방지)
+
         if (_target == null)
         {
             return;
         }
 
-        // 🌟 2. Rigidbody 물리 이동 처리
+        float capsuleOffsetY = 0.05f;
+        if (_capsuleCollider != null)
+        {
+            capsuleOffsetY += (_capsuleCollider.height * 0.5f) - _capsuleCollider.center.y;
+        }
+
+        Vector3 adjustedPosition = _target.position + Vector3.up * capsuleOffsetY;
+
         if (_rigidbody != null)
         {
             _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
-            _rigidbody.position = _target.position;
+            _rigidbody.position = adjustedPosition;
             _rigidbody.rotation = _target.rotation;
         }
 
-        transform.position = _target.position;
+        transform.position = adjustedPosition;
         transform.rotation = _target.rotation;
+
+        _xRotation = 0.0f;
+        if (_cameraTransform != null)
+        {
+            _cameraTransform.localRotation = Quaternion.identity;
+        }
     }
 
     public void SetTarget(Transform target)

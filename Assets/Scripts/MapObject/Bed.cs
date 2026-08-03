@@ -69,7 +69,7 @@ public class Bed : MonoBehaviour
                 fPopupUI.SetInteractName("잠에 든다");
             }
 
-            other.GetComponent<PlayerMovementView>().SetTarget(_sleepTransform);
+            other.GetComponent<PlayerMovementView>()?.SetTarget(_sleepTransform);
         }
     }
 
@@ -81,7 +81,7 @@ public class Bed : MonoBehaviour
             SetOutline(false);
             UIManager.Instance.CloseFPopupUI();
 
-            other.GetComponent<PlayerMovementView>().SetTarget(null);
+            other.GetComponent<PlayerMovementView>()?.SetTarget(null);
         }
     }
 
@@ -89,13 +89,22 @@ public class Bed : MonoBehaviour
     {
         if (NetworkManager.Inst.PlayerService.GetStatusViewModel().IsSleeping)
         {
-            // [일어난다]
+
             if (_player != null)
             {
-                _player.GetComponent<PlayerMovementView>()?.SetTarget(_wakeUpTransform);
+                var movementView = _player.GetComponent<PlayerMovementView>();
+                if (movementView != null)
+                {
+                    movementView.SetTarget(_wakeUpTransform);
+                }
             }
 
             NetworkManager.Inst.PlayerService.WakeUp();
+
+            if (_player != null)
+            {
+                _player.GetComponent<PlayerMovementView>()?.SetTarget(null);
+            }
 
             if (_mainLight != null) _mainLight.color = Color.white;
 
@@ -103,18 +112,17 @@ public class Bed : MonoBehaviour
         }
         else
         {
-            // [잠에 든다]
-            // 🌟 1. SetTarget을 Sleep()보다 무조건 먼저 실행!
+
             if (_player != null)
             {
                 _player.GetComponent<PlayerMovementView>()?.SetTarget(_sleepTransform);
             }
 
-            // 2. 수면 상태 전환 및 시간 변경
+
             NetworkManager.Inst.PlayerService.Sleep();
             NetworkManager.Inst.TimeService.SkipToNextDay();
 
-            // 3. UI 및 조명 처리
+
             UIManager.Instance.CloseFPopupUI();
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.ContentUI, UIType.FPopupUI);

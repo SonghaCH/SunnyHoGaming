@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class GameOverPopupUI : UIBase
@@ -11,15 +11,35 @@ public class GameOverPopupUI : UIBase
         {
             Btn_ReturnToTitle.BindOnClickButtonEvent(OnClick_ReturnToTitle);
         }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
-    private async void OnClick_ReturnToTitle()
+    private void OnDisable()
     {
-        UIManager.Instance.CloseGameOverPopupUI();
+        if (Btn_ReturnToTitle != null)
+        {
+            Btn_ReturnToTitle.UnBindAllOnClickButtonEvent();
+        }
+    }
 
-        UIManager.Instance.CloseAllPopups();
+    private void OnClick_ReturnToTitle()
+    {
+        ReturnToTitleAsync().Forget();
+    }
 
-        if(GameObjectManager.Instance != null)
+    private async UniTaskVoid ReturnToTitleAsync()
+    {
+        if (UIManager.Instance != null)
+        {
+           
+            UIManager.Instance.CloseGameOverPopupUI();
+            UIManager.Instance.CloseAllPopups();
+            UIManager.Instance.CloseMainUI();
+        }
+
+        if (GameObjectManager.Instance != null)
         {
             await GameObjectManager.Instance.ClearAllFixersAsync();
         }
@@ -32,10 +52,11 @@ public class GameOverPopupUI : UIBase
         if (NetworkManager.Inst != null && NetworkManager.Inst.GameStateService != null)
         {
             NetworkManager.Inst.GameStateService.GetViewModel().OnRequestingTitle();
-            
-            UIManager.Instance.ShowStartupUIOnGameStart();
-            
-            UIManager.Instance.CloseAllUI();
+
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.OpenGameStartUI();
+            }
         }
         else
         {

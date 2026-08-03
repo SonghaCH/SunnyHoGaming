@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class FixerPopupUI : UIBase
 {
     [Header("Fixer Data")]
@@ -16,12 +17,28 @@ public class FixerPopupUI : UIBase
 
     private bool _isTransitioning;
     private FixerViewModel _targetFixer;
+    private CanvasGroup _canvasGroup;
 
     private static bool _hasTriggeredDay2Dialogue = false;
+
+    private void Awake()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        if (_canvasGroup == null)
+        {
+            _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
 
     private void OnEnable()
     {
         _isTransitioning = false;
+
+        if (_canvasGroup != null)
+        {
+            _canvasGroup.alpha = 0f;
+        }
+
         Btn_Close.BindOnClickButtonEvent(Onclick_Close);
         Btn_Order.BindOnClickButtonEvent(Onclick_Order);
 
@@ -42,7 +59,6 @@ public class FixerPopupUI : UIBase
         }
     }
 
-   
     private void CheckAndTriggerDay2Dialogue()
     {
         if (_hasTriggeredDay2Dialogue) return;
@@ -52,7 +68,7 @@ public class FixerPopupUI : UIBase
 
         if (timeVm.CurrentDay == 2)
         {
-            _hasTriggeredDay2Dialogue = true; 
+            _hasTriggeredDay2Dialogue = true;
 
             var uiBase = UIManager.Instance.OpenUI(UIRootType.VeryFrontUI, UIType.DialogueUI);
             if (uiBase is DialogueUI dialogueUi)
@@ -62,15 +78,25 @@ public class FixerPopupUI : UIBase
         }
     }
 
-    public void SetFixerInfo(FixerViewModel fixerViewModel)
+    public async UniTask SetFixerInfoAsync(FixerViewModel fixerViewModel)
     {
         _targetFixer = fixerViewModel;
         if (_targetFixer != null)
         {
             _targetFixer.FreezeMovement(true);
 
-            UpdateUI().Forget();
+            await UpdateUIAsync();
+
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = 1f;
+            }
         }
+    }
+
+    public void SetFixerInfo(FixerViewModel fixerViewModel)
+    {
+        SetFixerInfoAsync(fixerViewModel).Forget();
     }
 
     private void Onclick_Close()
@@ -85,12 +111,9 @@ public class FixerPopupUI : UIBase
         UIManager.Instance.OpenWorkPopupUI(_targetFixer);
     }
 
-    private async UniTaskVoid UpdateUI()
+    private async UniTask UpdateUIAsync()
     {
-        if (_targetFixer == null)
-        {
-            return;
-        }
+        if (_targetFixer == null) return;
 
         FixerData fixerData = null;
         if (GameDataManager.Instance != null && !string.IsNullOrEmpty(_targetFixer.DataId))
@@ -98,10 +121,7 @@ public class FixerPopupUI : UIBase
             fixerData = GameDataManager.Instance.GetFixerData(_targetFixer.DataId);
         }
 
-        if (fixerData == null)
-        {
-            return;
-        }
+        if (fixerData == null) return;
 
         if (Text_FixerName != null)
         {
@@ -115,9 +135,10 @@ public class FixerPopupUI : UIBase
         if (Image_Fixer != null && !string.IsNullOrEmpty(fixerData.ImagePath))
         {
             Sprite fixerIcon = await ResourceManager.Instance.LoadSprite(fixerData.ImagePath);
-            if (fixerIcon != null)
+            if (fixerIcon != null && Image_Fixer != null)
             {
                 Image_Fixer.sprite = fixerIcon;
+                Image_Fixer.enabled = true;
             }
         }
     }

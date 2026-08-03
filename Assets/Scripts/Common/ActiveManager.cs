@@ -632,4 +632,11 @@ public class ActiveManager : MonoBehaviour
     {
         OnActiveDataChanged?.Invoke();
     }
+
+    public void ClearAllActiveData()
+    {
+        _assignmentDict.Clear();
+        InitializeData();
+        Debug.Log("[ActiveManager] 수리 오브젝트 및 배정 데이터가 초기화되었습니다.");
+    }
 }

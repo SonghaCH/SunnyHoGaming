@@ -27,7 +27,6 @@ public class EndingDialogUI : UIBase
     {
         ShowCursor();
 
-        // 🌟 엔딩 대화 시작 시 BGM 완전히 끄기 (타이핑 SFX만 들리도록)
         if (AudioController.Instance != null)
         {
             AudioController.Instance.StopBGM();

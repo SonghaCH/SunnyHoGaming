@@ -23,7 +23,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    
     public void InitializeQuests(List<QuestData> questList)
     {
         activeQuests = questList;
@@ -36,7 +35,6 @@ public class QuestManager : MonoBehaviour
         Debug.Log($"[QuestManager] 퀘스트 데이터 {activeQuests.Count}개 초기화 및 파싱 완료!");
     }
 
-    
     private void ParseSubTasks(QuestData questData)
     {
         questData.subTaskList.Clear();
@@ -83,24 +81,36 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-
+   
     public void CheckTaskProgress(string taskKey)
     {
         bool isUpdated = false;
 
-        foreach (var quest in activeQuests)
+        int currentDay = 1;
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
         {
-            foreach (var subTask in quest.subTaskList)
+            currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+        }
+
+        for (int i = 0; i < activeQuests.Count; i++)
+        {
+            var quest = activeQuests[i];
+
+            if (quest.UnlockDay <= currentDay)
             {
-                if (subTask.targetType == SubTaskTargetType.Task && (subTask.targetKey == taskKey || subTask.targetKey.StartsWith(taskKey + "_")))
+                for (int j = 0; j < quest.subTaskList.Count; j++)
                 {
-                    if (!subTask.isCompleted)
+                    var subTask = quest.subTaskList[j];
+
+                    if (subTask.targetType == SubTaskTargetType.Task &&
+                       (subTask.targetKey == taskKey || subTask.targetKey.StartsWith(taskKey + "_")))
                     {
-                        subTask.isCompleted = true;
-                        isUpdated = true;
-                        
-                        UpdateQuestUI();
-                        return;
+                        if (!subTask.isCompleted)
+                        {
+                            subTask.isCompleted = true;
+                            quest.subTaskList[j] = subTask; 
+                            isUpdated = true;
+                        }
                     }
                 }
             }
@@ -111,42 +121,54 @@ public class QuestManager : MonoBehaviour
             UpdateQuestUI();
         }
     }
-
     public void ResetDailyQuests()
     {
         if (activeQuests == null) return;
 
-        foreach (var quest in activeQuests)
+        int currentDay = 1;
+        if (NetworkManager.Inst != null && NetworkManager.Inst.TimeService != null)
         {
-            if (quest.Type == "Daily" || quest.Type == "Sub")
+            currentDay = NetworkManager.Inst.TimeService.GetViewModel().CurrentDay;
+        }
+
+        for (int i = 0; i < activeQuests.Count; i++)
+        {
+            var quest = activeQuests[i];
+
+            if (quest.UnlockDay == currentDay || quest.Type == "Daily" || quest.Type == "Main")
             {
-                foreach (var subTask in quest.subTaskList)
+                for (int j = 0; j < quest.subTaskList.Count; j++)
                 {
+                    var subTask = quest.subTaskList[j];
                     subTask.isCompleted = false;
+                    quest.subTaskList[j] = subTask; 
                 }
             }
         }
 
         UpdateQuestUI();
-        Debug.Log("[QuestManager] 일일 퀘스트 진행 상황이 리셋되었습니다.");
+        Debug.Log($"[QuestManager] {currentDay}일차 메인 및 일일 퀘스트 진행 상황이 리셋되었습니다.");
     }
-
 
     public void CheckItemProgress(string itemId)
     {
         bool isUpdated = false;
 
-        foreach (var quest in activeQuests)
+        for (int i = 0; i < activeQuests.Count; i++)
         {
-            foreach (var subTask in quest.subTaskList)
+            var quest = activeQuests[i];
+
+            for (int j = 0; j < quest.subTaskList.Count; j++)
             {
+                var subTask = quest.subTaskList[j];
+
                 if (subTask.targetType == SubTaskTargetType.Item && subTask.targetKey == itemId)
                 {
                     if (!subTask.isCompleted)
                     {
                         subTask.isCompleted = true;
+                        quest.subTaskList[j] = subTask; 
                         isUpdated = true;
-                        Debug.Log($"[QuestManager] 아이템 획득 서브태스크 완료! ({quest.Title} -> {subTask.subTaskText})");
                     }
                 }
             }

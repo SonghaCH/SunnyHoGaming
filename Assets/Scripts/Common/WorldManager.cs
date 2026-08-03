@@ -401,6 +401,11 @@ public class WorldManager : MonoBehaviour
 
     public void ClearMap()
     {
+        if (ActiveManager.Instance != null)
+        {
+            ActiveManager.Instance.ClearAllActiveData();
+        }
+
         if (_currentMapInstance != null)
         {
             if (ResourceManager.Instance != null)
@@ -417,5 +422,6 @@ public class WorldManager : MonoBehaviour
         _spawnedDays.Clear();
         _fixerSpawnPoints.Clear();
         _mainRoomSpawnPoint = null;
+        _roomAreaCollider = null;
     }
 }
