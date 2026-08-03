@@ -1,4 +1,5 @@
-﻿using NUnit.Framework.Interfaces;
+﻿using Cysharp.Threading.Tasks;
+using NUnit.Framework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -121,10 +122,7 @@ public class GameDataManager : MonoBehaviour
     {
         QuestDataList = LoadData<QuestData>(jsonPath);
 
-        if (QuestManager.Instance != null && QuestDataList != null)
-        {
-            QuestManager.Instance.InitializeQuests(QuestDataList.Values.ToList());
-        }
+        TryInitializeQuestsAsync().Forget();
     }
 
     public void LoadObjectData(string jsonPath)
@@ -183,4 +181,17 @@ public class GameDataManager : MonoBehaviour
         return ObjectDataList.TryGetValue(id, out var data) ? data : null;
     }
 
+    private async UniTaskVoid TryInitializeQuestsAsync()
+    {
+        // QuestManager.Instance가 생성될 때까지 프레임 양보하며 대기
+        while (QuestManager.Instance == null)
+        {
+            await UniTask.Yield();
+        }
+
+        if (QuestManager.Instance != null && QuestDataList != null)
+        {
+            QuestManager.Instance.InitializeQuests(QuestDataList.Values.ToList());
+        }
+    }
 }

@@ -277,17 +277,29 @@ public class NetworkManager : MonoBehaviour
         RequestLoadGameAsync().Forget();
     }
 
-    public void RequestNewGame()
+    public async void RequestNewGame()
     {
-        string path = GetPath();
-        if (File.Exists(path))
+        try
         {
-            File.Delete(path);
-        }
+            string path = GetPath();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                await UniTask.Delay(50);
+            }
 
         PlayerModel defaultData = GetDefaultPlayerData();
         RequstSaveData(defaultData);
         RequestLoadGame();
+            PlayerModel defaultData = GetDefaultPlayerData();
+            RequstSaveData(defaultData);
+
+            await RequestLoadGameAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[RequestNewGame] 새 게임 생성 중 에러 발생: {e.Message}");
+        }
     }
 
     public void RequstSaveData(PlayerModel data)

@@ -75,6 +75,11 @@ public class GameStartUI : UIBase
             Destroy(_skyboxCameraInstance);
             _skyboxCameraInstance = null;
         }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM();
+        }
     }
 
     private void ShowCursor()
@@ -98,6 +103,10 @@ public class GameStartUI : UIBase
 
     private async UniTaskVoid StartNewGameAsync()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopBGM();
+        }
         if (NetworkManager.Inst != null)
         {
             NetworkManager.Inst.RequestNewGame();
