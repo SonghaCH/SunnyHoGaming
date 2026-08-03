@@ -288,11 +288,9 @@ public class NetworkManager : MonoBehaviour
                 await UniTask.Delay(50);
             }
 
-        PlayerModel defaultData = GetDefaultPlayerData();
-        RequstSaveData(defaultData);
-        RequestLoadGame();
             PlayerModel defaultData = GetDefaultPlayerData();
             RequstSaveData(defaultData);
+            RequestLoadGame();
 
             await RequestLoadGameAsync();
         }
